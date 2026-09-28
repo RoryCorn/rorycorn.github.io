@@ -1,34 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Rory Corn — Apps</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rory Corn — Apps, Games, AI Voice & Music</title>
+<meta name="description" content="Rory Corn designs, builds and ships his own iOS apps, browser games and conversational voice-AI apps, and makes original music. Five apps live on the Apple App Store; ten games playable in the browser.">
+<meta property="og:title" content="Rory Corn — Apps, Games, AI Voice & Music">
+<meta property="og:description" content="Five apps on the App Store, ten games you can play in your browser, conversational voice AI, and 55 original songs — made independently.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rorycorn.github.io/">
+<meta name="theme-color" content="#0b0b12">
 <style>
-  body{margin:0;background:#0b0b0f;color:#eaeaf0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
-  .wrap{max-width:720px;margin:0 auto;padding:48px 22px 60px}
-  h1{font-size:1.7rem} h2{font-size:1.05rem;color:#9a90ff;margin-top:30px}
-  a{color:#7c5cff;text-decoration:none} a:hover{text-decoration:underline}
-  ul{padding-left:1.1rem} li{margin:6px 0}
-  .muted{color:#8a8aa0;font-size:.9rem}
+  :root{
+    --bg:#0b0b12; --bg2:#12121c; --card:#151522; --card2:#1b1b2b; --line:#262638;
+    --text:#ececf4; --muted:#a3a3ba; --dim:#7d7d96;
+    --accent:#8b7bff; --accent2:#ff5fae; --accent3:#35d0c0; --gold:#ffc27a;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(40vmax 40vmax at 12% 8%, rgba(139,123,255,.20), transparent 60%),
+      radial-gradient(38vmax 38vmax at 92% 18%, rgba(255,95,174,.14), transparent 60%),
+      radial-gradient(42vmax 42vmax at 50% 105%, rgba(53,208,192,.10), transparent 60%);}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+  .skip{position:absolute;left:-999px;top:8px;background:var(--gold);color:#111;padding:8px 14px;border-radius:10px;font-weight:700;z-index:10}
+  .skip:focus{left:12px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* nav */
+  header.top{position:sticky;top:0;z-index:5;backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);background:rgba(11,11,18,.72);border-bottom:1px solid rgba(38,38,56,.7)}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+  .brand{font-weight:800;letter-spacing:.2px;color:var(--text)}
+  .brand span{color:var(--accent)}
+  nav.links{display:flex;gap:18px;flex-wrap:wrap}
+  nav.links a{color:var(--muted);font-size:.93rem;font-weight:600}
+  nav.links a:hover{color:var(--text);text-decoration:none}
+  @media (max-width:720px){ nav.links{display:none} }
+
+  /* hero */
+  .hero{padding:84px 0 40px}
+  .eyebrow{display:inline-block;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent3);background:rgba(53,208,192,.10);border:1px solid rgba(53,208,192,.28);padding:6px 12px;border-radius:999px}
+  h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.04;margin:18px 0 16px;letter-spacing:-.02em;font-weight:800}
+  h1 .grad{background:linear-gradient(92deg,#b3a8ff 0%,#ff7cbc 55%,#ffc27a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--muted);max-width:720px;margin:0 0 28px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:700;font-size:.97rem;border:1px solid var(--line);color:var(--text);background:var(--card)}
+  .btn:hover{text-decoration:none;border-color:#3a3a55;background:var(--card2)}
+  .btn.primary{background:linear-gradient(135deg,#7b68ff,#c14fd8);border-color:transparent;color:#fff}
+  .btn.primary:hover{filter:brightness(1.08)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px 0 10px}
+  .stat{background:rgba(21,21,34,.72);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 16px}
+  .stat b{display:block;font-size:2rem;line-height:1.1;letter-spacing:-.02em}
+  .stat span{color:var(--muted);font-size:.92rem}
+  @media (max-width:820px){ .stats{grid-template-columns:repeat(2,1fr)} }
+
+  /* sections */
+  section{padding:56px 0 8px}
+  .sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  h2{font-size:clamp(1.6rem,3.2vw,2.2rem);margin:0;letter-spacing:-.01em}
+  .sec-head p{margin:0;color:var(--muted);max-width:560px}
+
+  /* app cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+  .card{position:relative;background:linear-gradient(180deg,rgba(27,27,43,.92),rgba(21,21,34,.92));border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:14px;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-3px);border-color:#3b3b58;box-shadow:0 18px 40px -18px rgba(0,0,0,.7)}
+  .app-top{display:flex;gap:16px;align-items:center}
+  .icon{width:76px;height:76px;border-radius:22%;flex:none;box-shadow:0 10px 24px -10px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06);background:#000;object-fit:cover}
+  .app-top h3{margin:0;font-size:1.22rem;line-height:1.25}
+  .meta{color:var(--dim);font-size:.86rem;margin-top:2px}
+  .card p{margin:0;color:#cfcfe0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:.76rem;font-weight:600;color:#cfc8ff;background:rgba(139,123,255,.12);border:1px solid rgba(139,123,255,.25);padding:3px 9px;border-radius:999px}
+  .card .actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:700;padding:9px 13px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text)}
+  .pill:hover{text-decoration:none;border-color:#44446a;background:rgba(255,255,255,.06)}
+  .pill.store{background:#f4f4f8;color:#111;border-color:#f4f4f8}
+  .pill.store:hover{background:#fff}
+  .badge{position:absolute;top:16px;right:16px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(255,194,122,.14);color:var(--gold);border:1px solid rgba(255,194,122,.35)}
+
+  .subhead{font-size:1.1rem;margin:34px 0 14px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  /* games */
+  .game{padding:0;overflow:hidden}
+  .game .cover{height:150px;display:flex;align-items:center;justify-content:center;background:var(--cover,#111);border-bottom:1px solid var(--line)}
+  .game .cover img{width:92px;height:92px;border-radius:22%;box-shadow:0 12px 30px -12px rgba(0,0,0,.9)}
+  .game .cover .glyph{font-size:3.2rem;font-weight:900;letter-spacing:-.03em;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)}
+  .game .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .game h3{margin:0;font-size:1.12rem}
+  .tagline{color:var(--gold)!important;font-weight:600;font-size:.95rem}
+
+  /* two-column feature blocks */
+  .feature{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
+  @media (max-width:860px){ .feature{grid-template-columns:1fr} }
+  .panel{background:rgba(21,21,34,.8);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .panel h3{margin:0 0 8px;font-size:1.15rem}
+  .panel ul{margin:10px 0 0;padding-left:1.1rem;color:#cfcfe0}
+  .panel li{margin:6px 0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .chip{font-size:.85rem;font-weight:600;padding:6px 11px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#dcdcea}
+
+  .sites{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .site{display:block;background:rgba(21,21,34,.8);border:1px solid var(--line);border-radius:14px;padding:18px;color:var(--text)}
+  .site:hover{text-decoration:none;border-color:#3b3b58;background:rgba(27,27,43,.9)}
+  .site b{display:block;font-size:1.02rem}
+  .site span{color:var(--muted);font-size:.9rem}
+  .site .url{display:block;color:var(--accent);font-size:.84rem;margin-top:8px;word-break:break-all}
+
+  .about p{color:#d6d6e4;max-width:820px}
+  .contact{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+
+  footer{margin-top:64px;border-top:1px solid var(--line);padding:32px 0 48px;color:var(--dim);font-size:.9rem}
+  footer h2{font-size:1rem;color:var(--muted);margin:0 0 12px}
+  .support{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 22px}
+  .support div b{display:block;color:#c9c9da;font-size:.92rem}
+  .support a{font-size:.88rem;margin-right:12px}
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important;scroll-behavior:auto!important} }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Rory Corn — Apps</h1>
-  <p class="muted">Support and privacy information for my apps.</p>
+<a class="skip" href="#main">Skip to content</a>
 
-  <h2>Ten31</h2>
-  <ul>
-    <li><a href="/ten31/support.html">Support</a></li>
-    <li><a href="/ten31/privacy.html">Privacy Policy</a></li>
-  </ul>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Rory <span>Corn</span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#apps">Apps</a>
+      <a href="#games">Games</a>
+      <a href="#ai">AI &amp; Voice</a>
+      <a href="#music">Music &amp; Art</a>
+      <a href="#web">Web</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-  <h2>Maintain</h2>
-  <ul>
-    <li><a href="/maintain/support.html">Support</a></li>
-    <li><a href="/maintain/privacy.html">Privacy Policy</a></li>
-  </ul>
-</div>
+<main id="main">
+  <div class="wrap">
+
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <span class="eyebrow">Independent developer &amp; creator</span>
+      <h1 id="hero-title">I build <span class="grad">apps, games &amp; AI voice</span> — and ship them.</h1>
+      <p class="lede">Five apps live on the Apple App Store, ten games you can play right now in your browser, conversational voice-AI apps, and a catalog of original music. Every one designed, built, tested and released by me, from the first sketch to App Review.</p>
+      <div class="cta">
+        <a class="btn primary" href="#apps">See the apps</a>
+        <a class="btn" href="https://apps.apple.com/us/developer/rory-corn/id6787558582">App Store page</a>
+        <a class="btn" href="#games">Play the games</a>
+        <a class="btn" href="mailto:rcorn88@gmail.com">Email me</a>
+      </div>
+
+      <div class="stats" role="list">
+        <div class="stat" role="listitem"><b>5</b><span>apps live on the App Store</span></div>
+        <div class="stat" role="listitem"><b>10</b><span>games playable in your browser</span></div>
+        <div class="stat" role="listitem"><b>2</b><span>conversational voice-AI apps</span></div>
+        <div class="stat" role="listitem"><b>55</b><span>original songs on getm12.com</span></div>
+      </div>
+    </section>
+
+    <!-- ================= APPS ================= -->
+    <section id="apps" aria-labelledby="apps-title">
+      <div class="sec-head">
+        <h2 id="apps-title">Apps on the App Store</h2>
+        <p>Each one designed, coded, tested and published by me — including the store listings, screenshots and promo videos.</p>
+      </div>
+      <div class="grid">
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/proxi-pals.png" alt="Proxi-Pals app icon" width="76" height="76">
+            <div><h3>Proxi-Pals</h3><div class="meta">Social Networking · Free · also on the web</div></div>
+          </div>
+          <p>See who nearby is on the app and wave hello. If they wave back, you’re connected and can chat or video call. You choose who can see you, distances are only ever approximate, and local businesses can post deals nearby.</p>
+          <div class="tags"><span class="tag">Node.js</span><span class="tag">WebSockets</span><span class="tag">PostgreSQL</span><span class="tag">Stripe</span><span class="tag">Capacitor</span></div>
+          <div class="actions">
+            <a class="pill store" href="https://apps.apple.com/us/app/proxi-pals/id6788054124">App Store</a>
+            <a class="pill" href="https://proxipals.onrender.com/">Open on the web</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/sound-and-the-body.png" alt="Sound &amp; the Body app icon" width="76" height="76">
+            <div><h3>Sound &amp; the Body</h3><div class="meta">Education · Free</div></div>
+          </div>
+          <p>An interactive frequency atlas you can hear, across seven scales: Brain, Body, Organs, Nerves, Cells, Atoms and Brainwaves. Tap a region to see its frequencies and play the tone live. Measured science and tradition are clearly labelled apart.</p>
+          <div class="tags"><span class="tag">Web Audio</span><span class="tag">Capacitor</span><span class="tag">Science vs. tradition, labelled</span></div>
+          <div class="actions"><a class="pill store" href="https://apps.apple.com/us/app/sound-the-body/id6787558580">App Store</a></div>
+        </article>
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/maintain.png" alt="Maintain app icon" width="76" height="76">
+            <div><h3>Maintain</h3><div class="meta">Games · Free · “Maintain 100% black” on the App Store</div></div>
+          </div>
+          <p>The screen is black. Keep it that way. Color creeps in as ink bleeds, splatters, fog and closing edges, and you wipe it away before it takes the screen. Two modes: Clean, the original, and Haunt, where whispers come for you.</p>
+          <div class="tags"><span class="tag">HTML5 Canvas</span><span class="tag">Web Audio</span><span class="tag">Haptics</span><span class="tag">Capacitor</span></div>
+          <div class="actions">
+            <a class="pill store" href="https://apps.apple.com/us/app/maintain-100-black/id6794418310">App Store</a>
+            <a class="pill" href="https://proxipals.onrender.com/games/maintain/">Play on the web</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/shifty.png" alt="Shifty – AI Comedian app icon" width="76" height="76">
+            <div><h3>Shifty – AI Comedian</h3><div class="meta">Entertainment · $4.99 · voice AI</div></div>
+          </div>
+          <p>An AI comedian who actually talks back. Tap the mic: he trades jokes, roasts you if you ask for it, and riffs on today’s real headlines, in a voice cloned from my own.</p>
+          <div class="tags"><span class="tag">ElevenLabs agents</span><span class="tag">Node.js</span><span class="tag">In-app purchase</span></div>
+          <div class="actions"><a class="pill store" href="https://apps.apple.com/us/app/shifty-ai-comedian/id6791783247">App Store</a></div>
+        </article>
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/black-at-it.png" alt="Black at it! app icon" width="76" height="76">
+            <div><h3>Black at it!</h3><div class="meta">Reference · $4.99 · voice AI</div></div>
+          </div>
+          <p>A voice AI you talk to about Black history, invention and community, from the Harlem Renaissance to Garrett Morgan’s traffic signal. It holds its focus through background noise and picks up where you left off.</p>
+          <div class="tags"><span class="tag">ElevenLabs agents</span><span class="tag">WebRTC</span><span class="tag">Node.js</span></div>
+          <div class="actions"><a class="pill store" href="https://apps.apple.com/us/app/black-at-it/id6792460400">App Store</a></div>
+        </article>
+
+
+      </div>
+      <h3 class="subhead">In development</h3>
+      <div class="grid">
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/games/quantum-boss.png" alt="Quantum Boss app icon" width="76" height="76">
+            <div><h3>Quantum Boss</h3><div class="meta">Games · iPhone · not on the App Store yet</div></div>
+          </div>
+          <p>A hands-free arcade game you play with your eyes. Invader saucers head for Earth: look at a hull and hold your gaze to collapse it. It uses the iPhone’s TrueDepth (Face ID) camera, so it only plays on Apple devices.</p>
+          <div class="tags"><span class="tag">Swift / SwiftUI</span><span class="tag">ARKit face tracking</span><span class="tag">Apple devices only</span></div>
+          <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/quantum-boss/">Try the browser version</a></div>
+        </article>
+
+        <article class="card">
+          <div class="app-top">
+            <img class="icon" src="assets/icons/synesthesia.png" alt="Synesthesia mood diary app icon" width="76" height="76">
+            <div><h3>Synesthesia — Mood Diary</h3><div class="meta">iPhone · not released yet</div></div>
+          </div>
+          <p>A mood diary you talk to. Say how you feel, and it reads both your words and your tone of voice, then paints the mood as a picture and answers it with music.</p>
+          <div class="tags"><span class="tag">Speech + tone of voice</span><span class="tag">Claude API</span><span class="tag">Web Audio</span><span class="tag">ElevenLabs Music</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= GAMES ================= -->
+    <section id="games" aria-labelledby="games-title">
+      <div class="sec-head">
+        <h2 id="games-title">Ten games you can play right now</h2>
+        <p>All in my Proxi-Pals arcade. They run in any modern browser, on your phone or computer, with no install needed.</p>
+      </div>
+      <div class="grid">
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#3a0f2eee,#07070c 78%)"><img src="assets/games/maintain.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Maintain</h3>
+            <p class="tagline">Keep the black. Wipe it clean.</p>
+            <p>Canvas arcade game; also on the App Store.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/maintain/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#2a0606ee,#07070c 78%)"><img src="assets/games/ten31.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Ten31</h3>
+            <p class="tagline">Wipe the whispers. Stay sane.</p>
+            <p>Halloween horror. Whispers crawl onto the screen, and you wipe them before your sanity hits zero. Now also the Haunt mode in Maintain.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/ten31/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#1e0707ee,#07070c 78%)"><img src="assets/games/ten31-3d.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Ten31 3D</h3>
+            <p class="tagline">The whispers are in the room with you.</p>
+            <p>A first-person 3D horror room with a stalker who only moves when you look away. Godot, Blender and ElevenLabs voices.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/ten31-3d/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#101a33ee,#07070c 78%)"><img src="assets/games/ten-chambers.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>The Ten Chambers</h3>
+            <p class="tagline">Ten honest rooms. Light the hall.</p>
+            <p>A 3D game adapted from my original story, <em>Verbum</em>, set at a 1930s Black college, with ten chambers built on Aristotle’s ten categories.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/ten-chambers/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#06142aee,#07070c 78%)"><img src="assets/games/quantum-boss.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Quantum Boss</h3>
+            <p class="tagline">Hold your aim. Collapse the hull.</p>
+            <p>Invader saucers head for Earth. Hold your aim on a hull and it collapses. This browser version plays with touch or mouse; the original iPhone version is played with your eyes.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/quantum-boss/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#0c3a1fee,#07070c 78%)"><img src="assets/games/tic-tac-turf.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Tic-Tac-Turf</h3>
+            <p class="tagline">Your team vs the one you hate. Three in a row, one blitz.</p>
+            <p>Tic-tac-toe played as a four-quarter football game, in a Three.js diorama with Blender-built models.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/tic-tac-turf/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#15406eee,#07070c 78%)"><img src="assets/games/bo-belongs-3d.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Bo Belongs 3D</h3>
+            <p class="tagline">For kids: the one thing only you can do.</p>
+            <p>A tap-only 3D story game adapted from my own animated shorts, with building puzzles, a marble run and a rainstorm.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/bo-belongs-3d/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#2b1a4dee,#07070c 78%)"><img src="assets/games/play-by-numbers.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Play by Numbers</h3>
+            <p class="tagline">Solve the maths. Uncover the art.</p>
+            <p>Every right answer sets a jigsaw piece. Finish it and the picture comes alive as a music video.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/play-by-numbers/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#3d2a0cee,#07070c 78%)"><img src="assets/games/draw-by-numbers.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Draw by Numbers</h3>
+            <p class="tagline">For younger players: every answer draws a line.</p>
+            <p>Addition and subtraction where each right answer draws a stroke of a hidden picture.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/draw-by-numbers/">Play</a></div>
+          </div>
+        </article>
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#23233aee,#07070c 78%)"><img src="assets/games/iamb.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Iamb</h3>
+            <p class="tagline">Drag a path of words. Make it scan.</p>
+            <p>A poetry word-path game: build a line that matches both the meter and the rhyme.</p>
+            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/iamb/">Play</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= AI & VOICE ================= -->
+    <section id="ai" aria-labelledby="ai-title">
+      <div class="sec-head">
+        <h2 id="ai-title">AI &amp; voice</h2>
+        <p>I use AI every day, to build faster and as the product itself.</p>
+      </div>
+      <div class="feature">
+        <div class="panel">
+          <h3>Conversational voice agents</h3>
+          <p>Shifty and Black at it! are live, paid apps built on ElevenLabs conversational agents, with Node.js servers and Apple in-app purchase verification. Getting a voice agent to behave in the real world is its own craft. For example:</p>
+          <ul>
+            <li>When background noise kept cutting Black at it! off mid-sentence, I traced the cause to its turn-taking settings rather than its prompt, and fixed it there.</li>
+            <li>Black at it! picks a conversation back up where it left off after the app is backgrounded or the connection drops.</li>
+            <li>Shifty speaks in a voice cloned from mine.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Building with AI</h3>
+          <p>Claude and Claude Code are my daily development tools, and I review their work before it ships.</p>
+          <div class="chips">
+            <span class="chip">Claude &amp; Claude Code</span><span class="chip">MCP integrations</span><span class="chip">ElevenLabs voice, SFX &amp; music</span>
+            <span class="chip">n8n workflows</span><span class="chip">Python automation</span><span class="chip">Image generation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MUSIC & ART ================= -->
+    <section id="music" aria-labelledby="music-title">
+      <div class="sec-head">
+        <h2 id="music-title">Music &amp; art</h2>
+        <p>Since 2017, Getm12 has been my creative company: original music, plus 2D, 3D and graphic art.</p>
+      </div>
+      <div class="feature">
+        <div class="panel">
+          <h3>55 original songs</h3>
+          <p>Hip hop, pop, R&amp;B, Afrobeats, rock, reggae, funk, country and dance, all original and sold through my own store.</p>
+          <div class="chips"><span class="chip">Hip hop</span><span class="chip">Pop</span><span class="chip">R&amp;B</span><span class="chip">Afrobeats</span><span class="chip">Rock</span><span class="chip">Reggae</span><span class="chip">Funk</span><span class="chip">Country</span></div>
+          <div class="actions" style="margin-top:16px"><a class="pill" href="https://getm12.com/">Listen at getm12.com</a></div>
+        </div>
+        <div class="panel">
+          <h3>3D, animation &amp; video</h3>
+          <p>I model and animate in Blender for my games, including a rigged character with a walk cycle for Ten31 3D and the cast of Bo Belongs. I also produce the promo videos and App Store previews for my apps.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Godot</span><span class="chip">Three.js</span><span class="chip">DaVinci Resolve</span><span class="chip">Descript</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WEB ================= -->
+    <section id="web" aria-labelledby="web-title">
+      <div class="sec-head">
+        <h2 id="web-title">On the web</h2>
+        <p>Live sites and web apps I built and run.</p>
+      </div>
+      <div class="sites">
+        <a class="site" href="https://proxipals.onrender.com/"><b>Proxi-Pals web app</b><span>The full app, installable from the browser as a PWA, with my ten-game arcade inside.</span><span class="url">proxipals.onrender.com</span></a>
+        <a class="site" href="https://www.nucorns.com/"><b>nucorns</b><span>“Write what moved you”: a writing community where people publish stories and join the conversation.</span><span class="url">nucorns.com</span></a>
+        <a class="site" href="https://getm12.com/"><b>Getm12</b><span>My music store and creative studio: original songs across nine genres, plus graphic art.</span><span class="url">getm12.com</span></a>
+              </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section aria-labelledby="skills-title">
+      <div class="sec-head"><h2 id="skills-title">What I work with</h2></div>
+      <div class="feature">
+        <div class="panel">
+          <h3>Build</h3>
+          <div class="chips">
+            <span class="chip">JavaScript</span><span class="chip">Node.js / Express</span><span class="chip">React</span><span class="chip">HTML &amp; CSS</span>
+            <span class="chip">Python</span><span class="chip">SQL / PostgreSQL</span><span class="chip">WebSockets</span><span class="chip">Capacitor (iOS)</span>
+            <span class="chip">PHP</span><span class="chip">Swift / SwiftUI</span><span class="chip">C</span><span class="chip">Stripe</span><span class="chip">WordPress</span><span class="chip">Render hosting</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>3D, design &amp; media</h3>
+          <div class="chips">
+            <span class="chip">Blender</span><span class="chip">Godot</span><span class="chip">Three.js</span><span class="chip">Figma</span>
+            <span class="chip">Inkscape</span><span class="chip">DaVinci Resolve</span><span class="chip">Descript</span><span class="chip">App Store creative</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" class="about" aria-labelledby="about-title">
+      <div class="sec-head"><h2 id="about-title">About</h2></div>
+      <p>I’m Rory Corn. I design and build software on my own: iOS apps, browser games, voice AI and the servers behind them. I handle the whole path to launch: code, 3D models, sound, store listings, screenshots, promo videos and App Review. Since 2017 I’ve also run Getm12, where I release my original music and art.</p>
+      <p>My professional background is 20+ years in public transit operations: supervising a 24/7 operation, coaching frontline teams, and solving problems in real time. That shapes how I build: reliable, clear, and made for real people.</p>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="sec-head"><h2 id="contact-title">Get in touch</h2></div>
+      <div class="contact">
+        <a class="btn primary" href="mailto:rcorn88@gmail.com">rcorn88@gmail.com</a>
+        <a class="btn" href="https://apps.apple.com/us/developer/rory-corn/id6787558582">All my apps on the App Store</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <h2>App support &amp; privacy</h2>
+    <div class="support">
+      <div><b>Maintain</b><a href="/maintain/support.html">Support</a><a href="/maintain/privacy.html">Privacy Policy</a></div>
+      <div><b>Ten31</b><a href="/ten31/support.html">Support</a><a href="/ten31/privacy.html">Privacy Policy</a></div>
+      <div><b>Sound &amp; the Body</b><a href="https://proxipals.onrender.com/sound-and-the-body.html">Support &amp; privacy</a></div>
+      <div><b>Proxi-Pals</b><a href="https://proxipals.onrender.com/privacy.html">Privacy Policy</a></div>
+    </div>
+    <p style="margin-top:22px">© 2026 Rory Corn</p>
+  </div>
+</footer>
 </body>
 </html>
