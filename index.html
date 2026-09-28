@@ -104,7 +104,9 @@
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
   .chip{font-size:.85rem;font-weight:600;padding:6px 11px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#dcdcea}
 
-  .sites{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .sites{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media (max-width:1040px){ .sites{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .sites{grid-template-columns:1fr} }
   .site{display:block;background:rgba(21,21,34,.8);border:1px solid var(--line);border-radius:14px;padding:18px;color:var(--text)}
   .site:hover{text-decoration:none;border-color:#3b3b58;background:rgba(27,27,43,.9)}
   .site b{display:block;font-size:1.02rem}
@@ -407,6 +409,7 @@
       </div>
       <div class="sites">
         <a class="site" href="https://proxipals.onrender.com/"><b>Proxi-Pals web app</b><span>The full app, installable from the browser as a PWA, with my ten-game arcade inside.</span><span class="url">proxipals.onrender.com</span></a>
+        <a class="site" href="https://blink-i.com/"><b>Blink-i</b><span>My video site: original 3D-animated shorts and music videos, from a superhero story to a reggae track. Free sign-up on the site to watch.</span><span class="url">blink-i.com</span></a>
         <a class="site" href="https://www.nucorns.com/"><b>nucorns</b><span>“Write what moved you”: a writing community where people publish stories and join the conversation.</span><span class="url">nucorns.com</span></a>
         <a class="site" href="https://getm12.com/"><b>Getm12</b><span>My music store and creative studio: original songs across nine genres, plus graphic art.</span><span class="url">getm12.com</span></a>
               </div>
