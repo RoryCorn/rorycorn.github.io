@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Saucer glyph" filter="url(#filter0_d_0_7)">
+<path id="Dome" d="M10 3.5C11.0605 3.5 11.9988 3.66177 12.6533 3.90723C12.982 4.03051 13.2132 4.16573 13.3535 4.29004C13.4944 4.41499 13.5 4.48723 13.5 4.5C13.5 4.51277 13.4944 4.58501 13.3535 4.70996C13.2132 4.83427 12.982 4.96949 12.6533 5.09277C11.9988 5.33823 11.0605 5.5 10 5.5C8.93951 5.5 8.00124 5.33823 7.34668 5.09277C7.018 4.96949 6.78683 4.83427 6.64648 4.70996C6.50555 4.58501 6.5 4.51277 6.5 4.5C6.5 4.48723 6.50555 4.41499 6.64648 4.29004C6.78683 4.16573 7.018 4.03051 7.34668 3.90723C8.00124 3.66177 8.93951 3.5 10 3.5Z" stroke="#EAF6FF"/>
+<path id="Lens" d="M10 6.5C11.9001 6.5 13.6018 6.7205 14.8125 7.06641C15.4211 7.24031 15.8773 7.43811 16.1699 7.63574C16.48 7.84519 16.5 7.97761 16.5 8C16.5 8.02239 16.48 8.15481 16.1699 8.36426C15.8773 8.56189 15.4211 8.75969 14.8125 8.93359C13.6018 9.2795 11.9001 9.5 10 9.5C8.09989 9.5 6.39818 9.2795 5.1875 8.93359C4.57887 8.75969 4.12269 8.56189 3.83008 8.36426C3.52001 8.15481 3.5 8.02239 3.5 8C3.5 7.97761 3.52001 7.84519 3.83008 7.63574C4.12269 7.43811 4.57887 7.24031 5.1875 7.06641C6.39818 6.7205 8.09989 6.5 10 6.5Z" stroke="#EAF6FF"/>
+</g>
+<defs>
+<filter id="filter0_d_0_7" x="0" y="0" width="20" height="14" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="1.5"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.301961 0 0 0 0 0.823529 0 0 0 0 1 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_7"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_7" result="shape"/>
+</filter>
+</defs>
+</svg>

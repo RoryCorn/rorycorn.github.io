@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quantum Boss — the arcade game you play with your eyes</title>
+<meta name="description" content="Invader hulls fall toward Earth through three bands. Hold your gaze on one and the hull nearest the planet collapses. A hands-free iPhone game in development by Rory Corn.">
+<link rel="canonical" href="https://rorycorn.github.io/quantum-boss/">
+<meta name="theme-color" content="#05080f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quantum Boss">
+<meta property="og:title" content="Quantum Boss — the arcade game you play with your eyes">
+<meta property="og:description" content="Hold your aim. Collapse the hull. A hands-free iPhone game in development, played with your eyes.">
+<meta property="og:url" content="https://rorycorn.github.io/quantum-boss/">
+<meta property="og:image" content="https://rorycorn.github.io/quantum-boss/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/bebas-neue.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/img/hero-plate.jpg" as="image" media="(min-width: 700px)">
+<link rel="preload" href="assets/img/plate-saucers-closer.jpg" as="image" media="(max-width: 699px)">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top" aria-label="Quantum Boss, back to top">
+      <img src="assets/img/app-icon-128.png" alt="" width="28" height="28">
+      <span class="wordmark" aria-hidden="true"><span>QUANTUM</span><span class="wordmark__boss">BOSS</span></span>
+    </a>
+    <nav class="nav__right" id="nav-menu" aria-label="Main">
+      <ul class="nav__links">
+        <li><a href="#how">How it plays</a></li>
+        <li><a href="#quantum">The quantum layer</a></li>
+        <li><a href="#dreadnoughts">Dreadnoughts</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+      </ul>
+      <a class="btn btn--primary btn--sm" href="#notify">Get notified</a>
+    </nav>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero__plate" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 699px)" srcset="assets/img/plate-saucers-closer.jpg">
+      <img src="assets/img/hero-plate.jpg" alt="" width="1674" height="1080" fetchpriority="high">
+    </picture>
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__bar hero__bar--top" aria-hidden="true"></div>
+
+  <div class="wrap hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow">A hands-free arcade game for iPhone</p>
+      <h1 class="hero__title" id="hero-title"><span>Quantum</span><span class="hero__boss">Boss</span></h1>
+      <p class="hero__premise">Saucers are descending on Earth through three bands. You hold your gaze on one. The hull nearest the planet collapses.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--primary" href="#notify">Get notified</a>
+        <a class="btn btn--ghost" href="https://proxipals.onrender.com/games/quantum-boss/">Play the browser version</a>
+      </div>
+      <p class="fine hero__fine">Free, in your browser. Aimed with mouse or touch. The eye-controlled game is the iPhone one.</p>
+      <p class="hero__status"><span>In development</span> · <span>Not on the App Store</span> · <span>Distributed from this site</span></p>
+      <p class="hero__hud-line" aria-hidden="true">WAVE 01 · INTEGRITY 100%</p>
+    </div>
+
+    <figure class="hero__device">
+      <div class="reticle">
+        <span class="reticle__label" aria-hidden="true">Target locked · Real gameplay</span>
+        <img class="reticle__b reticle__b--tl" src="assets/svg/bracket-tl.svg" alt="">
+        <img class="reticle__b reticle__b--tr" src="assets/svg/bracket-tr.svg" alt="">
+        <img class="reticle__b reticle__b--bl" src="assets/svg/bracket-bl.svg" alt="">
+        <img class="reticle__b reticle__b--br" src="assets/svg/bracket-br.svg" alt="">
+        <div class="phone phone--hero">
+          <img src="assets/img/shot-target-lock.jpg" width="640" height="1384"
+               alt="Quantum Boss on iPhone: wave 6, score 5,120 at ×8, the target reticle locking onto a hull in the MID band.">
+        </div>
+      </div>
+      <figcaption class="hero__tagline">Hold your aim. Collapse the hull.</figcaption>
+    </figure>
+  </div>
+
+  <div class="hero__bar hero__bar--hud" aria-hidden="true">
+    <div class="wrap hero__hud">
+      <span class="hero__hud-wave">Wave 01</span>
+      <span class="hero__hud-integrity">Planetary integrity <i></i></span>
+      <span class="hero__hud-bands">High orbit <b>/</b> Mid <b>/</b> Atmosphere</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= HOW IT PLAYS ======================= -->
+<section class="sec how" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="tick" aria-hidden="true">
+      <img class="tick__dot" src="assets/svg/tick-dot.svg" alt=""><i class="tick__line"></i>
+      <span class="tick__label">HIGH ORBIT</span>
+      <img class="tick__glyph" src="assets/svg/saucer-glyph.svg" alt="">
+    </div>
+    <div class="how__grid">
+      <div>
+        <p class="eyebrow">How it plays</p>
+        <h2 class="display how__title" id="how-title">Your eyes are the weapon.</h2>
+        <ol class="steps">
+          <li class="step"><span class="step__ghost" aria-hidden="true">01</span><p class="step__label">01 Look</p>
+            <p class="step__body">Aim with your eyes. The TrueDepth camera reads your gaze through ARKit. No touch controls during play.</p></li>
+          <li class="step"><span class="step__ghost" aria-hidden="true">02</span><p class="step__label">02 Hold</p>
+            <p class="step__body">Hold your gaze on a band. HIGH ORBIT, MID or ATMOSPHERE. The reticle locks.</p></li>
+          <li class="step"><span class="step__ghost" aria-hidden="true">03</span><p class="step__label">03 Collapse</p>
+            <p class="step__body">The hull nearest the planet collapses. Chain collapses for a combo multiplier up to ×8.</p></li>
+        </ol>
+        <hr class="rule">
+        <div class="stake">
+          <p>Let a hull reach the surface and Planetary Integrity drops.</p>
+          <p class="stake__row"><span class="tri-bar" aria-hidden="true"><i></i><i></i><i></i></span>At zero, the run ends.</p>
+        </div>
+      </div>
+      <figure class="how__device">
+        <div class="how__phonewrap">
+          <span class="bandmark bandmark--high" aria-hidden="true"><span>HIGH ORBIT</span></span>
+          <span class="bandmark bandmark--mid" aria-hidden="true"><span>MID</span></span>
+          <span class="bandmark bandmark--atmo" aria-hidden="true"><span>ATMOSPHERE</span></span>
+          <div class="phone phone--framed">
+            <img src="assets/img/shot-target-lock.jpg" width="640" height="1384" loading="lazy"
+                 alt="The three bands on screen, HIGH ORBIT, MID and ATMOSPHERE, with a hull locked in the MID band.">
+          </div>
+        </div>
+        <figcaption class="how__cap">Target lock · MID band · ×8</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= THE QUANTUM LAYER ======================= -->
+<section class="sec quantum" id="quantum" aria-labelledby="quantum-title">
+  <div class="sec__plate" aria-hidden="true"><img src="assets/img/plate-saucers-closer.jpg" alt="" width="1674" height="1080" loading="lazy"></div>
+  <div class="quantum__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="tick" aria-hidden="true">
+      <img class="tick__dot" src="assets/svg/tick-dot.svg" alt=""><i class="tick__line"></i>
+      <span class="tick__label">MID</span>
+      <img class="tick__glyph" src="assets/svg/saucer-glyph-mid.svg" alt="">
+      <img class="tick__glyph" src="assets/svg/saucer-glyph-mid.svg" alt="">
+    </div>
+    <div class="quantum__grid">
+      <div>
+        <p class="eyebrow">The quantum layer</p>
+        <h2 class="display quantum__title" id="quantum-title">Nothing is where it is until you look.</h2>
+        <dl class="qparas">
+          <div><dt>Probability</dt><dd>Hulls drift inside probability clouds until they are observed.</dd></div>
+          <div><dt>Observation</dt><dd>Observing one forces it into a definite state and collapses it.</dd></div>
+          <div><dt>Entanglement</dt><dd>From wave 3, entangled pairs. Collapse one and its partner is displaced.</dd></div>
+        </dl>
+        <blockquote class="quote">
+          <p>The one thing they didn't count on is you.</p>
+          <footer>Narrator</footer>
+        </blockquote>
+      </div>
+      <div class="motif" aria-hidden="true">
+        <img src="assets/img/cloud-220.png" alt="" width="220" height="140" style="left:70px;top:40px">
+        <img src="assets/img/cloud-150.png" alt="" width="150" height="96" style="left:105px;top:62px">
+        <img src="assets/img/cloud-80.png" alt="" width="80" height="52" style="left:140px;top:84px">
+        <img src="assets/svg/hull-unobserved.svg" alt="" style="left:176px;top:106px">
+        <span class="motif__label" style="left:139px;top:196px">UNOBSERVED</span>
+        <img src="assets/svg/hull-observed.svg" alt="" style="left:135px;top:285px">
+        <span class="motif__label" style="left:148px;top:370px">OBSERVED</span>
+        <i class="motif__line"></i>
+        <img src="assets/svg/hull-a.svg" alt="" style="left:96px;top:546px">
+        <img src="assets/img/hull-b-was.png" alt="" width="8" height="8" style="left:256px;top:546px">
+        <img src="assets/svg/hull-a.svg" alt="" style="left:280px;top:546px">
+        <img src="assets/svg/displacement-arrow.svg" alt="" style="left:258px;top:527.6px">
+        <span class="motif__label" style="left:153px;top:590px">ENTANGLED</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DREADNOUGHTS ======================= -->
+<section class="sec dread" id="dreadnoughts" aria-labelledby="dread-title">
+  <div class="dread__backdrop" aria-hidden="true"><img src="assets/img/dread-backdrop.jpg" alt="" width="832" height="480" loading="lazy"></div>
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <p class="eyebrow eyebrow--orange">Every fourth wave</p>
+    <h2 class="display dread__title" id="dread-title">Dreadnoughts.</h2>
+    <i class="rule-orange" aria-hidden="true"></i>
+    <p class="lede dread__lede">A named boss with several collapse cores and a health bar. Six on file.</p>
+    <ul class="bosses">
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-archon.jpg" alt="" width="896" height="576" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 01</p><h3 class="boss__name">THE ARCHON</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="3 collapse cores"><i></i><i></i><i></i></p></div>
+      </li>
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-void-sovereign.jpg" alt="" width="512" height="512" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 02</p><h3 class="boss__name">VOID SOVEREIGN</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="4 collapse cores"><i></i><i></i><i></i><i></i></p></div>
+      </li>
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-pale-monarch.jpg" alt="" width="512" height="512" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 03</p><h3 class="boss__name">PALE MONARCH</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="4 collapse cores"><i></i><i></i><i></i><i></i></p></div>
+      </li>
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-observer.jpg" alt="" width="512" height="512" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 04</p><h3 class="boss__name">THE OBSERVER</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="5 collapse cores"><i></i><i></i><i></i><i></i><i></i></p></div>
+      </li>
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-null-regent.jpg" alt="" width="512" height="512" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 05</p><h3 class="boss__name">NULL REGENT</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="5 collapse cores"><i></i><i></i><i></i><i></i><i></i></p></div>
+      </li>
+      <li class="boss">
+        <div class="boss__img"><img src="assets/img/boss-last-eigenstate.jpg" alt="" width="512" height="512" loading="lazy"></div>
+        <div class="boss__body"><p class="boss__idx">Dreadnought 06</p><h3 class="boss__name">THE LAST EIGENSTATE</h3>
+          <p class="boss__meta"><span>Cores</span><span>100%</span></p>
+          <p class="cores" role="img" aria-label="6 collapse cores"><i></i><i></i><i></i><i></i><i></i><i></i></p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= PLANETARY CONDITIONS ======================= -->
+<section class="sec cond" id="conditions" aria-labelledby="cond-title">
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="tick" aria-hidden="true">
+      <img class="tick__dot" src="assets/svg/tick-dot.svg" alt=""><i class="tick__line"></i>
+      <span class="tick__label">ATMOSPHERE</span>
+      <img class="tick__glyph tick__glyph--atmo" src="assets/svg/saucer-glyph-atmo.svg" alt="">
+    </div>
+    <div class="cond__grid">
+      <div>
+        <p class="eyebrow">Planetary conditions</p>
+        <h2 class="display cond__title" id="cond-title">Each run draws one.</h2>
+        <p class="lede cond__lede">Six conditions. One per run, drawn when the run begins. The planet below changes. The bands do not.</p>
+        <ol class="conds">
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-thunderstorm.svg" alt=""></span><span>Thunderstorm</span><small>01</small></li>
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-aurora.svg" alt=""></span><span>Aurora</span><small>02</small></li>
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-meteor-shower.svg" alt=""></span><span>Meteor shower</span><small>03</small></li>
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-solar-storm.svg" alt=""></span><span>Solar storm</span><small>04</small></li>
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-night-side.svg" alt=""></span><span>Night side</span><small>05</small></li>
+          <li><span class="conds__glyph"><img src="assets/svg/glyph-cyclone.svg" alt=""></span><span>Cyclone</span><small>06</small></li>
+        </ol>
+      </div>
+      <div class="cond__phones">
+        <figure class="cond__shot">
+          <div class="phone phone--framed phone--sm"><img src="assets/img/shot-cyclone.jpg" width="640" height="1384" loading="lazy" alt="Wave 7 during a cyclone: score 3,080 at ×2 with the HIGH ORBIT band active."></div>
+          <figcaption><span>Wave 7</span><span class="cond__dot" aria-hidden="true"> · </span><span>Cyclone</span></figcaption>
+        </figure>
+        <figure class="cond__shot">
+          <div class="phone phone--framed phone--sm"><img src="assets/img/shot-aurora.jpg" width="640" height="1384" loading="lazy" alt="Wave 2 under the aurora, five hulls over a daylit Earth."></div>
+          <figcaption><span>Wave 2</span><span class="cond__dot" aria-hidden="true"> · </span><span>Aurora</span></figcaption>
+        </figure>
+        <figure class="cond__shot">
+          <div class="phone phone--framed phone--sm"><img src="assets/img/shot-night.jpg" width="640" height="1384" loading="lazy" alt="Wave 1 on the night side, city lights below the three labelled bands."></div>
+          <figcaption><span>Wave 1</span><span class="cond__dot" aria-hidden="true"> · </span><span>Night side</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= REQUIREMENTS + PRIVACY ======================= -->
+<section class="sec privacy" id="privacy" aria-labelledby="privacy-title">
+  <div class="sec__plate sec__plate--column" aria-hidden="true"><img src="assets/img/plate-earth-portrait.jpg" alt="" width="596" height="1080" loading="lazy"></div>
+  <div class="privacy__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <h2 class="display privacy__title" id="privacy-title"><span>Plays only on iPhone with Face ID.</span><span class="cyan">Nothing leaves your phone.</span></h2>
+    <div class="privacy__grid">
+      <div class="col">
+        <p class="col__head">Requirements</p>
+        <p>iPhone X or later. iOS 17 or later.</p>
+        <p>Uses the TrueDepth (Face ID) camera through ARKit. No touch controls during play.</p>
+        <p>The first run fits the gaze bands to your face with three short holds. If the measured eye signal is weak, it drops to two bands.</p>
+        <p>Works best in a well-lit room, held at normal reading distance. There is an 'I wear glasses' toggle.</p>
+      </div>
+      <div class="col">
+        <p class="col__head">Privacy</p>
+        <p class="strong">No account. No sign-in. No network. No analytics. No ads. No third-party SDKs.</p>
+        <p>The camera feed and face data are processed live, in memory, on the phone. They are never recorded, stored, or transmitted.</p>
+        <p>Deleting the app deletes everything.</p>
+        <p><a class="link-mono" href="https://proxipals.onrender.com/quantum-boss.html#privacy">Support and privacy details →</a></p>
+      </div>
+      <figure class="face">
+        <img src="assets/svg/face-truedepth.svg" alt="">
+        <figcaption>Processed in memory<br>Never stored</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= EARLY ACCESS ======================= -->
+<section class="sec notify" id="notify" aria-labelledby="notify-title">
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="notify__inner">
+      <p class="eyebrow">Early access</p>
+      <h2 class="display notify__title" id="notify-title">Get notified.</h2>
+      <p class="lede notify__lede">The iPhone build is in development. It will be distributed from this site, not the App Store. Leave an email and you will hear when it is ready.</p>
+      <form class="notify__form" id="notify-form" action="https://n8n.srv1640797.hstgr.cloud/webhook/quantum-boss-signup" method="post" novalidate>
+        <label class="sr-only" for="notify-email">Email address</label>
+        <input id="notify-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="your@email" required maxlength="254">
+        <div class="hp" aria-hidden="true">
+          <label for="notify-company">Leave this empty</label>
+          <input id="notify-company" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="source" value="quantum-boss-site">
+        <button class="btn btn--primary" type="submit">Get notified</button>
+      </form>
+      <p class="fine notify__status" id="notify-status" role="status" aria-live="polite">One message when the build is ready. Nothing else.</p>
+      <p class="notify__alt">Or play the <a href="https://proxipals.onrender.com/games/quantum-boss/">browser version</a> now. It is aimed with mouse or touch, not eyes.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="tick" aria-hidden="true">
+      <img class="tick__dot" src="assets/svg/tick-dot.svg" alt=""><i class="tick__line"></i>
+      <span class="tick__label">SURFACE</span>
+    </div>
+    <div class="foot__integrity" aria-hidden="true"><span>Planetary integrity</span><i></i><span>100%</span></div>
+    <div class="foot__billing">
+      <a class="brand" href="#top" aria-label="Quantum Boss, back to top">
+        <img src="assets/img/app-icon-128.png" alt="" width="40" height="40">
+        <span class="wordmark" aria-hidden="true"><span>QUANTUM</span><span class="wordmark__boss">BOSS</span></span>
+      </a>
+      <p class="foot__links">
+        <a href="https://proxipals.onrender.com/quantum-boss.html#support">Support</a><b aria-hidden="true">·</b>
+        <a href="https://proxipals.onrender.com/quantum-boss.html#privacy">Privacy</a><b aria-hidden="true">·</b>
+        <a href="https://proxipals.onrender.com/games/quantum-boss/">Browser version</a><b aria-hidden="true">·</b>
+        <span id="contact">Contact <span class="email">rcorn88 <em>at</em> gmail <em>dot</em> com</span></span>
+      </p>
+      <p class="foot__made">Made by Rory Corn, an independent developer.</p>
+      <p class="foot__legal">© 2026 Rory Corn · iPhone app in development · Browser version aimed with mouse or touch</p>
+    </div>
+    <div class="film" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</footer>
+
+<script src="main.js?v=1" defer></script>
+</body>
+</html>
