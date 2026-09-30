@@ -396,7 +396,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .privacy__scrim { position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(0deg, var(--bg) 0, rgba(5, 8, 15, 0) 30%), rgba(5, 8, 15, 0.55); }
 .privacy .wrap { padding-top: 100px; padding-bottom: 140px; }
-.privacy__title { font-size: min(88px, 6.12vw); line-height: 0.9; }
+.privacy__title { margin-top: 16px; font-size: min(88px, 6.12vw); line-height: 0.9; }
 .privacy__title span { display: block; }
 .privacy__grid { position: relative; display: grid; grid-template-columns: 440px 440px; gap: 120px; margin-top: 110px; align-items: start; }
 .col { display: grid; gap: 16px; }

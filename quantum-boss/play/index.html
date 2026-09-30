@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05080f">
+<title>Quantum Boss — play free</title>
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<!-- HUD -->
+<div id="hud" hidden>
+  <div class="hud-row">
+    <div class="hud-block">
+      <span class="lbl">WAVE</span>
+      <span class="big" id="hudWave">1</span>
+    </div>
+    <div class="hud-block right">
+      <span class="lbl">SCORE <em id="hudMult" hidden></em></span>
+      <span class="big cyan" id="hudScore">0</span>
+    </div>
+  </div>
+  <div class="hud-integrity">
+    <span class="lbl">PLANETARY INTEGRITY</span>
+    <div class="bar"><i id="hudBar"></i></div>
+  </div>
+</div>
+
+<!-- Camera preview, tiny, so people can see tracking is working -->
+<video id="cam" playsinline muted autoplay hidden></video>
+<div id="camDot" hidden title="face tracking active"></div>
+
+<!-- ===== Screens ===== -->
+
+<div class="screen" id="screenTitle">
+  <div class="panel">
+    <h1>QUANTUM<span>BOSS</span></h1>
+    <p class="sub">They are coming for the North sky. <strong>Hold your gaze on a band</strong> to collapse the hulls inside it — before they breach the atmosphere.</p>
+    <p class="best" id="bestLine" hidden>BEST <span id="bestVal">0</span></p>
+
+    <button class="cta" id="btnCamera">▶ Play with head tracking</button>
+    <button class="cta ghost" id="btnTouch">Play with touch instead</button>
+
+    <p class="fineprint">
+      Head tracking uses your camera <strong>entirely on your device</strong> — nothing is recorded, stored, or uploaded.
+      Works best in a well-lit room.
+    </p>
+    <p class="fineprint fullgame">
+      This free browser version runs eight waves with two Dreadnoughts. The full iPhone game adds every wave, all six
+      Dreadnoughts, six planetary conditions, entangled pairs and TrueDepth eye tracking. <a href="../">About Quantum Boss</a>
+    </p>
+  </div>
+</div>
+
+<div class="screen" id="screenCal" hidden>
+  <div class="panel">
+    <h2 id="calTitle">Calibrating</h2>
+    <p class="sub" id="calMsg">Hold still…</p>
+    <div class="calring"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="fill" id="calArc" cx="60" cy="60" r="52"/></svg><span id="calCount"></span></div>
+    <p class="fineprint" id="calHint">Keep your head still and just move your eyes and chin.</p>
+    <button class="cta ghost small" id="btnCalSkip">Skip — use defaults</button>
+  </div>
+</div>
+
+<div class="screen" id="screenOver" hidden>
+  <div class="panel">
+    <h2 id="overTitle">The planet fell</h2>
+    <p class="score">SCORE <span id="overScore">0</span></p>
+    <p class="sub" id="overSub">You held out for <span id="overWave">1</span> waves.</p>
+    <button class="cta" id="btnAgain">▶ Play again</button>
+    <a class="cta ghost" id="btnSite" href="../">About the iPhone game</a>
+    <p class="fineprint" id="bandNote"></p>
+  </div>
+</div>
+
+<div class="screen" id="screenErr" hidden>
+  <div class="panel">
+    <h2>Camera unavailable</h2>
+    <p class="sub" id="errMsg">We couldn't start head tracking.</p>
+    <button class="cta" id="btnErrTouch">Play with touch instead</button>
+  </div>
+</div>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
