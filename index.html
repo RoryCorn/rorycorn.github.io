@@ -77,7 +77,10 @@
   .card p{margin:0;color:#cfcfe0}
   .tags{display:flex;flex-wrap:wrap;gap:6px}
   .tag{font-size:.76rem;font-weight:600;color:#cfc8ff;background:rgba(139,123,255,.12);border:1px solid rgba(139,123,255,.25);padding:3px 9px;border-radius:999px}
-  .card .actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+  .card .actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+  .card .stretch{color:inherit}
+  .card .stretch::after{content:"";position:absolute;inset:0;border-radius:inherit}
+  .card:has(.stretch:hover) h3{text-decoration:underline}
   .pill{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:700;padding:9px 13px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text)}
   .pill:hover{text-decoration:none;border-color:#44446a;background:rgba(255,255,255,.06)}
   .pill.store{background:#f4f4f8;color:#111;border-color:#f4f4f8}
@@ -253,7 +256,7 @@
         <article class="card game">
           <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#06142aee,#07070c 78%)"><img src="assets/games/quantum-boss.png" alt="" width="92" height="92" loading="lazy"></div>
           <div class="body">
-            <h3>Quantum Boss</h3>
+            <h3><a class="stretch" href="quantum-boss/">Quantum Boss</a></h3>
             <p class="tagline">Hold your aim. Collapse the hull.</p>
             <p>Saucers fall toward Earth. Find one with your eyes and head, keep your focus on it, and it is destroyed. Face tracking runs in the browser through your camera; touch, mouse and keys work too. Its website was designed in Figma and built from that design.</p>
             <div class="tags"><span class="tag">MediaPipe face tracking</span><span class="tag">Canvas &amp; Web Audio</span><span class="tag">Designed in Figma</span></div>
