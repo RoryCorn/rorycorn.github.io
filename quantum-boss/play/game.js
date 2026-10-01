@@ -594,12 +594,12 @@ function buildLock(target, dt) {
   if (state.bandDwell >= 1) { state.bandDwell = 0; lockComplete(target); }
 }
 /* Lock the hull at (px, py): magnetism to acquire, a sticky hold once locked. */
-function targetAt(px, py, assist, dt) {
+function targetAt(px, py, assist, dt, sticky = 1.5) {
   const forgive = Math.max(1.28 - (state.wave - 1) * 0.09, 1.0) * assist;
   const radius = (v) => Math.max(v.w * 0.70, 76 * u) * forgive;
   const dist = (v) => Math.hypot(px - v.pos.x, py - v.pos.y);
   let cur = byId(state.targetId);
-  if (cur && (cur.collapsing || dist(cur) > radius(cur) * 1.5)) cur = null;
+  if (cur && (cur.collapsing || dist(cur) > radius(cur) * sticky)) cur = null;
   if (!cur) {
     let bestD = Infinity;
     for (const v of state.invaders) {
@@ -625,7 +625,7 @@ function updateLock(dt) {
       if (Math.hypot(g.x - state.killGaze.x, g.y - state.killGaze.y) >= 48 * u) state.killGaze = null;
       else { state.selectedBand = bandAt(g.y); clearLock(dt, 0.4); return; }
     }
-    targetAt(g.x, g.y, PC ? 1.25 : 1.1, dt);
+    targetAt(g.x, g.y, PC ? 1.4 : 1.1, dt, PC ? 1.8 : 1.5);
     return;
   }
   if (state.input === 'auto' || state.keysOverride) {
@@ -893,8 +893,14 @@ function drawReticle() {
     if (!track.model) return;
     x = track.gaze.x; y = track.gaze.y;
     if (!track.live) a = 0.3;
-    const locked = PC ? byId(state.targetId) : null;
-    if (locked && !locked.collapsing) { x += (locked.pos.x - x) * 0.4; y += (locked.pos.y - y) * 0.4; }
+    if (PC) {
+      const locked = byId(state.targetId);
+      if (locked && !locked.collapsing) { x += (locked.pos.x - x) * 0.6; y += (locked.pos.y - y) * 0.6; }
+      const d = track.disp;
+      if (!d.init) { d.x = x; d.y = y; d.init = true; }
+      d.x += (x - d.x) * 0.35; d.y += (y - d.y) * 0.35;   // glide between held points, no teleporting
+      x = d.x; y = d.y;
+    }
   } else if (state.input === 'pointer' && !state.keysOverride && ptr.active && ptr.mouse) {
     x = ptr.x; y = ptr.y;
   } else return;
@@ -1048,12 +1054,16 @@ const K_EYE = 0.4;   // radians of gaze per unit of eye-look blendshape
 const PC = finePointer;
 const makeFilter = () => (PC ? new OneEuro(0.45, 0.25, 1.0) : new OneEuro(1.0, 1.0, 1.0));
 function median5(buf, v) { buf.push(v); if (buf.length > 5) buf.shift(); const s = [...buf].sort((a, b) => a - b); return s[s.length >> 1]; }
-const CAL_DOTS = [[0.5, 0.5], [0.5, 0.26], [0.5, 0.74], [0.14, 0.5], [0.86, 0.5]];
+const CAL_DOTS = PC
+  ? [[0.5, 0.5], [0.5, 0.26], [0.5, 0.74], [0.14, 0.5], [0.86, 0.5], [0.14, 0.26], [0.86, 0.26], [0.14, 0.74], [0.86, 0.74]]
+  : [[0.5, 0.5], [0.5, 0.26], [0.5, 0.74], [0.14, 0.5], [0.86, 0.5]];
 const track = {
   landmarker: null, stream: null, live: false, lastFace: 0, lastVideoT: -1,
   hp: 0, hy: 0, ev: 0, eh: 0,   // head pitch and yaw (radians), eyes vertical and horizontal
   model: null, gaze: { x: 0, y: 0 },
   fx: null, fy: null, bx: [], by: [], blink: false,
+  ih: 0, iv: 0,                   // computers: where each iris sits between its eye corners
+  fix: { x: null, y: null, sx: 0, sy: 0, n: 0 }, fixR: 0.06, disp: { x: 0, y: 0 },
   cal: null,
 };
 function blend(cats, name) { const c = cats.find((x) => x.categoryName === name); return c ? c.score : 0; }
@@ -1100,8 +1110,61 @@ function fitAxis(samples, headKey, eyeKey, targetKey) {
   return fitLinear(samples, headKey, eyeKey, targetKey, wHead, wEye);
 }
 const predict = (m, head, eye) => m.a + m.b * (m.wHead * head + m.wEye * eye);
+/* Computers: least squares on standardised readings with a little ridge, so head pose and
+ * iris position each get the weight the nine dots justify. */
+function fitRidge(samples, keys, targetKey) {
+  const n = samples.length;
+  if (n < 12) return null;
+  const mean = keys.map((k) => avg(samples.map((x) => x[k])));
+  const sd = keys.map((k, i) => Math.sqrt(avg(samples.map((x) => (x[k] - mean[i]) ** 2))));
+  const idx = keys.map((_, i) => i).filter((i) => sd[i] > 1e-9);
+  if (!idx.length) return null;
+  const mt = avg(samples.map((x) => x[targetKey]));
+  const m = idx.length;
+  const A = Array.from({ length: m }, () => Array(m).fill(0)), b = Array(m).fill(0);
+  for (const x of samples) {
+    const z = idx.map((i) => (x[keys[i]] - mean[i]) / sd[i]), y = x[targetKey] - mt;
+    for (let r = 0; r < m; r++) { b[r] += z[r] * y; for (let c = 0; c < m; c++) A[r][c] += z[r] * z[c]; }
+  }
+  for (let r = 0; r < m; r++) A[r][r] += 0.02 * n;
+  let beta;
+  if (m === 1) beta = [b[0] / A[0][0]];
+  else {
+    const det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+    if (Math.abs(det) < 1e-12) return null;
+    beta = [(b[0] * A[1][1] - A[0][1] * b[1]) / det, (A[0][0] * b[1] - A[1][0] * b[0]) / det];
+  }
+  const model = { kind: 'ridge', keys: idx.map((i) => keys[i]), mean: idx.map((i) => mean[i]), sd: idx.map((i) => sd[i]), beta, mt };
+  let ssr = 0, sst = 0;
+  for (const x of samples) { const d = x[targetKey] - predictAxis(model, x); ssr += d * d; sst += (x[targetKey] - mt) ** 2; }
+  model.r2 = 1 - ssr / Math.max(sst, 1e-12);
+  return model;
+}
+/* Computers: head only, iris only, or both; keep the cleanest fit (simpler wins near-ties). */
+function fitAxisPC(samples, headKey, irisKey, targetKey) {
+  let best = null;
+  for (const keys of [[headKey], [irisKey], [headKey, irisKey]]) {
+    const m = fitRidge(samples, keys, targetKey);
+    if (m && (!best || m.r2 > best.r2 + 0.01)) best = m;
+  }
+  return best;
+}
+function predictAxis(m, r) {
+  if (m.kind === 'ridge') {
+    let v = m.mt;
+    for (let i = 0; i < m.keys.length; i++) v += m.beta[i] * (r[m.keys[i]] - m.mean[i]) / m.sd[i];
+    return v;
+  }
+  return predict(m, r.head, r.eye);
+}
 /* Calibration skipped: head only, typical ranges, signs from MediaPipe's axes. */
 function defaultModel() {
+  if (PC) {   // same head-only ranges, in the form the computer's predictor reads
+    return {
+      x: { kind: 'ridge', keys: ['hy'], mean: [track.hy], sd: [1], beta: [-2.0], mt: 0.5, r2: 0 },
+      y: { kind: 'ridge', keys: ['hp'], mean: [track.hp], sd: [1], beta: [2.78], mt: 0.5, r2: 0 },
+    };
+  }
   return {
     x: { wHead: 1, wEye: 0, b: -2.0, a: 0.5 + 2.0 * track.hy, r2: 0 },
     y: { wHead: 1, wEye: 0, b: 2.78, a: 0.5 - 2.78 * track.hp, r2: 0 },
@@ -1188,19 +1251,55 @@ function camLoop() {
                - (blend(c, 'eyeLookInLeft') + blend(c, 'eyeLookOutRight'))) / 2;
     }
   }
+  const lm = res.faceLandmarks && res.faceLandmarks[0];
+  if (PC && lm && lm.length >= 478 && !track.blink) {
+    // where each iris sits between its eye corners (aspect-correct pixels): along the
+    // corner line for left/right, across it for up/down
+    const vw = cam.videoWidth || 640, vh = cam.videoHeight || 480;
+    const eye = (inner, outer, iris) => {
+      const ax = lm[inner].x * vw, ay = lm[inner].y * vh;
+      const ex = lm[outer].x * vw - ax, ey = lm[outer].y * vh - ay, w2 = ex * ex + ey * ey;
+      const dx = lm[iris].x * vw - ax, dy = lm[iris].y * vh - ay;
+      return w2 > 1 ? [(dx * ex + dy * ey) / w2, (ex * dy - ey * dx) / w2] : [0, 0];
+    };
+    const [hL, vL] = eye(362, 263, 473), [hR, vR] = eye(133, 33, 468);
+    track.ih = (hL - hR) / 2;   // the corner lines run opposite ways in the two eyes
+    track.iv = (vL - vR) / 2;
+  }
   const cal = track.cal;
   if (cal && cal.collecting && cal.t > 0.25 && !track.blink) {   // skip the first moment of each hold while the eyes land
     const [tx, ty] = CAL_DOTS[cal.i];
-    cal.samples.push({ hp: track.hp, hy: track.hy, ev: track.ev, eh: track.eh, tx, ty });
+    cal.samples.push({ hp: track.hp, hy: track.hy, ev: track.ev, eh: track.eh, ih: track.ih, iv: track.iv, tx, ty, dot: cal.i });
   }
   if (track.model) {
     const now = performance.now() / 1000;
-    let fx = predict(track.model.x, track.hy, track.eh), fy = predict(track.model.y, track.hp, track.ev);
-    if (PC) { fx = median5(track.bx, fx); fy = median5(track.by, fy); }
-    if (!track.fx) { track.fx = makeFilter(); track.fy = makeFilter(); }
-    track.gaze.x = track.fx.filter(fx, now) * W;
-    track.gaze.y = track.fy.filter(fy, now) * H;
+    if (PC) {
+      const r = { hy: track.hy, hp: track.hp, ih: track.ih, iv: track.iv, head: 0, eye: 0 };
+      const fx = median5(track.bx, predictAxis(track.model.x, r)), fy = median5(track.by, predictAxis(track.model.y, r));
+      fixate(fx, fy);
+      track.gaze.x = track.fix.x * W; track.gaze.y = track.fix.y * H;
+    } else {
+      const fx = predict(track.model.x, track.hy, track.eh), fy = predict(track.model.y, track.hp, track.ev);
+      if (!track.fx) { track.fx = makeFilter(); track.fy = makeFilter(); }
+      track.gaze.x = track.fx.filter(fx, now) * W;
+      track.gaze.y = track.fy.filter(fy, now) * H;
+    }
   }
+}
+/* Computers: eyes rest, then jump. Hold the gaze point still while readings stay inside a
+ * small circle (sized from this player's own calibration wobble), drifting only slowly to
+ * their centre; move only when three readings in a row land outside it. */
+function fixate(px, py) {
+  const f = track.fix;
+  if (f.x == null) { f.x = px; f.y = py; return; }
+  const R = track.fixR * H;
+  if (Math.hypot((px - f.x) * W, (py - f.y) * H) < R) {
+    f.x += (px - f.x) * 0.06; f.y += (py - f.y) * 0.06;
+    f.n = 0; f.sx = 0; f.sy = 0;
+    return;
+  }
+  f.sx += px; f.sy += py; f.n++;
+  if (f.n >= 3) { f.x = f.sx / f.n; f.y = f.sy / f.n; f.n = 0; f.sx = 0; f.sy = 0; }
 }
 
 function beginCalibration() {
@@ -1254,11 +1353,33 @@ function calTick(ts) {
 function finishCalibration(cal) {
   track.cal = null; calLast = 0;
   $('calDot').hidden = true;
-  const mx = fitAxis(cal.samples.filter((s) => s.ty === 0.5), 'hy', 'eh', 'tx');   // centre, left, right
-  const my = fitAxis(cal.samples.filter((s) => s.tx === 0.5), 'hp', 'ev', 'ty');   // centre, top, bottom
+  let mx, my;
+  if (PC) {
+    mx = fitAxisPC(cal.samples, 'hy', 'ih', 'tx');
+    my = fitAxisPC(cal.samples, 'hp', 'iv', 'ty');
+  } else {
+    mx = fitAxis(cal.samples.filter((s) => s.ty === 0.5), 'hy', 'eh', 'tx');   // centre, left, right
+    my = fitAxis(cal.samples.filter((s) => s.tx === 0.5), 'hp', 'ev', 'ty');   // centre, top, bottom
+  }
   const fallback = defaultModel();
   track.model = { x: mx || fallback.x, y: my || fallback.y };
   track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
+  track.fix = { x: null, y: null, sx: 0, sy: 0, n: 0 };
+  if (PC && mx && my) {
+    // the wobble inside each hold, in screen terms, sets how big a still gaze is allowed to be
+    let ss = 0, n = 0;
+    for (let d = 0; d < CAL_DOTS.length; d++) {
+      const pts = cal.samples.filter((s) => s.dot === d).map((s) => {
+        const r = { ...s, head: 0, eye: 0 };
+        return [predictAxis(mx, r) * W, predictAxis(my, r) * H];
+      });
+      if (pts.length < 4) continue;
+      const cx = avg(pts.map((q) => q[0])), cy = avg(pts.map((q) => q[1]));
+      for (const q of pts) { ss += (q[0] - cx) ** 2 + (q[1] - cy) ** 2; n++; }
+    }
+    const sigma = n ? Math.sqrt(ss / n / 2) : 0.03 * H;
+    track.fixR = clamp((2.5 * sigma) / H, 0.035, 0.10);
+  }
   if (!mx || !my || mx.r2 < 0.3 || my.r2 < 0.3) {
     $('calTitle').textContent = 'TRACKING WAS UNSTEADY';
     $('calMsg').textContent = 'Sit facing the screen in good light, keep your face in view, and try again. Or play now and see how it feels.';
@@ -1274,6 +1395,7 @@ function skipCalibration() {
   track.cal = null; calLast = 0;
   if (!calPlayAnyway || !track.model) track.model = defaultModel();
   track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
+  track.fix = { x: null, y: null, sx: 0, sy: 0, n: 0 };
   $('calDot').hidden = true;
   afterCalibration();
 }
@@ -1402,6 +1524,7 @@ window.__qb = {
   // eye play without a camera: a test puts the gaze where it wants
   fakeEyes: () => { track.model = defaultModel(); track.live = true; track.lastFace = Infinity; state.input = 'eyes'; startRun(); },
   gazeAt: (x, y) => { track.live = true; track.gaze.x = x; track.gaze.y = y; },
+  fixR: () => track.fixR, dots: () => CAL_DOTS.length,
   size: () => ({ W, H, u }),
   wave: (n) => { state.invaders = []; state.pending = []; beginWave(n); },
 };
