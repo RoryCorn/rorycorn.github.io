@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Synesthesia — a mood diary in colour and sound</title>
+<meta name="description" content="Say how you feel. Synesthesia paints your mood as a moving picture, plays it as a short piece of music, and keeps it on a calendar in colour. A free mood diary by Rory Corn that installs from this page.">
+<link rel="canonical" href="https://rorycorn.github.io/synesthesia/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f6f0e6">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Synesthesia">
+<meta property="og:title" content="Synesthesia — a mood diary in colour and sound">
+<meta property="og:description" content="Say how you feel. Keep the day in colour. A free mood diary that paints your mood, plays it as music and keeps it on a calendar on your device.">
+<meta property="og:url" content="https://rorycorn.github.io/synesthesia/">
+<meta property="og:image" content="https://rorycorn.github.io/synesthesia/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="preload" href="assets/fonts/newsreader-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/newsreader-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=1">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Synesthesia",
+ "alternateName": "Synesthesia — Mood Diary",
+ "url": "https://rorycorn.github.io/synesthesia/",
+ "description": "A mood diary you keep by saying how you feel. It reads feeling from your words and energy from your voice, paints your mood as a moving picture, plays it as a short piece of music, and keeps it on a calendar on your device.",
+ "applicationCategory": "LifestyleApplication",
+ "operatingSystem": "Any — installs from the browser on iPhone, iPad, Android, Mac, Windows and Chromebook",
+ "browserRequirements": "A current browser. Speech-to-words works in Chrome, Edge and Safari; typing works everywhere.",
+ "installUrl": "https://rorycorn.github.io/synesthesia/app/?install",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "image": "https://rorycorn.github.io/synesthesia/og.jpg",
+ "screenshot": "https://rorycorn.github.io/synesthesia/assets/img/shot-phone-calm.jpg",
+ "author": {
+  "@type": "Person",
+  "name": "Rory Corn",
+  "url": "https://rorycorn.github.io/"
+ }
+}
+</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="c612ccf3-e4c0-42a9-8339-f51a428e895c" data-domains="rorycorn.github.io"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top" aria-label="Synesthesia, back to top">
+      <img src="assets/img/icon-72.png" alt="" width="36" height="36">
+      <span>Synesthesia</span>
+    </a>
+    <nav class="nav__right" id="nav-menu" aria-label="Main">
+      <ul class="nav__links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#moods">Moods</a></li>
+        <li><a href="#diary">Diary</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+      </ul>
+      <a class="btn btn--dark btn--sm nav__cta" href="#get" data-umami-event="Get the app (menu)">Get the app</a>
+    </nav>
+    <a class="btn btn--dark btn--sm nav__cta-m" href="#get" data-umami-event="Get the app (menu)">Get the app</a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menu"><img class="nav__ico-menu" src="assets/svg/icon-menu.svg" alt="" width="20" height="18"><span class="nav__ico-close" aria-hidden="true"></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero__head">
+    <p class="eyebrow eyebrow--ruled"><span>A mood diary in colour and sound</span></p>
+    <h1 class="hero__title" id="hero-title">
+      <span class="hero__l1">Say how <span class="nw">you feel.</span></span>
+      <span class="hero__l2"><em>Keep the day</em> <em class="hl-colour">in colour.</em></span>
+    </h1>
+    <p class="hero__lede">Synesthesia is a mood diary: say or type how you feel, and it paints your mood as a moving picture, plays it as a short piece of music, and keeps it on a calendar in colour.</p>
+    <div class="hero__cta">
+      <div class="btns">
+        <a class="btn btn--dark" href="app/?install" data-install data-where="top"><img src="assets/svg/icon-download.svg" alt="" width="20" height="20">Download the app</a>
+        <a class="btn btn--line" href="app/" data-umami-event="Open the app" data-umami-event-where="top">Open in your browser<img src="assets/svg/icon-arrow.svg" alt="" width="16" height="16"></a>
+      </div>
+      <p class="fine">Free · iPhone, iPad, Android, Mac, Windows · No App Store, no account</p>
+    </div>
+  </div>
+
+  <!-- The open diary: a day's two entries on the left, the real app taped in on the right. -->
+  <figure class="spread fit" data-fit="1200" aria-label="An open mood diary. Thursday, September 24, 8:15 PM: Made a plan, wrote it down, and I can breathe again. Stamped Calm. Earlier, 7:45 AM, Anxious: Woke up at four with my mind racing about money. Taped onto the facing page, a phone screenshot of the app playing a Calm piece.">
+    <div class="fit__canvas spread__canvas" aria-hidden="true">
+      <div class="spread__cover"></div>
+      <div class="spread__block spread__block--low"></div>
+      <div class="spread__block"></div>
+      <div class="spread__page spread__page--l"><img class="spread__grid" src="assets/svg/dot-grid-page.svg" alt=""><div class="spread__shade"></div></div>
+      <div class="spread__page spread__page--r"><img class="spread__grid" src="assets/svg/dot-grid-page.svg" alt=""><div class="spread__shade"></div></div>
+      <div class="spread__gutter"></div>
+
+      <div class="spread__entry">
+        <div class="spread__head"><span>Mood diary</span><span>September 2026</span></div>
+        <div class="spread__main">
+          <p class="spread__time">Thursday, September 24 · 8:15 PM</p>
+          <p class="spread__quote">Made a plan, wrote it down, and I can breathe again.</p>
+          <p class="spread__meta">feeling +0.32 · energy 0.1<br>major pentatonic · 52 bpm</p>
+        </div>
+        <div class="spread__earlier">
+          <p class="spread__row"><span class="spread__time spread__time--muted">Earlier · 7:45 AM</span><span class="stamp-sm" style="--c:#8d2f93">Anxious</span></p>
+          <p class="spread__said">Woke up at four with my mind racing about money.</p>
+        </div>
+      </div>
+      <div class="spread__foot"><img src="assets/svg/day-square-calm.svg" alt="" width="28" height="28"><p>Two entries today. The day takes the colour of the latest.</p></div>
+
+      <div class="stamp stamp--calm"><span class="stamp__inner"></span><span class="stamp__word">Calm</span><span class="stamp__date">24 Sep 2026 · 8:15 PM</span></div>
+      <img class="spread__ribbon" src="assets/svg/ribbon-tender.svg" alt="">
+      <div class="spread__photo"><img src="assets/img/shot-phone-calm.jpg" alt="" width="240" height="519"></div>
+      <img class="spread__tape spread__tape--l" src="assets/svg/tape-left.svg" alt="">
+      <img class="spread__tape spread__tape--r" src="assets/svg/tape-right.svg" alt="">
+      <img class="spread__arrow" src="assets/svg/hand-arrow.svg" alt="">
+      <div class="spread__note">
+        <p class="label">As it plays</p>
+        <p class="spread__note-text">A Calm piece on the phone: slow lines draw themselves with each note while a soft core glows.</p>
+        <p class="spread__note-meta">major pentatonic · 54 bpm</p>
+        <p class="spread__note-aside">The tempo drifts a little each time.</p>
+      </div>
+    </div>
+  </figure>
+
+  <!-- Phones: one diary page, the screenshot taped into its lower corner. -->
+  <figure class="spread-m fit" data-fit="350" aria-label="A mood diary page. Thursday, September 24, 8:15 PM: Made a plan, wrote it down, and I can breathe again. Stamped Calm, with a phone screenshot of the app playing a Calm piece taped onto the page.">
+    <div class="fit__canvas spread-m__canvas" aria-hidden="true">
+      <div class="spread-m__cover"></div>
+      <div class="spread-m__block"></div>
+      <div class="spread-m__page"><img class="spread__grid" src="assets/svg/dot-grid-page-m.svg" alt=""><div class="spread-m__shade"></div></div>
+      <img class="spread-m__ribbon" src="assets/svg/ribbon-tender-m.svg" alt="">
+      <div class="spread-m__entry">
+        <div class="spread__head"><span>Mood diary</span><span>Sep 2026</span></div>
+        <div class="spread-m__main">
+          <p class="spread__time">Thursday, September 24 · 8:15 PM</p>
+          <p class="spread-m__quote">Made a plan,<br>wrote it down, and I<br>can breathe again.</p>
+          <p class="spread__meta">feeling +0.32 · energy 0.1<br>major pentatonic · 52 bpm</p>
+        </div>
+      </div>
+      <div class="stamp stamp--m"><span class="stamp__inner"></span><span class="stamp__word">Calm</span><span class="stamp__date">24 Sep · 8:15 PM</span></div>
+      <div class="spread-m__photo"><img src="assets/img/shot-phone-calm.jpg" alt="" width="118" height="256"></div>
+      <img class="spread-m__tape spread-m__tape--l" src="assets/svg/tape-left-m.svg" alt="">
+      <img class="spread-m__tape spread-m__tape--r" src="assets/svg/tape-right-m.svg" alt="">
+    </div>
+  </figure>
+</section>
+
+<!-- ======================= 01 HOW IT WORKS ======================= -->
+<section class="how" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="how__head">
+      <div class="how__title">
+        <p class="sec-label"><b>01</b><i></i><span>How it works</span></p>
+        <h2 id="how-title">From a sentence to a page in your diary.</h2>
+      </div>
+      <p class="intro">A sentence or two is all it needs. Here is what happens after you say it.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step__top"><span class="step__n" style="color:#af623c">1</span><span class="label">Speak or type</span></div>
+        <div class="step__art" aria-hidden="true">
+          <div class="art art--speak">
+            <img class="art__wave" src="assets/svg/waveform.svg" alt="" width="226" height="92">
+            <span class="mini mini--dark"><img src="assets/svg/rec-dot.svg" alt="" width="7" height="7">Speak</span><span class="mini mini--line">Finish</span>
+          </div>
+        </div>
+        <h3>Say how you feel</h3>
+        <p>Tap Speak and talk, then Finish. Or type it and press Render. Speaking says more: it hears how you sound, not just what you say.</p>
+      </li>
+      <li class="step">
+        <div class="step__top"><span class="step__n" style="color:#597488">2</span><span class="label">Feeling · energy</span></div>
+        <div class="step__art" aria-hidden="true">
+          <div class="art art--meters">
+            <span class="art__k" style="left:18px;top:22px">Feeling</span><span class="art__v" style="left:172px;top:22px">+0.32</span>
+            <i class="art__track" style="top:46px"></i><i class="art__zero"></i><i class="art__fill" style="left:113px;top:46px;width:30.4px;background:#bc6862"></i>
+            <img class="art__marker" src="assets/svg/marker-feeling.svg" alt="" width="12" height="12" style="left:137.4px;top:42px">
+            <span class="art__k" style="left:18px;top:74px">Energy</span><span class="art__v" style="left:186px;top:74px">0.1</span>
+            <i class="art__track" style="top:98px"></i><i class="art__fill" style="left:18px;top:98px;width:19px;background:#6790ad"></i>
+            <img class="art__marker" src="assets/svg/marker-energy.svg" alt="" width="12" height="12" style="left:31px;top:94px">
+          </div>
+        </div>
+        <h3>It reads two things</h3>
+        <p>Feeling, mostly from your words: how pleasant or unpleasant. Energy, mostly from your voice: how calm or charged.</p>
+      </li>
+      <li class="step">
+        <div class="step__top"><span class="step__n" style="color:#a24958">3</span><span class="label">16–20 seconds</span></div>
+        <div class="step__art step__art--shot" aria-hidden="true"><img src="assets/img/shot-desktop-tender.jpg" alt="" width="960" height="600"></div>
+        <h3>It paints and plays your mood</h3>
+        <p>It lands on the nearest of 13 moods, then paints a moving picture and plays a short melody in that mood’s own scale and tempo.</p>
+      </li>
+      <li class="step">
+        <div class="step__top"><span class="step__n" style="color:#965954">4</span><span class="label">With the time</span></div>
+        <div class="step__art" aria-hidden="true">
+          <div class="art art--week">
+            <span class="wk__d">S</span><span class="wk__d">M</span><span class="wk__d">T</span><span class="wk__d">W</span><span class="wk__d">T</span><span class="wk__d">F</span><span class="wk__d">S</span>
+            <span class="wk__day" style="background:#965954">20</span>
+            <span class="wk__day wk__day--empty">21</span>
+            <span class="wk__day" style="background:#92266e">22</span>
+            <span class="wk__day" style="background:#6c5661">23</span>
+            <span class="wk__day wk__day--sel" style="background:#965954">24<img src="assets/svg/day-dot.svg" alt="" width="4" height="4"></span>
+            <span class="wk__day wk__day--empty">25</span>
+            <span class="wk__day" style="background:#af623c">26</span>
+            <span class="wk__cap">September 20–26</span>
+          </div>
+        </div>
+        <h3>It goes in your diary</h3>
+        <p>Turn the diary on once, and every finished piece is kept with the time and your words. Each day takes its latest mood’s colour.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= 02 WHAT IT LISTENS FOR ======================= -->
+<section class="listens" id="listens" aria-labelledby="listens-title">
+  <div class="wrap listens__row">
+    <div class="listens__text">
+      <p class="sec-label"><b>02</b><i></i><span>What it listens for</span></p>
+      <h2 id="listens-title">It listens for<br>two things.</h2>
+      <p class="intro">One happy-to-sad scale can’t tell calm sadness from panic, or contentment from excitement. So it reads two things at once.</p>
+      <div class="listen">
+        <p class="listen__title"><span class="hl hl--feeling">Feeling</span><span class="label">From your words · −1 to +1</span></p>
+        <p>How pleasant or unpleasant. A built-in vocabulary of about 230 feeling words that understands “not”, “very” and “a bit”: “not great” is not “great”, and “really awful” is worse than “awful”.</p>
+      </div>
+      <div class="listen">
+        <p class="listen__title"><span class="hl hl--energy">Energy</span><span class="label">From your voice · 0 to 1</span></p>
+        <p>How calm or charged: how loud you are, how bright your tone is, and how fast you’re talking.</p>
+      </div>
+      <p class="listens__note">With no words at all, it stays near neutral instead of inventing a feeling. The reading happens on your device; turning speech into words is your browser’s job (<a href="#privacy">see Privacy</a>).</p>
+    </div>
+
+    <figure class="map fit" data-fit="640" aria-label="The feeling and energy map. Feeling runs from unpleasant on the left to pleasant on the right; energy from still at the bottom to charged at the top. Angry, Anxious and Stressed sit high and unpleasant; Joyful high and pleasant; Hopeful in the middle right; Moody, Sad, Lonely and Numb low and unpleasant; Even, Content, Tender and Calm low and pleasant.">
+      <div class="fit__canvas map__canvas" aria-hidden="true">
+        <img class="map__layer" src="assets/svg/graph-paper.svg" alt="">
+        <img class="map__layer" src="assets/svg/axes.svg" alt="">
+        <span class="map__tick" style="left:79px;top:291px">−1&nbsp;&nbsp;unpleasant</span>
+        <span class="map__tick" style="left:512px;top:291px">pleasant&nbsp;&nbsp;+1</span>
+        <span class="map__tick" style="left:349px;top:55px">charged&nbsp;&nbsp;1</span>
+        <span class="map__tick" style="left:349px;top:493px">still&nbsp;&nbsp;0</span>
+        <span class="map__axis map__axis--x"><b class="hl hl--feeling hl--sm">Feeling</b>from your words</span>
+        <span class="map__axis map__axis--y"><b class="hl hl--energy hl--sm">Energy</b>from your voice</span>
+        <span class="map__label" style="left:506px;top:140px">Joyful</span><img class="map__dot" src="assets/svg/dot-joyful.svg" alt="" style="left:559.8px;top:143px">
+        <span class="map__label" style="left:514px;top:369px">Content</span><img class="map__dot" src="assets/svg/dot-content.svg" alt="" style="left:492.2px;top:371.8px">
+        <span class="map__label" style="left:483px;top:395px">Tender</span><img class="map__dot" src="assets/svg/dot-tender.svg" alt="" style="left:461px;top:398.2px">
+        <span class="map__label" style="left:464px;top:241px">Hopeful</span><img class="map__dot" src="assets/svg/dot-hopeful.svg" alt="" style="left:448px;top:266.2px">
+        <span class="map__label" style="left:436px;top:448px">Calm</span><img class="map__dot" src="assets/svg/dot-calm.svg" alt="" style="left:414.2px;top:451px">
+        <span class="map__label" style="left:379px;top:373px">Even</span><img class="map__dot" src="assets/svg/dot-even.svg" alt="" style="left:357px;top:376.2px">
+        <span class="map__label" style="left:218px;top:457px">Numb</span><img class="map__dot" src="assets/svg/dot-numb.svg" alt="" style="left:273.8px;top:459.8px">
+        <span class="map__label" style="left:187px;top:342px">Moody</span><img class="map__dot" src="assets/svg/dot-moody.svg" alt="" style="left:247.8px;top:345.4px">
+        <span class="map__label" style="left:114px;top:413px">Sad</span><img class="map__dot" src="assets/svg/dot-sad.svg" alt="" style="left:154.2px;top:415.8px">
+        <span class="map__label" style="left:223px;top:430px">Lonely</span><img class="map__dot" src="assets/svg/dot-lonely.svg" alt="" style="left:201px;top:433.4px">
+        <span class="map__label" style="left:192px;top:166px">Stressed</span><img class="map__dot" src="assets/svg/dot-stressed.svg" alt="" style="left:169.8px;top:169.4px">
+        <span class="map__label" style="left:244px;top:96px">Anxious</span><img class="map__dot" src="assets/svg/dot-anxious.svg" alt="" style="left:221.8px;top:99px">
+        <span class="map__label" style="left:124px;top:74px">Angry</span><img class="map__dot" src="assets/svg/dot-angry.svg" alt="" style="left:102.2px;top:77px">
+        <span class="map__cap">Each dot is a mood’s centre, placed by its feeling and energy numbers.</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================= 03 THE 13 MOODS ======================= -->
+<section class="moods" id="moods" aria-labelledby="moods-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__title">
+        <p class="sec-label"><b>03</b><i></i><span>The 13 moods</span></p>
+        <h2 id="moods-title">Thirteen moods, each with its own colour.</h2>
+      </div>
+      <p class="intro">Whatever you say lands on the nearest of thirteen moods. Each has its own colour, its own moving picture, its own line style and its own music. Every moving picture is one of Rory’s own videos.</p>
+    </div>
+    <ul class="mood-grid">
+      <li class="mood" style="--r:1.6deg;--tx:102px;--tr:-3deg;--sx:70px;--sr:4deg;--c:#bf9d2b;--t:#1f1b16;--rule-in:rgba(31,27,22,.5)">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-joyful.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m1.svg" alt=""><span class="mood__stamp"><span>Joyful</span></span>
+        </div></div>
+        <p class="mood__music">lydian · ~108 bpm</p>
+      </li>
+      <li class="mood" style="--r:-1.2deg;--tx:116px;--tr:4deg;--sx:146px;--sr:-3deg;--c:#a87c43;--t:#1f1b16;--rule-in:rgba(31,27,22,.5)">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-content.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m2.svg" alt=""><span class="mood__stamp"><span>Content</span></span>
+        </div></div>
+        <p class="mood__music">major pentatonic · ~68 bpm</p>
+      </li>
+      <li class="mood" style="--r:0.8deg;--tx:104px;--tr:-2deg;--sx:70px;--sr:3deg;--c:#a24958">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-tender.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m3.svg" alt=""><span class="mood__stamp"><span>Tender</span></span>
+        </div></div>
+        <p class="mood__music">major sixth · ~60 bpm</p>
+      </li>
+      <li class="mood" style="--r:-1.4deg;--tx:114px;--tr:3deg;--sx:146px;--sr:-4deg;--c:#af623c">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-hopeful.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m4.svg" alt=""><span class="mood__stamp"><span>Hopeful</span></span>
+        </div></div>
+        <p class="mood__music">mixolydian · ~88 bpm</p>
+      </li>
+      <li class="mood" style="--r:1.2deg;--tx:100px;--tr:-4deg;--sx:70px;--sr:5deg;--c:#965954">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-calm.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m5.svg" alt=""><span class="mood__stamp"><span>Calm</span></span>
+        </div></div>
+        <p class="mood__music">major pentatonic · ~52 bpm</p>
+      </li>
+      <li class="mood" style="--r:-0.9deg;--tx:112px;--tr:2deg;--sx:146px;--sr:-3deg;--c:#597488">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-even.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m6.svg" alt=""><span class="mood__stamp"><span>Even</span></span>
+        </div></div>
+        <p class="mood__music">mixolydian · ~66 bpm</p>
+      </li>
+      <li class="mood" style="--r:1.4deg;--tx:102px;--tr:-3deg;--sx:70px;--sr:4deg;--c:#6c5661">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-numb.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m1.svg" alt=""><span class="mood__stamp"><span>Numb</span></span>
+        </div></div>
+        <p class="mood__music">open fifths · ~46 bpm</p>
+      </li>
+      <li class="mood" style="--r:-1.1deg;--tx:116px;--tr:4deg;--sx:146px;--sr:-5deg;--c:#793e79">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-moody.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m2.svg" alt=""><span class="mood__stamp"><span>Moody</span></span>
+        </div></div>
+        <p class="mood__music">dorian · ~72 bpm</p>
+      </li>
+      <li class="mood" style="--r:0.6deg;--tx:104px;--tr:-2deg;--sx:70px;--sr:3deg;--c:#50386b">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-sad.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m3.svg" alt=""><span class="mood__stamp"><span>Sad</span></span>
+        </div></div>
+        <p class="mood__music">natural minor · ~54 bpm</p>
+      </li>
+      <li class="mood" style="--r:-1.5deg;--tx:114px;--tr:3deg;--sx:146px;--sr:-4deg;--c:#403a5f">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-lonely.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m4.svg" alt=""><span class="mood__stamp"><span>Lonely</span></span>
+        </div></div>
+        <p class="mood__music">minor pentatonic · ~50 bpm</p>
+      </li>
+      <li class="mood" style="--r:1deg;--tx:100px;--tr:-4deg;--sx:70px;--sr:4deg;--c:#6c2f7f">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-stressed.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m5.svg" alt=""><span class="mood__stamp"><span>Stressed</span></span>
+        </div></div>
+        <p class="mood__music">phrygian · ~112 bpm</p>
+      </li>
+      <li class="mood" style="--r:-0.7deg;--tx:112px;--tr:2deg;--sx:146px;--sr:-3deg;--c:#8d2f93">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-anxious.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m6.svg" alt=""><span class="mood__stamp"><span>Anxious</span></span>
+        </div></div>
+        <p class="mood__music">diminished · ~126 bpm</p>
+      </li>
+      <li class="mood" style="--r:1.3deg;--tx:102px;--tr:-3deg;--sx:70px;--sr:5deg;--c:#92266e">
+        <div class="mood__fig fit" data-fit="216"><div class="fit__canvas mood__canvas">
+          <div class="mood__print"><img src="assets/img/mood-angry.jpg" alt="" width="360" height="464" loading="lazy"></div>
+          <img class="mood__tape" src="assets/svg/tape-m1.svg" alt=""><span class="mood__stamp"><span>Angry</span></span>
+        </div></div>
+        <p class="mood__music">phrygian dominant · ~132 bpm</p>
+      </li>
+      <li class="mood-note">
+        <img class="mood-note__tape" src="assets/svg/tape-note.svg" alt="">
+        <p class="label">How the colours move</p>
+        <div class="mood-note__bar" aria-hidden="true"></div>
+        <p class="mood-note__ends" aria-hidden="true"><span>unpleasant</span><span>pleasant</span></p>
+        <p>Colours travel from indigo through violet and rose to amber as the feeling rises. Agitated moods break into more colours and sharper angles; good moods, into sweeping curves.</p>
+        <p class="mood-note__aside">No two pieces play the same phrase.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= 04 YOUR DIARY ======================= -->
+<section class="diary" id="diary" aria-labelledby="diary-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__title">
+        <p class="sec-label"><b>04</b><i></i><span>Your diary</span></p>
+        <h2 id="diary-title">Your month, in colour.</h2>
+      </div>
+      <p class="intro">Turn the diary on once and every finished piece is added, with the time. Each day takes its latest mood’s colour; a small dot means more than one entry.</p>
+    </div>
+
+    <figure class="planner" aria-label="An example month in the diary, September 2026, with Thursday the 24th opened.">
+      <div class="planner__holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <i class="planner__margin" aria-hidden="true"></i>
+      <div class="planner__cal">
+        <div class="planner__head">
+          <p class="planner__month">September <span>2026</span></p>
+          <p class="planner__legend"><img src="assets/svg/legend-square.svg" alt="" width="20" height="20">more than one entry</p>
+        </div>
+        <div class="planner__grid" aria-hidden="true">
+          <span class="dow">S</span><span class="dow">M</span><span class="dow">T</span><span class="dow">W</span><span class="dow">T</span><span class="dow">F</span><span class="dow">S</span>
+          <span class="d d--pad"></span><span class="d d--pad"></span>
+          <span class="d d--none">1</span><span class="d" style="--c:#597488">2</span><span class="d d--dark" style="--c:#a87c43">3</span><span class="d d--none">4</span><span class="d d--dark" style="--c:#bf9d2b">5</span>
+          <span class="d" style="--c:#a24958">6</span><span class="d d--none">7</span><span class="d" style="--c:#6c2f7f">8</span><span class="d d--more" style="--c:#af623c">9</span><span class="d" style="--c:#965954">10</span><span class="d d--none">11</span><span class="d d--dark" style="--c:#a87c43">12</span>
+          <span class="d" style="--c:#793e79">13</span><span class="d d--none">14</span><span class="d" style="--c:#597488">15</span><span class="d" style="--c:#403a5f">16</span><span class="d d--more" style="--c:#a24958">17</span><span class="d d--none">18</span><span class="d d--dark" style="--c:#bf9d2b">19</span>
+          <span class="d" style="--c:#965954">20</span><span class="d d--none">21</span><span class="d" style="--c:#92266e">22</span><span class="d" style="--c:#6c5661">23</span><span class="d d--more d--open" style="--c:#965954">24</span><span class="d d--none">25</span><span class="d" style="--c:#af623c">26</span>
+          <span class="d d--dark" style="--c:#a87c43">27</span><span class="d d--none">28</span><span class="d" style="--c:#597488">29</span><span class="d d--dark" style="--c:#bf9d2b">30</span>
+        </div>
+      </div>
+      <div class="planner__day">
+        <p class="label">Opened · 2026-09-24</p>
+        <p class="planner__date">Thursday, September 24</p>
+        <p class="planner__count">2 entries · newest first</p>
+        <div class="entry">
+          <div class="entry__head">
+            <img src="assets/img/thumb-calm.jpg" alt="" width="84" height="63" loading="lazy">
+            <div class="entry__info">
+              <p class="entry__name"><i style="--c:#965954"></i>Calm</p>
+              <p class="entry__time">8:15 PM · recorded</p>
+              <p class="entry__meta">feeling +0.32 · energy 0.1<br>major pentatonic · 52 bpm</p>
+            </div>
+          </div>
+          <p class="entry__said">“Made a plan, wrote it down, and I can breathe again.”</p>
+          <p class="entry__acts" aria-hidden="true"><span class="pill pill--dark"><img src="assets/svg/play.svg" alt="" width="8" height="10">Watch again</span><span class="pill pill--line">Replay live</span><span class="pill pill--muted">Delete</span></p>
+        </div>
+        <div class="entry">
+          <div class="entry__head">
+            <img src="assets/img/thumb-anxious.jpg" alt="" width="84" height="63" loading="lazy">
+            <div class="entry__info">
+              <p class="entry__name"><i style="--c:#8d2f93"></i>Anxious</p>
+              <p class="entry__time">7:45 AM · recorded</p>
+              <p class="entry__meta">feeling −0.42 · energy 0.9<br>diminished · 126 bpm</p>
+            </div>
+          </div>
+          <p class="entry__said">“Woke up at four with my mind racing about money.”</p>
+          <p class="entry__acts" aria-hidden="true"><span class="pill pill--dark"><img src="assets/svg/play.svg" alt="" width="8" height="10">Watch again</span><span class="pill pill--line">Replay live</span><span class="pill pill--muted">Delete</span></p>
+        </div>
+      </div>
+      <div class="planner__bar" aria-hidden="true">
+        <p class="planner__keep"><img src="assets/svg/checkbox-on.svg" alt="" width="18" height="18">Keep a diary on this device</p>
+        <span class="planner__btn"><img src="assets/svg/icon-download-dark.svg" alt="" width="16" height="16">Download calendar</span>
+        <span class="planner__clear">Clear diary</span>
+        <p class="planner__note">Opens in Apple Calendar, Google Calendar or Outlook</p>
+      </div>
+    </figure>
+
+    <div class="diary-more">
+      <figure class="taped">
+        <div class="taped__canvas">
+          <div class="taped__photo"><img src="assets/img/shot-diary-phone.jpg" alt="The Mood diary screen in the Synesthesia app on a phone: September 2026 in colour, with the 24th opened." width="240" height="550" loading="lazy"></div>
+          <img class="taped__tape taped__tape--l" src="assets/svg/tape-diary-l.svg" alt="">
+          <img class="taped__tape taped__tape--r" src="assets/svg/tape-diary-r.svg" alt="">
+        </div>
+        <figcaption><span class="label">In the app</span><em>The same month, on a phone.</em></figcaption>
+      </figure>
+      <div class="features">
+        <div class="feature">
+          <p class="label">Recorded as it plays</p>
+          <h3>Watch it again, or replay it live</h3>
+          <p>Every piece is recorded as it plays, picture and music together, and kept with its entry. Watch the recording, or replay it live: same mood, same painting, same melody.</p>
+        </div>
+        <div class="feature">
+          <p class="label">JPG or video</p>
+          <h3>Save the picture or the whole piece</h3>
+          <p>Keep the picture as a JPG, or save the whole piece, picture and music, as a video.</p>
+        </div>
+        <div class="feature">
+          <p class="label">A .ics calendar file</p>
+          <h3>Take it to your calendar</h3>
+          <p>Download your diary as a calendar file. It opens in Apple Calendar, Google Calendar or Outlook, with one event per entry.</p>
+        </div>
+        <div class="feature">
+          <p class="label">Any time</p>
+          <h3>Delete anything</h3>
+          <p>Delete an entry or a recording, or clear the whole diary, whenever you like.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 05 PRIVACY ======================= -->
+<section class="privacy" id="privacy" aria-labelledby="privacy-title">
+  <div class="wrap privacy__row">
+    <div class="privacy__claim">
+      <p class="sec-label"><b>05</b><i></i><span>Privacy</span></p>
+      <h2 id="privacy-title">Your diary stays on your device.</h2>
+      <p class="intro">Your diary and its recordings are stored on your device, in your browser’s storage. There’s no account, no sign-up and no ads, and your diary is never sent to a server.</p>
+      <div class="caveat">
+        <p class="caveat__head"><img src="assets/svg/icon-mic.svg" alt="" width="18" height="18">One honest exception</p>
+        <p>Turning speech into words is done by your browser’s built-in speech recognition, and some browsers (Chrome, for example) send the audio to their speech service to do it. If you’d rather nothing you say leaves your device, <b>type instead.</b></p>
+      </div>
+    </div>
+    <div class="ledger">
+      <div class="ledger__stamp" aria-hidden="true"><span>No account · no ads</span></div>
+      <dl>
+        <div><dt>On this device</dt><dd>Your diary and its recordings live in your browser’s storage on this device, not on a server.</dd></div>
+        <div><dt>Read here</dt><dd>The mood reading, from your words and your voice, runs on your device.</dd></div>
+        <div><dt>No account</dt><dd>No sign-up and no account. No ads.</dd></div>
+        <div><dt>Visit counts</dt><dd>This website counts visits anonymously with Umami: no cookies and nothing that identifies you. The app itself counts nothing.</dd></div>
+        <div><dt>Keep a copy</dt><dd>Clearing your browser’s data for this site removes the diary. Download the calendar file to keep a copy.</dd></div>
+        <div><dt>Not medical</dt><dd>Synesthesia is a creative diary. It is not a medical or mental-health tool.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 06 GET THE APP ======================= -->
+<section class="get" id="get" aria-labelledby="get-title">
+  <div class="wrap">
+    <div class="bookplate">
+      <p class="sec-label"><b>06</b><i></i><span>Get the app</span></p>
+      <h2 id="get-title">Free, and it installs<br>from this page.</h2>
+      <p class="intro">No App Store, no Google Play, no account. Once installed, Synesthesia has its own icon, opens full-screen like any app, and works offline.</p>
+      <div class="hero__cta">
+        <div class="btns">
+          <a class="btn btn--dark" href="app/?install" data-install data-where="get-the-app"><img src="assets/svg/icon-download.svg" alt="" width="20" height="20">Download the app</a>
+          <a class="btn btn--line" href="app/" data-umami-event="Open the app" data-umami-event-where="get-the-app">Open in your browser<img src="assets/svg/icon-arrow.svg" alt="" width="16" height="16"></a>
+        </div>
+        <p class="fine">Free · iPhone, iPad, Android, Mac, Windows · No App Store, no account</p>
+      </div>
+    </div>
+
+    <ul class="installs">
+      <li class="install" style="--tx:181px;--tr:3deg">
+        <img class="install__tape" src="assets/svg/tape-g1.svg" alt="">
+        <div class="install__top"><img src="assets/svg/device-phone.svg" alt="" width="40" height="40"><span class="label">In Safari</span></div>
+        <h3>iPhone &amp; iPad</h3>
+        <ol>
+          <li><span>Open the app in <b>Safari</b>.</span></li>
+          <li><span>Tap <b>Share</b>.</span></li>
+          <li><span>Tap <b>Add to Home Screen</b>.</span></li>
+        </ol>
+      </li>
+      <li class="install" style="--tx:191px;--tr:-2deg">
+        <img class="install__tape" src="assets/svg/tape-g2.svg" alt="">
+        <div class="install__top"><img src="assets/svg/device-android.svg" alt="" width="40" height="40"><span class="label">In Chrome</span></div>
+        <h3>Android</h3>
+        <ol>
+          <li><span>Open the app in <b>Chrome</b>.</span></li>
+          <li><span>Tap <b>Install</b>, or open the three-dot menu and choose <b>Install app</b>.</span></li>
+        </ol>
+      </li>
+      <li class="install" style="--tx:201px;--tr:2deg">
+        <img class="install__tape" src="assets/svg/tape-g3.svg" alt="">
+        <div class="install__top"><img src="assets/svg/device-laptop.svg" alt="" width="40" height="40"><span class="label">In Chrome or Edge</span></div>
+        <h3>Windows, Mac &amp; Chromebook</h3>
+        <ol>
+          <li><span>Open the app in <b>Chrome</b> or <b>Edge</b>.</span></li>
+          <li><span>Click <b>Install</b> in the address bar.</span></li>
+          <li><span>On a Mac in <b>Safari</b>, choose <b>File</b>, then <b>Add to Dock</b>.</span></li>
+        </ol>
+      </li>
+    </ul>
+
+    <div class="get-notes">
+      <div class="feature">
+        <p class="label">Works offline</p>
+        <p>Typing always works offline. Spoken words need a connection in some browsers.</p>
+      </div>
+      <div class="feature">
+        <p class="label">Which browsers</p>
+        <p>Speech-to-words works in Chrome, Edge and Safari. Firefox reads your tone but not your words; typing works everywhere.</p>
+      </div>
+      <div class="feature">
+        <p class="label">No install needed</p>
+        <p>Or just use it in your browser, without installing.</p>
+        <a class="textlink" href="app/" data-umami-event="Open the app" data-umami-event-where="notes">Open in your browser<img src="assets/svg/icon-arrow-14.svg" alt="" width="14" height="14"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="brand brand--foot" href="#top"><img src="assets/img/icon-72.png" alt="" width="32" height="32"><span>Synesthesia</span></a>
+        <p>A creative diary, not a medical tool.</p>
+      </div>
+      <nav class="footer__cols" aria-label="Footer">
+        <div>
+          <p class="label">The app</p>
+          <a href="#how">How it works</a>
+          <a href="#moods">Moods</a>
+          <a href="#diary">Diary</a>
+          <a href="#get">Get the app</a>
+        </div>
+        <div>
+          <p class="label">About</p>
+          <a href="#privacy">Privacy</a>
+          <a class="footer__rory" href="https://rorycorn.github.io/" data-umami-event="Outbound link" data-umami-event-url="rorycorn.github.io">Made by Rory Corn<img src="assets/svg/icon-arrow-13.svg" alt="" width="13" height="13"></a>
+          <span class="footer__url">rorycorn.github.io</span>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__bottom"><span>© 2026 Rory Corn</span><span>rorycorn.github.io/synesthesia</span></div>
+  </div>
+</footer>
+
+<script src="main.js?v=2"></script>
+</body>
+</html>

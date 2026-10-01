@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="226" height="92" viewBox="0 0 226 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Waveform">
+<path id="Vector" d="M20.2 41.5V50.5M26.6 32V60M33 30V62M39.4 33.5V58.5M45.8 39.5V52.5M52.2 41V51M58.6 38V54M65 31.5V60.5M71.4 26.5V65.5M77.8 28.5V63.5M84.2 37.5V54.5M90.6 32.5V59.5M97 23V69M103.4 21.5V70.5M109.8 27.5V64.5M116.2 37.5V54.5M122.6 38V54M129 36V56M135.4 40V52M141.8 38.5V53.5M148.2 38.5V53.5M154.6 38.5V53.5M161 29.5V62.5M167.4 22.5V69.5M173.8 23.5V68.5M180.2 32V60M186.6 38V54M193 28V64M199.4 25V67M205.8 29V63" stroke="url(#paint0_linear_0_8)" stroke-width="3" stroke-linecap="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_8" x1="20.2" y1="46" x2="205.8" y2="46" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4F4389"/>
+<stop offset="0.3" stop-color="#AB3FAB"/>
+<stop offset="0.55" stop-color="#D16174"/>
+<stop offset="0.78" stop-color="#E38E63"/>
+<stop offset="1" stop-color="#C99A4E"/>
+</linearGradient>
+</defs>
+</svg>
