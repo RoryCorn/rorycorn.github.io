@@ -437,7 +437,7 @@ h2 { font-size: 64px; line-height: 72px; letter-spacing: -0.02em; }
 .footer__cols .label { letter-spacing: 0.14em; }
 .footer__cols a { font-size: 17px; line-height: 24px; color: var(--ink-2); text-decoration: none; }
 .footer__cols a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.footer__rory { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; color: var(--ink) !important; text-decoration: underline !important;
+.footer__rory, .footer__out { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; color: var(--ink) !important; text-decoration: underline !important;
   text-decoration-thickness: 1px !important; text-underline-offset: 3px; }
 .footer__url { font: 400 12px/1.3 var(--mono); color: var(--muted); }
 .footer__bottom { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule);

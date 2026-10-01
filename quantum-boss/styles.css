@@ -473,6 +473,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .foot__links b { font-weight: 400; color: var(--cyan); letter-spacing: 0; }
 .foot__links .email { text-transform: none; letter-spacing: 0.08em; }
 .foot__made { margin-top: 20px; font-size: 13px; color: var(--muted); }
+.foot__also { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.foot__also a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.foot__also a:hover { color: var(--cyan); }
 .foot__legal { margin-top: 12px; font: 10px/1.5 var(--mono); letter-spacing: 0.24em; color: rgba(159, 180, 201, 0.6); text-transform: uppercase; text-wrap: balance; }
 .film { position: relative; height: 4px; margin: 44px 0 0 calc(var(--rail-x) - var(--col-x)); display: flex; justify-content: space-between; }
 .film::before { content: ""; position: absolute; left: 0; right: 0; top: 2px; height: 1px; background: rgba(234, 246, 255, 0.08); }

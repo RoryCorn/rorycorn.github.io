@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://rorycorn.github.io/sitemap.xml
+Sitemap: https://rorycorn.github.io/quantum-boss/sitemap.xml
+Sitemap: https://rorycorn.github.io/synesthesia/sitemap.xml
