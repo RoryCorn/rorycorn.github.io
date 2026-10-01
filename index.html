@@ -234,16 +234,6 @@
       <div class="grid">
         <article class="card">
           <div class="app-top">
-            <img class="icon" src="assets/games/quantum-boss.png" alt="Quantum Boss app icon" width="76" height="76">
-            <div><h3>Quantum Boss</h3><div class="meta">Games · iPhone · in development</div></div>
-          </div>
-          <p>A hands-free arcade game you play with your eyes. Invader saucers head for Earth: look at a hull and hold your gaze to collapse it. It uses the iPhone’s TrueDepth (Face ID) camera, so it only plays on Apple devices.</p>
-          <div class="tags"><span class="tag">Swift / SwiftUI</span><span class="tag">ARKit face tracking</span><span class="tag">Apple devices only</span></div>
-          <div class="actions"><a class="pill" href="quantum-boss/">Game website</a><a class="pill" href="quantum-boss/play/">Try the browser version</a></div>
-        </article>
-
-        <article class="card">
-          <div class="app-top">
             <img class="icon" src="assets/icons/synesthesia.png" alt="Synesthesia mood diary app icon" width="76" height="76">
             <div><h3>Synesthesia — Mood Diary</h3><div class="meta">iPhone · not released yet</div></div>
           </div>
@@ -257,9 +247,19 @@
     <section id="games" aria-labelledby="games-title">
       <div class="sec-head">
         <h2 id="games-title">Ten games you can play right now</h2>
-        <p>All in my Proxi-Pals arcade. They run in any modern browser, on your phone or computer, with no install needed.</p>
+        <p>Quantum Boss has its own website; the rest are in my Proxi-Pals arcade. They all run in any modern browser, on your phone or computer, with no install needed.</p>
       </div>
       <div class="grid">
+        <article class="card game">
+          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#06142aee,#07070c 78%)"><img src="assets/games/quantum-boss.png" alt="" width="92" height="92" loading="lazy"></div>
+          <div class="body">
+            <h3>Quantum Boss</h3>
+            <p class="tagline">Hold your aim. Collapse the hull.</p>
+            <p>Saucers fall toward Earth. Find one with your eyes and head, keep your focus on it, and it is destroyed. Face tracking runs in the browser through your camera; touch, mouse and keys work too. Its website was designed in Figma and built from that design.</p>
+            <div class="tags"><span class="tag">MediaPipe face tracking</span><span class="tag">Canvas &amp; Web Audio</span><span class="tag">Designed in Figma</span></div>
+            <div class="actions"><a class="pill" href="quantum-boss/play/">Play</a><a class="pill" href="quantum-boss/">Game website</a></div>
+          </div>
+        </article>
         <article class="card game">
           <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#3a0f2eee,#07070c 78%)"><img src="assets/games/maintain.png" alt="" width="92" height="92" loading="lazy"></div>
           <div class="body">
@@ -294,15 +294,6 @@
             <p class="tagline">Ten honest rooms. Light the hall.</p>
             <p>A 3D game adapted from my original story, <em>Verbum</em>, set at a 1930s Black college, with ten chambers built on Aristotle’s ten categories.</p>
             <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/ten-chambers/">Play</a></div>
-          </div>
-        </article>
-        <article class="card game">
-          <div class="cover" style="--cover:radial-gradient(circle at 50% 42%,#06142aee,#07070c 78%)"><img src="assets/games/quantum-boss.png" alt="" width="92" height="92" loading="lazy"></div>
-          <div class="body">
-            <h3>Quantum Boss</h3>
-            <p class="tagline">Hold your aim. Collapse the hull.</p>
-            <p>Invader saucers head for Earth. Hold your aim on a hull and it collapses. This browser version plays with touch or mouse; the original iPhone version is played with your eyes.</p>
-            <div class="actions"><a class="pill" href="https://proxipals.onrender.com/games/quantum-boss/">Play</a></div>
           </div>
         </article>
         <article class="card game">
@@ -423,7 +414,7 @@
           <h3>Build</h3>
           <div class="chips">
             <span class="chip">JavaScript</span><span class="chip">Node.js / Express</span><span class="chip">React</span><span class="chip">HTML &amp; CSS</span>
-            <span class="chip">Python</span><span class="chip">SQL / PostgreSQL</span><span class="chip">WebSockets</span><span class="chip">Capacitor (iOS)</span>
+            <span class="chip">Python</span><span class="chip">SQL / PostgreSQL</span><span class="chip">WebSockets</span><span class="chip">Capacitor (iOS)</span><span class="chip">MediaPipe face tracking</span>
             <span class="chip">PHP</span><span class="chip">Swift / SwiftUI</span><span class="chip">C</span><span class="chip">Stripe</span><span class="chip">WordPress</span><span class="chip">Render hosting</span>
           </div>
         </div>
@@ -464,6 +455,7 @@
       <div><b>Ten31</b><a href="/ten31/support.html">Support</a><a href="/ten31/privacy.html">Privacy Policy</a></div>
       <div><b>Sound &amp; the Body</b><a href="https://proxipals.onrender.com/sound-and-the-body.html">Support &amp; privacy</a></div>
       <div><b>Proxi-Pals</b><a href="https://proxipals.onrender.com/privacy.html">Privacy Policy</a></div>
+      <div><b>Quantum Boss</b><a href="/quantum-boss/">Website</a><a href="/quantum-boss/#privacy">Privacy</a></div>
     </div>
     <p style="margin-top:22px">© 2026 Rory Corn</p>
   </div>
