@@ -625,7 +625,7 @@ function updateLock(dt) {
       if (Math.hypot(g.x - state.killGaze.x, g.y - state.killGaze.y) >= 48 * u) state.killGaze = null;
       else { state.selectedBand = bandAt(g.y); clearLock(dt, 0.4); return; }
     }
-    targetAt(g.x, g.y, 1.1, dt);
+    targetAt(g.x, g.y, PC ? 1.25 : 1.1, dt);
     return;
   }
   if (state.input === 'auto' || state.keysOverride) {
@@ -893,6 +893,8 @@ function drawReticle() {
     if (!track.model) return;
     x = track.gaze.x; y = track.gaze.y;
     if (!track.live) a = 0.3;
+    const locked = PC ? byId(state.targetId) : null;
+    if (locked && !locked.collapsing) { x += (locked.pos.x - x) * 0.4; y += (locked.pos.y - y) * 0.4; }
   } else if (state.input === 'pointer' && !state.keysOverride && ptr.active && ptr.mouse) {
     x = ptr.x; y = ptr.y;
   } else return;
@@ -1040,12 +1042,18 @@ class OneEuro {
  * straight-line fit through those holds. Ships are only locked where this gaze point is,
  * which is the fix for eye play destroying ships nobody was looking at. */
 const K_EYE = 0.4;   // radians of gaze per unit of eye-look blendshape
+/* On a computer the webcam sits further from the face than a phone's camera does, so the
+ * face is smaller in frame and the readings are noisier: Rory found eye play there "very
+ * erratic" while phones were fine. Everything gated on PC applies only to computers. */
+const PC = finePointer;
+const makeFilter = () => (PC ? new OneEuro(0.45, 0.25, 1.0) : new OneEuro(1.0, 1.0, 1.0));
+function median5(buf, v) { buf.push(v); if (buf.length > 5) buf.shift(); const s = [...buf].sort((a, b) => a - b); return s[s.length >> 1]; }
 const CAL_DOTS = [[0.5, 0.5], [0.5, 0.26], [0.5, 0.74], [0.14, 0.5], [0.86, 0.5]];
 const track = {
   landmarker: null, stream: null, live: false, lastFace: 0, lastVideoT: -1,
   hp: 0, hy: 0, ev: 0, eh: 0,   // head pitch and yaw (radians), eyes vertical and horizontal
   model: null, gaze: { x: 0, y: 0 },
-  fx: new OneEuro(1.0, 1.0, 1.0), fy: new OneEuro(1.0, 1.0, 1.0),
+  fx: null, fy: null, bx: [], by: [], blink: false,
   cal: null,
 };
 function blend(cats, name) { const c = cats.find((x) => x.categoryName === name); return c ? c.score : 0; }
@@ -1056,17 +1064,10 @@ function corr(a, b) {
   for (let i = 0; i < a.length; i++) { const da = a[i] - ma, db = b[i] - mb; sab += da * db; saa += da * da; sbb += db * db; }
   return saa > 1e-12 && sbb > 1e-12 ? sab / Math.sqrt(saa * sbb) : 0;
 }
-/* One screen axis: the eye term's sign comes from the data, then target = a + b * gaze. */
-function fitAxis(samples, headKey, eyeKey, targetKey) {
-  if (samples.length < 12) return null;
-  const t = samples.map((s) => s[targetKey]);
-  const h = samples.map((s) => s[headKey]), e = samples.map((s) => s[eyeKey]);
-  const cH = corr(h, t), cE = corr(e, t);
-  let wHead = 1, wEye = 0;
-  if (Math.abs(cH) >= 0.2) { wEye = Math.abs(cE) >= 0.3 ? K_EYE * Math.sign(cE) * Math.sign(cH) : 0; }
-  else if (Math.abs(cE) >= 0.3) { wHead = 0; wEye = 1; }
-  else return null;
-  const g = samples.map((s) => wHead * s[headKey] + wEye * s[eyeKey]);
+/* target = a + b * (wHead * head + wEye * eye), least squares, with its R². */
+function fitLinear(samples, headKey, eyeKey, targetKey, wHead, wEye) {
+  const t = samples.map((x) => x[targetKey]);
+  const g = samples.map((x) => wHead * x[headKey] + wEye * x[eyeKey]);
   const mg = avg(g), mt = avg(t);
   let sgg = 0, sgt = 0, stt = 0;
   for (let i = 0; i < g.length; i++) { sgg += (g[i] - mg) ** 2; sgt += (g[i] - mg) * (t[i] - mt); stt += (t[i] - mt) ** 2; }
@@ -1075,6 +1076,28 @@ function fitAxis(samples, headKey, eyeKey, targetKey) {
   let ssr = 0;
   for (let i = 0; i < g.length; i++) ssr += (t[i] - (a + b * g[i])) ** 2;
   return { wHead, wEye, a, b, r2: 1 - ssr / Math.max(stt, 1e-12) };
+}
+/* One screen axis. Phones: the eye term's sign comes from the data. Computers: try head
+ * only, eyes only and several mixes, and keep whichever lines the five dots up most
+ * cleanly (head only wins near-ties, because head pose is the steadier reading). */
+function fitAxis(samples, headKey, eyeKey, targetKey) {
+  if (samples.length < 12) return null;
+  if (PC) {
+    let best = null;
+    for (const [wHead, wEye] of [[1, 0], [0, 1], [1, 0.15], [1, -0.15], [1, 0.3], [1, -0.3], [1, 0.45], [1, -0.45]]) {
+      const m = fitLinear(samples, headKey, eyeKey, targetKey, wHead, wEye);
+      if (m && (!best || m.r2 > best.r2 + 0.01)) best = m;
+    }
+    return best;
+  }
+  const t = samples.map((x) => x[targetKey]);
+  const h = samples.map((x) => x[headKey]), e = samples.map((x) => x[eyeKey]);
+  const cH = corr(h, t), cE = corr(e, t);
+  let wHead = 1, wEye = 0;
+  if (Math.abs(cH) >= 0.2) { wEye = Math.abs(cE) >= 0.3 ? K_EYE * Math.sign(cE) * Math.sign(cH) : 0; }
+  else if (Math.abs(cE) >= 0.3) { wHead = 0; wEye = 1; }
+  else return null;
+  return fitLinear(samples, headKey, eyeKey, targetKey, wHead, wEye);
 }
 const predict = (m, head, eye) => m.a + m.b * (m.wHead * head + m.wEye * eye);
 /* Calibration skipped: head only, typical ranges, signs from MediaPipe's axes. */
@@ -1156,20 +1179,27 @@ function camLoop() {
   track.hy = Math.atan2(m[8], m[10]);
   if (shapes && shapes.length) {
     const c = shapes[0].categories;
-    track.ev = (blend(c, 'eyeLookDownLeft') + blend(c, 'eyeLookDownRight')) / 2
-             - (blend(c, 'eyeLookUpLeft') + blend(c, 'eyeLookUpRight')) / 2;
-    track.eh = ((blend(c, 'eyeLookOutLeft') + blend(c, 'eyeLookInRight'))
-             - (blend(c, 'eyeLookInLeft') + blend(c, 'eyeLookOutRight'))) / 2;
+    // a blink drags the eye readings with the lids; on a computer, hold them until it ends
+    track.blink = PC && (blend(c, 'eyeBlinkLeft') + blend(c, 'eyeBlinkRight')) / 2 > 0.35;
+    if (!track.blink) {
+      track.ev = (blend(c, 'eyeLookDownLeft') + blend(c, 'eyeLookDownRight')) / 2
+               - (blend(c, 'eyeLookUpLeft') + blend(c, 'eyeLookUpRight')) / 2;
+      track.eh = ((blend(c, 'eyeLookOutLeft') + blend(c, 'eyeLookInRight'))
+               - (blend(c, 'eyeLookInLeft') + blend(c, 'eyeLookOutRight'))) / 2;
+    }
   }
   const cal = track.cal;
-  if (cal && cal.collecting && cal.t > 0.25) {   // skip the first moment of each hold while the eyes land
+  if (cal && cal.collecting && cal.t > 0.25 && !track.blink) {   // skip the first moment of each hold while the eyes land
     const [tx, ty] = CAL_DOTS[cal.i];
     cal.samples.push({ hp: track.hp, hy: track.hy, ev: track.ev, eh: track.eh, tx, ty });
   }
   if (track.model) {
     const now = performance.now() / 1000;
-    track.gaze.x = track.fx.filter(predict(track.model.x, track.hy, track.eh), now) * W;
-    track.gaze.y = track.fy.filter(predict(track.model.y, track.hp, track.ev), now) * H;
+    let fx = predict(track.model.x, track.hy, track.eh), fy = predict(track.model.y, track.hp, track.ev);
+    if (PC) { fx = median5(track.bx, fx); fy = median5(track.by, fy); }
+    if (!track.fx) { track.fx = makeFilter(); track.fy = makeFilter(); }
+    track.gaze.x = track.fx.filter(fx, now) * W;
+    track.gaze.y = track.fy.filter(fy, now) * H;
   }
 }
 
@@ -1228,7 +1258,7 @@ function finishCalibration(cal) {
   const my = fitAxis(cal.samples.filter((s) => s.tx === 0.5), 'hp', 'ev', 'ty');   // centre, top, bottom
   const fallback = defaultModel();
   track.model = { x: mx || fallback.x, y: my || fallback.y };
-  track.fx = new OneEuro(1.0, 1.0, 1.0); track.fy = new OneEuro(1.0, 1.0, 1.0);
+  track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
   if (!mx || !my || mx.r2 < 0.3 || my.r2 < 0.3) {
     $('calTitle').textContent = 'TRACKING WAS UNSTEADY';
     $('calMsg').textContent = 'Sit facing the screen in good light, keep your face in view, and try again. Or play now and see how it feels.';
@@ -1243,7 +1273,7 @@ function finishCalibration(cal) {
 function skipCalibration() {
   track.cal = null; calLast = 0;
   if (!calPlayAnyway || !track.model) track.model = defaultModel();
-  track.fx = new OneEuro(1.0, 1.0, 1.0); track.fy = new OneEuro(1.0, 1.0, 1.0);
+  track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
   $('calDot').hidden = true;
   afterCalibration();
 }
