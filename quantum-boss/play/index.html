@@ -3,88 +3,132 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#05080f">
-<title>Quantum Boss — play free</title>
-<link rel="icon" href="icon.png">
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#000000">
+<title>Play Quantum Boss</title>
+<meta name="description" content="Play Quantum Boss free in your browser. Saucers fall toward Earth; find one with your eyes and head, keep your focus on it, and it is destroyed.">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preload" href="assets/northsky.mp4" as="video" type="video/mp4">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
-<canvas id="stage"></canvas>
+<!-- Wide screens: the play area keeps the iPhone's proportions and the planet carries on, blurred, either side. -->
+<div class="backdrop" aria-hidden="true"></div>
 
-<!-- HUD -->
-<div id="hud" hidden>
-  <div class="hud-row">
-    <div class="hud-block">
-      <span class="lbl">WAVE</span>
-      <span class="big" id="hudWave">1</span>
+<aside class="side side--left" aria-label="Quantum Boss">
+  <a class="side__back" href="../">← Quantum Boss</a>
+  <p class="side__title">QUANTUM<br><span>BOSS</span></p>
+  <p class="side__copy">Saucers fall toward Earth through the bands. Find one, keep your focus on it, and it is destroyed. Let one through and the planet takes the hit.</p>
+</aside>
+
+<aside class="side side--right" aria-label="Controls">
+  <p class="side__head">Controls</p>
+  <dl class="side__keys">
+    <div><dt>Eyes</dt><dd>Look up and down to pick a band. Hold your focus to lock on.</dd></div>
+    <div><dt>Mouse</dt><dd>Point at a saucer and hold.</dd></div>
+    <div><dt>Keys</dt><dd>↑ ↓ or W S to pick a band. P to pause. M for sound.</dd></div>
+  </dl>
+</aside>
+
+<main class="stage" id="stage">
+  <video id="sky" src="assets/northsky.mp4" poster="assets/northsky.jpg" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+  <div class="scrim" aria-hidden="true"></div>
+  <canvas id="view" aria-label="Quantum Boss playfield"></canvas>
+
+  <!-- HUD, laid out as on the iPhone -->
+  <div class="hud" id="hud" hidden>
+    <div class="hud__row">
+      <div class="hud__col">
+        <span class="hud__lbl">WAVE</span>
+        <span class="hud__num" id="hWave">1</span>
+        <span class="hud__cond" id="hCond"></span>
+      </div>
+      <div class="hud__col hud__col--r">
+        <span class="hud__lbl" id="hScoreLbl">SCORE</span>
+        <span class="hud__num hud__num--cyan" id="hScore">0</span>
+      </div>
     </div>
-    <div class="hud-block right">
-      <span class="lbl">SCORE <em id="hudMult" hidden></em></span>
-      <span class="big cyan" id="hudScore">0</span>
+    <div class="hud__integ">
+      <span class="hud__lbl hud__lbl--sm">PLANETARY INTEGRITY</span>
+      <div class="bar"><i id="hInteg"></i></div>
     </div>
+    <div class="hud__boss" id="hBoss" hidden>
+      <div class="hud__bossrow"><span id="hBossName"></span><span id="hBossCores"></span></div>
+      <div class="bar bar--boss"><i id="hBossBar"></i></div>
+    </div>
+    <div class="hud__banner" id="hBanner" role="status" aria-live="polite" hidden></div>
   </div>
-  <div class="hud-integrity">
-    <span class="lbl">PLANETARY INTEGRITY</span>
-    <div class="bar"><i id="hudBar"></i></div>
-  </div>
-</div>
+  <button class="pausebtn" id="btnPause" type="button" aria-label="Pause" hidden>II</button>
+  <div class="tracklost" id="trackLost" hidden>LOOKING FOR YOUR FACE…</div>
 
-<!-- Camera preview, tiny, so people can see tracking is working -->
-<video id="cam" playsinline muted autoplay hidden></video>
-<div id="camDot" hidden title="face tracking active"></div>
+  <!-- ===== Screens ===== -->
+  <section class="screen screen--gate" id="scrGate">
+    <div class="gate__plate" aria-hidden="true"></div>
+    <div class="title"><span>QUANTUM</span><span class="title__boss">BOSS</span></div>
+    <button class="qbtn" id="btnBegin" type="button">TAP TO BEGIN</button>
+    <p class="note">Sound on for the full effect.</p>
+  </section>
 
-<!-- ===== Screens ===== -->
+  <section class="screen screen--intro" id="scrIntro" hidden>
+    <video id="intro" src="assets/intro.mp4" poster="assets/intro.jpg" playsinline preload="auto"></video>
+    <div class="title title--intro" id="introTitle"><span>QUANTUM</span><span class="title__boss">BOSS</span></div>
+    <button class="qbtn qbtn--ghost qbtn--skip" id="btnSkip" type="button" hidden>SKIP</button>
+  </section>
 
-<div class="screen" id="screenTitle">
-  <div class="panel">
-    <h1>QUANTUM<span>BOSS</span></h1>
-    <p class="sub">They are coming for the North sky. <strong>Hold your gaze on a band</strong> to collapse the hulls inside it — before they breach the atmosphere.</p>
-    <p class="best" id="bestLine" hidden>BEST <span id="bestVal">0</span></p>
+  <section class="screen screen--menu" id="scrMenu" hidden>
+    <a class="menu__back" href="../">← About Quantum Boss</a>
+    <div class="title title--menu"><span>QUANTUM</span><span class="title__boss">BOSS</span></div>
+    <p class="menu__sub">They are coming for the North sky.<br>Find a saucer, keep your focus on it,<br>and destroy it before it breaches<br>the atmosphere.</p>
+    <p class="menu__best" id="menuBest" hidden>BEST <span id="bestVal">0</span></p>
+    <button class="qbtn" id="btnEyes" type="button">PLAY WITH YOUR EYES</button>
+    <p class="menu__hint">Uses your front camera. It stays on your device.</p>
+    <button class="qbtn qbtn--ghost" id="btnPointer" type="button">PLAY WITH TOUCH</button>
+    <p class="menu__hint" id="keyHint" hidden>or use ↑ ↓ on the keyboard</p>
+    <button class="qbtn qbtn--ghost qbtn--small" id="btnSound" type="button">SOUND: ON</button>
+  </section>
 
-    <button class="cta" id="btnCamera">▶ Play with head tracking</button>
-    <button class="cta ghost" id="btnTouch">Play with touch instead</button>
+  <section class="screen screen--cal" id="scrCal" hidden>
+    <div class="cal__cam" id="calCam" aria-hidden="true"></div>
+    <h2 class="cal__title" id="calTitle">STARTING CAMERA</h2>
+    <p class="cal__msg" id="calMsg">Allow camera access when your browser asks.</p>
+    <div class="cal__ring" aria-hidden="true">
+      <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="fill" id="calArc" cx="60" cy="60" r="52"/></svg>
+      <span id="calCount"></span>
+    </div>
+    <p class="cal__hint" id="calHint">The camera picture is processed on your device. Nothing is recorded or uploaded.</p>
+    <button class="qbtn qbtn--ghost qbtn--small" id="btnCalSkip" type="button" hidden>SKIP — USE DEFAULTS</button>
+  </section>
 
-    <p class="fineprint">
-      Head tracking uses your camera <strong>entirely on your device</strong> — nothing is recorded, stored, or uploaded.
-      Works best in a well-lit room.
-    </p>
-    <p class="fineprint fullgame">
-      This browser game runs eight waves with two Dreadnoughts. The original iPhone edition, not released, adds every
-      wave, all six Dreadnoughts, six planetary conditions, entangled pairs and Face ID eye tracking. <a href="../">About Quantum Boss</a>
-    </p>
-  </div>
-</div>
+  <section class="screen screen--pause" id="scrPause" hidden>
+    <h2 class="pause__title">PAUSED</h2>
+    <button class="qbtn" id="btnResume" type="button">RESUME</button>
+    <button class="qbtn qbtn--ghost" id="btnRecal" type="button" hidden>RECALIBRATE</button>
+    <button class="qbtn qbtn--ghost" id="btnQuit" type="button">MENU</button>
+  </section>
 
-<div class="screen" id="screenCal" hidden>
-  <div class="panel">
-    <h2 id="calTitle">Calibrating</h2>
-    <p class="sub" id="calMsg">Hold still…</p>
-    <div class="calring"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="fill" id="calArc" cx="60" cy="60" r="52"/></svg><span id="calCount"></span></div>
-    <p class="fineprint" id="calHint">Keep your head still and just move your eyes and chin.</p>
-    <button class="cta ghost small" id="btnCalSkip">Skip — use defaults</button>
-  </div>
-</div>
+  <section class="screen screen--over" id="scrOver" hidden>
+    <h2 class="over__title">SURFACE LOST</h2>
+    <p class="over__score" id="overScore">0</p>
+    <p class="over__wave" id="overWave">HELD TO WAVE 1</p>
+    <p class="over__best" id="overBest" hidden>NEW BEST</p>
+    <div class="over__btns">
+      <button class="qbtn qbtn--ghost" id="btnMenu" type="button">MENU</button>
+      <button class="qbtn" id="btnAgain" type="button">AGAIN</button>
+    </div>
+  </section>
 
-<div class="screen" id="screenOver" hidden>
-  <div class="panel">
-    <h2 id="overTitle">The planet fell</h2>
-    <p class="score">SCORE <span id="overScore">0</span></p>
-    <p class="sub" id="overSub">You held out for <span id="overWave">1</span> waves.</p>
-    <button class="cta" id="btnAgain">▶ Play again</button>
-    <a class="cta ghost" id="btnSite" href="../">About Quantum Boss</a>
-    <p class="fineprint" id="bandNote"></p>
-  </div>
-</div>
+  <section class="screen screen--err" id="scrErr" hidden>
+    <h2 class="err__title">QUANTUM BOSS<br>IS PLAYED WITH YOUR EYES</h2>
+    <p class="err__msg" id="errMsg">The camera could not start.</p>
+    <button class="qbtn" id="btnErrPointer" type="button">PLAY WITH TOUCH INSTEAD</button>
+    <button class="qbtn qbtn--ghost" id="btnErrMenu" type="button">MENU</button>
+  </section>
 
-<div class="screen" id="screenErr" hidden>
-  <div class="panel">
-    <h2>Camera unavailable</h2>
-    <p class="sub" id="errMsg">We couldn't start head tracking.</p>
-    <button class="cta" id="btnErrTouch">Play with touch instead</button>
-  </div>
-</div>
+  <div class="rotate" id="rotate"><div class="rotate__phone" aria-hidden="true"></div>QUANTUM BOSS<br><span>Turn your phone upright to defend the planet.</span></div>
+  <video id="cam" playsinline muted aria-hidden="true"></video>
+</main>
 
-<script type="module" src="game.js"></script>
+<script type="module" src="game.js?v=3"></script>
 </body>
 </html>
