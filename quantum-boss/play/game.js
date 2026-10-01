@@ -896,9 +896,12 @@ function drawReticle() {
     if (PC) {
       const locked = byId(state.targetId);
       if (locked && !locked.collapsing) { x += (locked.pos.x - x) * 0.6; y += (locked.pos.y - y) * 0.6; }
+      // looking past the edge parks the crosshair there, dimmed, rather than losing it
+      if (x < 0 || x > W || y < 0 || y > H) a *= 0.45;
+      x = clamp(x, 10 * u, W - 10 * u); y = clamp(y, 10 * u, H - 10 * u);
       const d = track.disp;
-      if (!d.init) { d.x = x; d.y = y; d.init = true; }
-      d.x += (x - d.x) * 0.35; d.y += (y - d.y) * 0.35;   // glide between held points, no teleporting
+      if (!d.init || !Number.isFinite(d.x) || !Number.isFinite(d.y)) { d.x = x; d.y = y; d.init = true; }
+      d.x += (x - d.x) * 0.2; d.y += (y - d.y) * 0.2;   // glide between held points, no teleporting
       x = d.x; y = d.y;
     }
   } else if (state.input === 'pointer' && !state.keysOverride && ptr.active && ptr.mouse) {
@@ -1140,13 +1143,20 @@ function fitRidge(samples, keys, targetKey) {
   model.r2 = 1 - ssr / Math.max(sst, 1e-12);
   return model;
 }
-/* Computers: head only, iris only, or both; keep the cleanest fit (simpler wins near-ties). */
+/* Computers: head only, iris only, or both. A two-reading fit is only trusted when each
+ * reading pulls the same way it does on its own; head and iris move together during
+ * calibration, and opposite-signed weights on them swing the aim wildly (and off the
+ * screen) the moment they disagree. Head pose is the steadiest reading, so it is kept
+ * unless another fit is clearly better. */
 function fitAxisPC(samples, headKey, irisKey, targetKey) {
-  let best = null;
-  for (const keys of [[headKey], [irisKey], [headKey, irisKey]]) {
-    const m = fitRidge(samples, keys, targetKey);
-    if (m && (!best || m.r2 > best.r2 + 0.01)) best = m;
-  }
+  const head = fitRidge(samples, [headKey], targetKey);
+  const iris = fitRidge(samples, [irisKey], targetKey);
+  const both = fitRidge(samples, [headKey, irisKey], targetKey);
+  const agree = both && head && iris && both.keys.length === 2
+    && Math.sign(both.beta[0]) === Math.sign(head.beta[0]) && Math.sign(both.beta[1]) === Math.sign(iris.beta[0]);
+  let best = head;
+  if (iris && (!best || iris.r2 > best.r2 + 0.08)) best = iris;
+  if (agree && (!best || both.r2 > best.r2 + 0.03)) best = both;
   return best;
 }
 function predictAxis(m, r) {
@@ -1275,8 +1285,9 @@ function camLoop() {
     const now = performance.now() / 1000;
     if (PC) {
       const r = { hy: track.hy, hp: track.hp, ih: track.ih, iv: track.iv, head: 0, eye: 0 };
-      const fx = median5(track.bx, predictAxis(track.model.x, r)), fy = median5(track.by, predictAxis(track.model.y, r));
-      fixate(fx, fy);
+      const px = clamp(predictAxis(track.model.x, r), -0.15, 1.15), py = clamp(predictAxis(track.model.y, r), -0.15, 1.15);
+      if (!Number.isFinite(px) || !Number.isFinite(py)) return;
+      fixate(median5(track.bx, px), median5(track.by, py));
       track.gaze.x = track.fix.x * W; track.gaze.y = track.fix.y * H;
     } else {
       const fx = predict(track.model.x, track.hy, track.eh), fy = predict(track.model.y, track.hp, track.ev);
@@ -1288,7 +1299,7 @@ function camLoop() {
 }
 /* Computers: eyes rest, then jump. Hold the gaze point still while readings stay inside a
  * small circle (sized from this player's own calibration wobble), drifting only slowly to
- * their centre; move only when three readings in a row land outside it. */
+ * their centre; move only when four readings in a row land outside it. */
 function fixate(px, py) {
   const f = track.fix;
   if (f.x == null) { f.x = px; f.y = py; return; }
@@ -1299,7 +1310,7 @@ function fixate(px, py) {
     return;
   }
   f.sx += px; f.sy += py; f.n++;
-  if (f.n >= 3) { f.x = f.sx / f.n; f.y = f.sy / f.n; f.n = 0; f.sx = 0; f.sy = 0; }
+  if (f.n >= 4) { f.x = f.sx / f.n; f.y = f.sy / f.n; f.n = 0; f.sx = 0; f.sy = 0; }
 }
 
 function beginCalibration() {
@@ -1324,9 +1335,13 @@ function nextCalDot() {
   const dot = $('calDot');
   dot.style.left = `${x * 100}%`; dot.style.top = `${y * 100}%`;
   $('calArc').style.strokeDashoffset = '327';
-  $('calTitle').textContent = 'LOOK AT THE DOT';
-  $('calMsg').textContent = `${cal.i + 1} of ${CAL_DOTS.length}. Keep your eyes on it until its ring fills.`;
+  $('calTitle').textContent = PC ? 'FACE THE DOT' : 'LOOK AT THE DOT';
+  $('calMsg').textContent = calPrompt(cal.i);
 }
+/* Computers: head pose is the steadiest thing a webcam reads, so ask for it as well. */
+const calPrompt = (i) => PC
+  ? `${i + 1} of ${CAL_DOTS.length}. Point your face at it and keep your eyes on it until its ring fills.`
+  : `${i + 1} of ${CAL_DOTS.length}. Keep your eyes on it until its ring fills.`;
 let calLast = 0;
 function calTick(ts) {
   const cal = track.cal;
@@ -1342,7 +1357,7 @@ function calTick(ts) {
   cal.t += dt;
   if (cal.phase === 'move') {               // the dot travels; let the eyes follow before measuring
     if (cal.t >= 0.6) { cal.phase = 'hold'; cal.t = 0; }
-    $('calMsg').textContent = `${cal.i + 1} of ${CAL_DOTS.length}. Keep your eyes on it until its ring fills.`;
+    $('calMsg').textContent = calPrompt(cal.i);
     return;
   }
   cal.collecting = true;
@@ -1378,7 +1393,7 @@ function finishCalibration(cal) {
       for (const q of pts) { ss += (q[0] - cx) ** 2 + (q[1] - cy) ** 2; n++; }
     }
     const sigma = n ? Math.sqrt(ss / n / 2) : 0.03 * H;
-    track.fixR = clamp((2.5 * sigma) / H, 0.035, 0.10);
+    track.fixR = clamp((3.5 * sigma) / H, 0.05, 0.12);
   }
   if (!mx || !my || mx.r2 < 0.3 || my.r2 < 0.3) {
     $('calTitle').textContent = 'TRACKING WAS UNSTEADY';
@@ -1404,7 +1419,9 @@ function afterCalibration() {
   $('btnCalRetry').hidden = true; $('btnCalSkip').hidden = true;
   $('btnCalSkip').textContent = 'SKIP — USE DEFAULTS';
   $('calTitle').textContent = 'READY';
-  $('calMsg').textContent = 'A red crosshair shows where you are looking. Keep it on a saucer until the ring closes.';
+  $('calMsg').textContent = PC
+    ? 'The red crosshair follows your face and eyes. Point it at a saucer and hold until the ring closes.'
+    : 'A red crosshair shows where you are looking. Keep it on a saucer until the ring closes.';
   state.bandCount = 3;
   setTimeout(() => {
     if (resumeAfterCal) {
