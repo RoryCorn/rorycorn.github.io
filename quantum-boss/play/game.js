@@ -625,7 +625,7 @@ function updateLock(dt) {
       if (Math.hypot(g.x - state.killGaze.x, g.y - state.killGaze.y) >= 48 * u) state.killGaze = null;
       else { state.selectedBand = bandAt(g.y); clearLock(dt, 0.4); return; }
     }
-    targetAt(g.x, g.y, PC ? 1.4 : 1.1, dt, PC ? 1.8 : 1.5);
+    targetAt(g.x, g.y, PC ? 1.6 : 1.1, dt, PC ? 2.0 : 1.5);
     return;
   }
   if (state.input === 'auto' || state.keysOverride) {
@@ -640,7 +640,22 @@ function updateLock(dt) {
   if (!ptr.active) { state.selectedBand = null; clearLock(dt, 0.5); return; }
   targetAt(ptr.x, ptr.y, 1, dt);
 }
+/* Computers: a finished lock means the player was looking at that saucer, which is a free
+ * calibration point. Nudge the aim a quarter of the way toward it, so drift from leaning or
+ * shifting in the chair corrects itself during play. Capped so a stray lock cannot pull it far. */
+function learnFromLock(v) {
+  if (!PC || state.input !== 'eyes' || !track.model || track.model.x.kind !== 'ridge') return;
+  const ex = (v.pos.x - track.gaze.x) / W, ey = (v.pos.y - track.gaze.y) / H;
+  const m = track.model, lim = 0.15;
+  if (m.x.mt0 == null) m.x.mt0 = m.x.mt;
+  if (m.y.mt0 == null) m.y.mt0 = m.y.mt;
+  m.bx = clamp((m.bx || 0) + ex * 0.25, -lim, lim);
+  m.by = clamp((m.by || 0) + ey * 0.25, -lim, lim);
+  m.x.mt = m.x.mt0 + m.bx; m.y.mt = m.y.mt0 + m.by;
+  if (track.fix.x != null) { track.fix.x += ex * 0.25; track.fix.y += ey * 0.25; }
+}
 function lockComplete(v) {
+  learnFromLock(v);
   if (v.bossName) {
     // each completed lock knocks out one core; the hull goes with the last
     const core = v.cores.find((c) => !c.down);
@@ -1378,6 +1393,7 @@ function finishCalibration(cal) {
   }
   const fallback = defaultModel();
   track.model = { x: mx || fallback.x, y: my || fallback.y };
+  track.model.x.mt0 = track.model.x.mt; track.model.y.mt0 = track.model.y.mt;
   track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
   track.fix = { x: null, y: null, sx: 0, sy: 0, n: 0 };
   if (PC && mx && my) {
@@ -1409,6 +1425,7 @@ function finishCalibration(cal) {
 function skipCalibration() {
   track.cal = null; calLast = 0;
   if (!calPlayAnyway || !track.model) track.model = defaultModel();
+  track.model.x.mt0 = track.model.x.mt; track.model.y.mt0 = track.model.y.mt;
   track.fx = makeFilter(); track.fy = makeFilter(); track.bx = []; track.by = [];
   track.fix = { x: null, y: null, sx: 0, sy: 0, n: 0 };
   $('calDot').hidden = true;
