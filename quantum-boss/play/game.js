@@ -435,6 +435,9 @@ const bandInterval = () => Math.max(5.5 - state.wave * 0.30, 1.8) * 3.0 / state.
 // ------------------------------------------------------------------ engine
 function showBanner(text) { state.banner = text; state.bannerT = 2.0; }
 
+/* Anonymous counts for the site's visitor stats (Umami: no cookies, nothing that identifies the player). */
+function count(name, data) { try { if (window.umami) window.umami.track(name, data); } catch (e) {} }
+
 function startRun() {
   Object.assign(state, {
     wave: 1, score: 0, integrity: 100, combo: 0, invaders: [], debris: [], pending: [],
@@ -447,6 +450,7 @@ function startRun() {
   beginWave(startWave);
   state.mode = 'play';
   showScreen(null);
+  count('Game start', { input: state.input });
   stage.classList.toggle('is-pointer', state.input === 'pointer' && finePointer);
   startAmbient();
   lastT = 0;
@@ -737,6 +741,7 @@ function showOver() {
   $('overBest').hidden = !newBest;
   showScreen('over');
   stopAmbient();
+  count('Game over', { wave: state.wave, score: state.score, input: state.input });
   $('btnAgain').focus({ preventScroll: true });
 }
 

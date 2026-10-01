@@ -59,6 +59,7 @@
           form.reset();
         } else if (r.ok) {
           say("You're on the list. Only Quantum Boss news.", "ok");
+          if (window.umami) { try { window.umami.track("News signup"); } catch (e) {} }   // the count only, never the address
           form.reset();
         } else if (r.data && r.data.status === "invalid") {
           say("Check that email address.", "err");

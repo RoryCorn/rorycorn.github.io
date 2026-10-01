@@ -22,6 +22,36 @@
 <link rel="preload" href="assets/img/hero-plate.jpg" as="image" media="(min-width: 700px)">
 <link rel="preload" href="assets/img/plate-saucers-closer.jpg" as="image" media="(max-width: 699px)">
 <link rel="stylesheet" href="styles.css?v=2">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": [
+  "VideoGame",
+  "WebApplication"
+ ],
+ "name": "Quantum Boss",
+ "url": "https://rorycorn.github.io/quantum-boss/",
+ "description": "Saucers fall toward Earth. Find one with your eyes and head, keep your focus on it, and it is destroyed. A free arcade game that plays in your browser, aimed by looking through your front camera, or with touch, mouse or keys.",
+ "applicationCategory": "GameApplication",
+ "operatingSystem": "Any — plays in a web browser on phone, iPad or computer",
+ "gamePlatform": "Web browser",
+ "playMode": "SinglePlayer",
+ "genre": "Arcade",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "image": "https://rorycorn.github.io/quantum-boss/og.jpg",
+ "author": {
+  "@type": "Person",
+  "name": "Rory Corn",
+  "url": "https://rorycorn.github.io/"
+ }
+}
+</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="3d0f50a7-609b-4dbc-8d37-a2116eec9000" data-domains="rorycorn.github.io"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -39,7 +69,7 @@
         <li><a href="#dreadnoughts">Dreadnoughts</a></li>
         <li><a href="#privacy">Privacy</a></li>
       </ul>
-      <a class="btn btn--primary btn--sm" href="play/">Play free</a>
+      <a class="btn btn--primary btn--sm" href="play/" data-umami-event="Play" data-umami-event-where="menu">Play free</a>
     </nav>
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menu"><span></span><span></span></button>
   </div>
@@ -64,7 +94,7 @@
       <h1 class="hero__title" id="hero-title"><span>Quantum</span><span class="hero__boss">Boss</span></h1>
       <p class="hero__premise">Saucers are descending on Earth. Find one with your eyes, keep your focus on it, and it is destroyed before it reaches the planet.</p>
       <div class="hero__ctas">
-        <a class="btn btn--primary" href="play/">Play free in your browser</a>
+        <a class="btn btn--primary" href="play/" data-umami-event="Play" data-umami-event-where="top">Play free in your browser</a>
         <a class="btn btn--ghost" href="#notify">Get notified</a>
       </div>
       <p class="fine hero__fine">Free in your browser on phone, iPad or computer. Play with your eyes through the front camera, or with touch, mouse or keyboard.</p>
@@ -283,7 +313,7 @@
   <div class="wrap">
     <div class="rail" aria-hidden="true"></div>
     <p class="eyebrow">Requirements and privacy</p>
-    <h2 class="display privacy__title" id="privacy-title"><span>Plays right in your browser.</span><span class="cyan">Nothing leaves your device.</span></h2>
+    <h2 class="display privacy__title" id="privacy-title"><span>Plays right in your browser.</span><span class="cyan">Your camera stays on your device.</span></h2>
     <div class="privacy__grid">
       <div class="col">
         <p class="col__head">Requirements</p>
@@ -294,10 +324,11 @@
       </div>
       <div class="col">
         <p class="col__head">Privacy</p>
-        <p class="strong">No account. No sign-in. No ads. No analytics.</p>
+        <p class="strong">No account. No sign-in. No ads.</p>
         <p>The camera picture is processed live on your device. It is never recorded, stored, or uploaded.</p>
         <p>The face-tracking software, Google's open-source MediaPipe, downloads when you start eye control. Nothing from your camera is sent anywhere.</p>
         <p>Your best score is kept only in your browser.</p>
+        <p>The site counts visits and games played anonymously with Umami: no cookies, nothing that identifies you, and nothing from your camera.</p>
       </div>
       <figure class="face">
         <img src="assets/svg/face-truedepth.svg" alt="">
@@ -326,7 +357,7 @@
         <button class="btn btn--primary" type="submit">Get notified</button>
       </form>
       <p class="fine notify__status" id="notify-status" role="status" aria-live="polite">Only Quantum Boss news. Nothing else.</p>
-      <p class="notify__alt">Or <a href="play/">play it now</a>, free in your browser.</p>
+      <p class="notify__alt">Or <a href="play/" data-umami-event="Play" data-umami-event-where="news">play it now</a>, free in your browser.</p>
     </div>
   </div>
 </section>
@@ -349,7 +380,7 @@
       </a>
       <p class="foot__links">
         <a href="#privacy">Privacy</a><b aria-hidden="true">·</b>
-        <a href="play/">Play free</a><b aria-hidden="true">·</b>
+        <a href="play/" data-umami-event="Play" data-umami-event-where="footer">Play free</a><b aria-hidden="true">·</b>
         <span id="contact">Contact <span class="email">rcorn88 <em>at</em> gmail <em>dot</em> com</span></span>
       </p>
       <p class="foot__made">Made by Rory Corn, an independent developer.</p>
@@ -359,6 +390,6 @@
   </div>
 </footer>
 
-<script src="main.js?v=2" defer></script>
+<script src="main.js?v=3" defer></script>
 </body>
 </html>
