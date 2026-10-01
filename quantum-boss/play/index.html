@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preload" href="assets/northsky.mp4" as="video" type="video/mp4">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
 <aside class="side side--right" aria-label="Controls">
   <p class="side__head">Controls</p>
   <dl class="side__keys">
-    <div><dt>Eyes</dt><dd>Look up and down to pick a band. Hold your focus to lock on.</dd></div>
+    <div><dt>Eyes</dt><dd>Look at a saucer and keep your focus on it. A red crosshair shows where you are looking.</dd></div>
     <div><dt>Mouse</dt><dd>Point at a saucer and hold.</dd></div>
     <div><dt>Keys</dt><dd>↑ ↓ or W S to pick a band. P to pause. M for sound.</dd></div>
   </dl>
@@ -89,15 +89,21 @@
   </section>
 
   <section class="screen screen--cal" id="scrCal" hidden>
-    <div class="cal__cam" id="calCam" aria-hidden="true"></div>
-    <h2 class="cal__title" id="calTitle">STARTING CAMERA</h2>
-    <p class="cal__msg" id="calMsg">Allow camera access when your browser asks.</p>
-    <div class="cal__ring" aria-hidden="true">
-      <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="fill" id="calArc" cx="60" cy="60" r="52"/></svg>
-      <span id="calCount"></span>
+    <div class="cal__top">
+      <div class="cal__cam" id="calCam" aria-hidden="true"></div>
+      <h2 class="cal__title" id="calTitle">STARTING CAMERA</h2>
+      <p class="cal__msg" id="calMsg" role="status" aria-live="polite">Allow camera access when your browser asks.</p>
     </div>
-    <p class="cal__hint" id="calHint">The camera picture is processed on your device. Nothing is recorded or uploaded.</p>
-    <button class="qbtn qbtn--ghost qbtn--small" id="btnCalSkip" type="button" hidden>SKIP — USE DEFAULTS</button>
+    <div class="cal__dot" id="calDot" hidden aria-hidden="true">
+      <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="fill" id="calArc" cx="60" cy="60" r="52"/></svg>
+    </div>
+    <div class="cal__bottom">
+      <p class="cal__hint">The camera picture is processed on your device. Nothing is recorded or uploaded.</p>
+      <div class="cal__btns">
+        <button class="qbtn qbtn--small" id="btnCalRetry" type="button" hidden>TRY AGAIN</button>
+        <button class="qbtn qbtn--ghost qbtn--small" id="btnCalSkip" type="button" hidden>SKIP — USE DEFAULTS</button>
+      </div>
+    </div>
   </section>
 
   <section class="screen screen--pause" id="scrPause" hidden>
@@ -129,6 +135,6 @@
   <video id="cam" playsinline muted aria-hidden="true"></video>
 </main>
 
-<script type="module" src="game.js?v=3"></script>
+<script type="module" src="game.js?v=4"></script>
 </body>
 </html>

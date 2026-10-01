@@ -404,6 +404,7 @@ const state = {
   invaders: [], debris: [], pending: [], waveElapsed: 0, runClock: 0,
   bandCount: 3, selectedBand: null, heldBand: null, bandDwell: 0, targetId: null,
   reacquire: 0, impactFlash: 0, banner: null, bannerT: 0, weather: null, overT: 0,
+  killGaze: null,   // eyes: where the gaze was at the last kill; it must move on before the next lock
 };
 try { state.best = +(localStorage.getItem('qb.best') || 0); } catch {}
 let nextId = 1;
@@ -429,16 +430,6 @@ function bandAt(y) {
   if (y < top || y > bottom) return null;
   return clamp(Math.floor(((y - top) / (bottom - top)) * state.bandCount), 0, state.bandCount - 1);
 }
-/* Once a band holds selection it keeps it until the aim moves a good way past the
- * boundary; a jittery signal near an edge would otherwise reset the lock every frame. */
-function selectBand(t) {
-  const n = state.bandCount;
-  const raw = clamp(Math.floor(t * n), 0, n - 1);
-  const cur = state.selectedBand;
-  if (cur == null || raw === cur) return raw;
-  const centre = (cur + 0.5) / n;
-  return Math.abs(t - centre) > (1 / n) * (0.5 + HYSTERESIS) ? raw : cur;
-}
 const bandInterval = () => Math.max(5.5 - state.wave * 0.30, 1.8) * 3.0 / state.bandCount;
 
 // ------------------------------------------------------------------ engine
@@ -448,7 +439,7 @@ function startRun() {
   Object.assign(state, {
     wave: 1, score: 0, integrity: 100, combo: 0, invaders: [], debris: [], pending: [],
     waveElapsed: 0, runClock: 0, selectedBand: null, heldBand: null, bandDwell: 0, targetId: null,
-    reacquire: 0, impactFlash: 0, banner: null, bannerT: 0, overT: 0,
+    reacquire: 0, impactFlash: 0, banner: null, bannerT: 0, overT: 0, killGaze: null,
   });
   state.weather = makeWeather(pickCondition());
   $('hCond').textContent = CONDITIONS[state.weather.condition].short;
@@ -602,25 +593,11 @@ function buildLock(target, dt) {
   for (const v of state.invaders) if (!v.collapsing) v.dwell = v === target ? state.bandDwell : 0;
   if (state.bandDwell >= 1) { state.bandDwell = 0; lockComplete(target); }
 }
-function updateLock(dt) {
-  const bandPlay = state.input === 'eyes' || state.input === 'auto' || state.keysOverride;
-  if (state.reacquire > 0) { state.reacquire -= dt; clearLock(dt, 0.4); return; }
-  if (bandPlay) {
-    // nothing may be destroyed while the camera has lost the player
-    if (state.input === 'eyes' && !track.live) { clearLock(dt, 0.4); return; }
-    const band = state.selectedBand;
-    if (band !== state.heldBand) state.bandDwell = 0;
-    state.heldBand = band;
-    const lead = band == null ? null : leadInvader(band);
-    if (!lead) { clearLock(dt, 0.5); return; }
-    buildLock(lead, dt);
-    return;
-  }
-  // pointer play: the hull under the pointer, with magnetism and a sticky hold
-  if (!ptr.active) { state.selectedBand = null; clearLock(dt, 0.5); return; }
-  const forgive = Math.max(1.28 - (state.wave - 1) * 0.09, 1.0);
+/* Lock the hull at (px, py): magnetism to acquire, a sticky hold once locked. */
+function targetAt(px, py, assist, dt) {
+  const forgive = Math.max(1.28 - (state.wave - 1) * 0.09, 1.0) * assist;
   const radius = (v) => Math.max(v.w * 0.70, 76 * u) * forgive;
-  const dist = (v) => Math.hypot(ptr.x - v.pos.x, ptr.y - v.pos.y);
+  const dist = (v) => Math.hypot(px - v.pos.x, py - v.pos.y);
   let cur = byId(state.targetId);
   if (cur && (cur.collapsing || dist(cur) > radius(cur) * 1.5)) cur = null;
   if (!cur) {
@@ -631,9 +608,37 @@ function updateLock(dt) {
       if (d < radius(v) && d < bestD) { bestD = d; cur = v; }
     }
   }
-  if (!cur) { state.selectedBand = bandAt(ptr.y); clearLock(dt, 0.5); return; }
+  if (!cur) { state.selectedBand = bandAt(py); clearLock(dt, 0.5); return; }
   state.selectedBand = cur.band;
   buildLock(cur, dt);
+}
+function updateLock(dt) {
+  if (state.reacquire > 0) { state.reacquire -= dt; clearLock(dt, 0.4); return; }
+  if (state.input === 'eyes') {
+    // nothing is destroyed unless the camera has the player and the gaze is on the field
+    const g = track.gaze;
+    if (!track.live || !track.model || g.x < -10 || g.x > W + 10 || g.y < 0 || g.y > H) {
+      state.selectedBand = null; clearLock(dt, 0.4); return;
+    }
+    // after a kill the gaze has to move on: a hull drifting under a resting gaze is not a target
+    if (state.killGaze) {
+      if (Math.hypot(g.x - state.killGaze.x, g.y - state.killGaze.y) >= 48 * u) state.killGaze = null;
+      else { state.selectedBand = bandAt(g.y); clearLock(dt, 0.4); return; }
+    }
+    targetAt(g.x, g.y, 1.1, dt);
+    return;
+  }
+  if (state.input === 'auto' || state.keysOverride) {
+    const band = state.selectedBand;
+    if (band !== state.heldBand) state.bandDwell = 0;
+    state.heldBand = band;
+    const lead = band == null ? null : leadInvader(band);
+    if (!lead) { clearLock(dt, 0.5); return; }
+    buildLock(lead, dt);
+    return;
+  }
+  if (!ptr.active) { state.selectedBand = null; clearLock(dt, 0.5); return; }
+  targetAt(ptr.x, ptr.y, 1, dt);
 }
 function lockComplete(v) {
   if (v.bossName) {
@@ -657,6 +662,7 @@ function collapse(v) {
   play(v.bossName ? 'bossFall' : 'collapse');
   shatter(v);
   state.reacquire = REACQUIRE; state.targetId = null; state.bandDwell = 0;
+  if (state.input === 'eyes') state.killGaze = { x: track.gaze.x, y: track.gaze.y };
   if (v.partner) {
     const p = byId(v.partner);
     if (p && !p.collapsing) {
@@ -723,7 +729,6 @@ function update(dt) {
   state.runClock += dt;
   state.waveElapsed += dt;
   while (state.pending.length && state.pending[0].d <= state.waveElapsed) spawn(state.pending.shift().kind);
-  if (state.input === 'eyes') state.selectedBand = selectBand(track.aim);
   if (state.input === 'auto') autoPilot(dt);
   advanceBands(dt);
   if (state.mode !== 'play') return;
@@ -883,18 +888,25 @@ function drawLinks() {
   ctx.restore();
 }
 function drawReticle() {
-  if (state.input !== 'pointer' || state.keysOverride || !ptr.active || !ptr.mouse) return;
-  // the iPhone's gaze reticle, made solid enough to read over a saucer for mouse play
+  let x, y, a = 1;
+  if (state.input === 'eyes') {
+    if (!track.model) return;
+    x = track.gaze.x; y = track.gaze.y;
+    if (!track.live) a = 0.3;
+  } else if (state.input === 'pointer' && !state.keysOverride && ptr.active && ptr.mouse) {
+    x = ptr.x; y = ptr.y;
+  } else return;
+  // the iPhone's gaze reticle, made solid enough to read over a saucer
   const r = 14 * u;
   ctx.save();
   ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 3;
-  ctx.strokeStyle = rgba(RED, 0.9); ctx.lineWidth = 2;
-  ellipse(ctx, ptr.x, ptr.y, r, r); ctx.stroke();
+  ctx.strokeStyle = rgba(RED, 0.9 * a); ctx.lineWidth = 2;
+  ellipse(ctx, x, y, r, r); ctx.stroke();
   ctx.restore();
-  ctx.strokeStyle = rgba(RED, 0.85); ctx.lineWidth = 1.5;
+  ctx.strokeStyle = rgba(RED, 0.85 * a); ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(ptr.x - 5 * u, ptr.y); ctx.lineTo(ptr.x + 5 * u, ptr.y);
-  ctx.moveTo(ptr.x, ptr.y - 5 * u); ctx.lineTo(ptr.x, ptr.y + 5 * u);
+  ctx.moveTo(x - 5 * u, y); ctx.lineTo(x + 5 * u, y);
+  ctx.moveTo(x, y - 5 * u); ctx.lineTo(x, y + 5 * u);
   ctx.stroke();
 }
 function render() {
@@ -907,7 +919,7 @@ function render() {
   drawAtmosphere();
   drawDebris();
   drawLinks();
-  const bandPlay = state.input !== 'pointer' || state.keysOverride;
+  const bandPlay = state.input === 'auto' || state.keysOverride;   // TARGET markers for band play only
   for (const v of state.invaders) drawInvader(v, bandPlay);
   drawReticle();
   // scrim behind the HUD only, so readouts stay legible over a bright hull
@@ -1006,7 +1018,7 @@ window.addEventListener('keydown', (e) => {
   state.selectedBand = band;
 });
 
-// ------------------------------------------------------------------ eyes: MediaPipe, calibrated per player
+// ------------------------------------------------------------------ eyes: MediaPipe gaze, calibrated per player
 /* One Euro filter: smooths hard when the aim is still, lets fast moves through. */
 class OneEuro {
   constructor(minCutoff, beta, dCutoff) { this.minCutoff = minCutoff; this.beta = beta; this.dCutoff = dCutoff; this.x = null; this.dx = 0; this.t = 0; }
@@ -1021,20 +1033,64 @@ class OneEuro {
     return this.x;
   }
 }
+
+/* Where you look = head angle + eye-in-head angle, summed rather than averaged: when you
+ * turn your head while holding a ship, the eyes counter-rotate and the sum stays on the
+ * ship. Five dots measure how this player's head and eyes move, and each screen axis is a
+ * straight-line fit through those holds. Ships are only locked where this gaze point is,
+ * which is the fix for eye play destroying ships nobody was looking at. */
+const K_EYE = 0.4;   // radians of gaze per unit of eye-look blendshape
+const CAL_DOTS = [[0.5, 0.5], [0.5, 0.26], [0.5, 0.74], [0.14, 0.5], [0.86, 0.5]];
 const track = {
   landmarker: null, stream: null, live: false, lastFace: 0, lastVideoT: -1,
-  head: 0, eye: 0, aim: 0.5, map: null, filter: new OneEuro(1.2, 2.0, 1.0),
+  hp: 0, hy: 0, ev: 0, eh: 0,   // head pitch and yaw (radians), eyes vertical and horizontal
+  model: null, gaze: { x: 0, y: 0 },
+  fx: new OneEuro(1.0, 1.0, 1.0), fy: new OneEuro(1.0, 1.0, 1.0),
   cal: null,
 };
 function blend(cats, name) { const c = cats.find((x) => x.categoryName === name); return c ? c.score : 0; }
+const avg = (a) => a.reduce((s, v) => s + v, 0) / Math.max(1, a.length);
+function corr(a, b) {
+  const ma = avg(a), mb = avg(b);
+  let sab = 0, saa = 0, sbb = 0;
+  for (let i = 0; i < a.length; i++) { const da = a[i] - ma, db = b[i] - mb; sab += da * db; saa += da * da; sbb += db * db; }
+  return saa > 1e-12 && sbb > 1e-12 ? sab / Math.sqrt(saa * sbb) : 0;
+}
+/* One screen axis: the eye term's sign comes from the data, then target = a + b * gaze. */
+function fitAxis(samples, headKey, eyeKey, targetKey) {
+  if (samples.length < 12) return null;
+  const t = samples.map((s) => s[targetKey]);
+  const h = samples.map((s) => s[headKey]), e = samples.map((s) => s[eyeKey]);
+  const cH = corr(h, t), cE = corr(e, t);
+  let wHead = 1, wEye = 0;
+  if (Math.abs(cH) >= 0.2) { wEye = Math.abs(cE) >= 0.3 ? K_EYE * Math.sign(cE) * Math.sign(cH) : 0; }
+  else if (Math.abs(cE) >= 0.3) { wHead = 0; wEye = 1; }
+  else return null;
+  const g = samples.map((s) => wHead * s[headKey] + wEye * s[eyeKey]);
+  const mg = avg(g), mt = avg(t);
+  let sgg = 0, sgt = 0, stt = 0;
+  for (let i = 0; i < g.length; i++) { sgg += (g[i] - mg) ** 2; sgt += (g[i] - mg) * (t[i] - mt); stt += (t[i] - mt) ** 2; }
+  if (sgg < 1e-12) return null;
+  const b = sgt / sgg, a = mt - b * mg;
+  let ssr = 0;
+  for (let i = 0; i < g.length; i++) ssr += (t[i] - (a + b * g[i])) ** 2;
+  return { wHead, wEye, a, b, r2: 1 - ssr / Math.max(stt, 1e-12) };
+}
+const predict = (m, head, eye) => m.a + m.b * (m.wHead * head + m.wEye * eye);
+/* Calibration skipped: head only, typical ranges, signs from MediaPipe's axes. */
+function defaultModel() {
+  return {
+    x: { wHead: 1, wEye: 0, b: -2.0, a: 0.5 + 2.0 * track.hy, r2: 0 },
+    y: { wHead: 1, wEye: 0, b: 2.78, a: 0.5 - 2.78 * track.hp, r2: 0 },
+  };
+}
 
 async function startEyes() {
   state.input = 'eyes';
   $('calTitle').textContent = 'STARTING CAMERA';
   $('calMsg').textContent = 'Allow camera access when your browser asks.';
-  $('calCount').textContent = '';
-  $('calArc').style.strokeDashoffset = '327';
-  $('btnCalSkip').hidden = true;
+  $('calDot').hidden = true;
+  $('btnCalSkip').hidden = true; $('btnCalRetry').hidden = true;
   state.mode = 'cal';
   showScreen('cal');
   if (!track.stream) {
@@ -1048,7 +1104,7 @@ async function startEyes() {
     cam.srcObject = track.stream;
     await cam.play().catch(() => {});
   }
-  // the preview inside the calibration ring
+  // the player's own picture, so they can see the camera has them
   const preview = $('calCam');
   if (!preview.firstChild) {
     const v = document.createElement('video');
@@ -1095,119 +1151,118 @@ function camLoop() {
     return;
   }
   track.lastFace = performance.now(); track.live = true;
-  const m = mats[0].data;
-  track.head = Math.asin(clamp(-m[9], -1, 1));   // forward vector's vertical component
+  const m = mats[0].data;   // column-major; the third column is the face's forward axis
+  track.hp = Math.asin(clamp(-m[9], -1, 1));
+  track.hy = Math.atan2(m[8], m[10]);
   if (shapes && shapes.length) {
     const c = shapes[0].categories;
-    track.eye = (blend(c, 'eyeLookDownLeft') + blend(c, 'eyeLookDownRight')) / 2
-              - (blend(c, 'eyeLookUpLeft') + blend(c, 'eyeLookUpRight')) / 2;
+    track.ev = (blend(c, 'eyeLookDownLeft') + blend(c, 'eyeLookDownRight')) / 2
+             - (blend(c, 'eyeLookUpLeft') + blend(c, 'eyeLookUpRight')) / 2;
+    track.eh = ((blend(c, 'eyeLookOutLeft') + blend(c, 'eyeLookInRight'))
+             - (blend(c, 'eyeLookInLeft') + blend(c, 'eyeLookOutRight'))) / 2;
   }
-  if (track.cal && track.cal.collecting) track.cal.samples.push({ h: track.head, e: track.eye });
-  if (track.map) {
-    const mp = track.map;
-    let a;
-    if (mp.wH + mp.wE > 0) {
-      const aH = (track.head - mp.hU) / (mp.hD - mp.hU), aE = (track.eye - mp.eU) / (mp.eD - mp.eU);
-      a = (mp.wH * aH + mp.wE * aE) / (mp.wH + mp.wE);
-    } else {
-      a = 0.5 + (track.head - mp.neutral) / (2 * 0.13);
-    }
-    a = clamp(0.5 + (a - 0.5) * 1.15, 0, 1);   // nobody plays at the extremes they calibrated at
-    track.aim = clamp(track.filter.filter(a, performance.now() / 1000), 0, 1);
+  const cal = track.cal;
+  if (cal && cal.collecting && cal.t > 0.25) {   // skip the first moment of each hold while the eyes land
+    const [tx, ty] = CAL_DOTS[cal.i];
+    cal.samples.push({ hp: track.hp, hy: track.hy, ev: track.ev, eh: track.eh, tx, ty });
+  }
+  if (track.model) {
+    const now = performance.now() / 1000;
+    track.gaze.x = track.fx.filter(predict(track.model.x, track.hy, track.eh), now) * W;
+    track.gaze.y = track.fy.filter(predict(track.model.y, track.hp, track.ev), now) * H;
   }
 }
 
-/* Look up, then down. Head and eyes are measured separately and each one's share of the
- * aim is set by how cleanly it separated the two holds. The measured travel IS the
- * gearing: shipping one person's range to everyone was the iPhone game's biggest lesson. */
 function beginCalibration() {
-  const cal = { stage: -1, t: 0, collecting: false, samples: [], up: null, down: null, waitFace: 0 };
-  track.cal = cal;
-  setTimeout(() => { if (track.cal === cal) $('btnCalSkip').hidden = false; }, 3000);
-  nextCalStage();
-}
-function nextCalStage() {
+  track.cal = { i: -1, t: 0, phase: 'move', collecting: false, samples: [] };
+  track.model = null;
+  calPlayAnyway = false;
+  $('calDot').hidden = false;
+  $('btnCalRetry').hidden = true;
+  $('btnCalSkip').hidden = true;
+  $('btnCalSkip').textContent = 'SKIP — USE DEFAULTS';
   const cal = track.cal;
-  cal.stage++; cal.t = 0; cal.samples = []; cal.collecting = false;
-  const up = cal.stage === 0;
-  $('calTitle').textContent = up ? 'LOOK UP' : 'LOOK DOWN';
-  $('calMsg').textContent = up
-    ? 'Tip your head and eyes up toward HIGH ORBIT, at the top of the screen, and hold.'
-    : 'Now down toward the ATMOSPHERE, at the bottom, and hold.';
+  setTimeout(() => { if (track.cal === cal) $('btnCalSkip').hidden = false; }, 4000);
+  calLast = 0;
+  nextCalDot();
   requestAnimationFrame(calTick);
+}
+function nextCalDot() {
+  const cal = track.cal;
+  cal.i++; cal.t = 0; cal.phase = 'move'; cal.collecting = false;
+  if (cal.i >= CAL_DOTS.length) { finishCalibration(cal); return; }
+  const [x, y] = CAL_DOTS[cal.i];
+  const dot = $('calDot');
+  dot.style.left = `${x * 100}%`; dot.style.top = `${y * 100}%`;
+  $('calArc').style.strokeDashoffset = '327';
+  $('calTitle').textContent = 'LOOK AT THE DOT';
+  $('calMsg').textContent = `${cal.i + 1} of ${CAL_DOTS.length}. Keep your eyes on it until its ring fills.`;
 }
 let calLast = 0;
 function calTick(ts) {
   const cal = track.cal;
   if (!cal || state.mode !== 'cal') return;
+  requestAnimationFrame(calTick);
   const dt = calLast ? Math.min(0.05, (ts - calLast) / 1000) : 0;
   calLast = ts;
-  const dur = 2.2;
   if (!track.live) {
     cal.collecting = false;
-    $('calCount').textContent = '';
     $('calMsg').textContent = 'Looking for your face… sit facing the screen in good light.';
-    requestAnimationFrame(calTick);
     return;
   }
-  if (!cal.collecting) {
-    cal.collecting = true;
-    $('calMsg').textContent = cal.stage === 0
-      ? 'Tip your head and eyes up toward HIGH ORBIT, at the top of the screen, and hold.'
-      : 'Now down toward the ATMOSPHERE, at the bottom, and hold.';
-  }
   cal.t += dt;
-  const k = Math.min(1, cal.t / dur);
+  if (cal.phase === 'move') {               // the dot travels; let the eyes follow before measuring
+    if (cal.t >= 0.6) { cal.phase = 'hold'; cal.t = 0; }
+    $('calMsg').textContent = `${cal.i + 1} of ${CAL_DOTS.length}. Keep your eyes on it until its ring fills.`;
+    return;
+  }
+  cal.collecting = true;
+  const k = Math.min(1, cal.t / 1.4);
   $('calArc').style.strokeDashoffset = String(327 * (1 - k));
-  $('calCount').textContent = String(Math.max(1, Math.ceil((1 - k) * dur)));
-  if (k < 1) { requestAnimationFrame(calTick); return; }
-  // keep the steady part of the hold: drop the first third while the player settles
-  const held = cal.samples.slice(Math.floor(cal.samples.length / 3));
-  if (cal.stage === 0) { cal.up = held; calLast = 0; nextCalStage(); return; }
-  cal.down = held;
-  finishCalibration(cal);
+  if (k >= 1) { cal.collecting = false; nextCalDot(); }
 }
-const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[s.length >> 1]; };
-const iqr = (a) => { if (a.length < 4) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length * 0.75)] - s[Math.floor(s.length * 0.25)]; };
 function finishCalibration(cal) {
-  cal.collecting = false; track.cal = null; calLast = 0;
-  const upH = cal.up.map((s) => s.h), dnH = cal.down.map((s) => s.h);
-  const upE = cal.up.map((s) => s.e), dnE = cal.down.map((s) => s.e);
-  const hU = median(upH), hD = median(dnH), eU = median(upE), eD = median(dnE);
-  const spanH = Math.abs(hD - hU), spanE = Math.abs(eD - eU);
-  const rH = spanH / ((iqr(upH) + iqr(dnH)) / 2 + 0.004);   // separation over noise
-  const rE = spanE / ((iqr(upE) + iqr(dnE)) / 2 + 0.02);
-  const wH = spanH > 0.02 ? rH : 0, wE = spanE > 0.06 ? rE : 0;
-  track.map = { hU, hD, eU, eD, wH, wE, neutral: (hU + hD) / 2 };
-  track.filter = new OneEuro(1.2, 2.0, 1.0);
-  // a weak signal gets fewer, bigger targets
-  state.bandCount = Math.max(rH * (wH > 0), rE * (wE > 0)) >= 5 ? 3 : 2;
+  track.cal = null; calLast = 0;
+  $('calDot').hidden = true;
+  const mx = fitAxis(cal.samples.filter((s) => s.ty === 0.5), 'hy', 'eh', 'tx');   // centre, left, right
+  const my = fitAxis(cal.samples.filter((s) => s.tx === 0.5), 'hp', 'ev', 'ty');   // centre, top, bottom
+  const fallback = defaultModel();
+  track.model = { x: mx || fallback.x, y: my || fallback.y };
+  track.fx = new OneEuro(1.0, 1.0, 1.0); track.fy = new OneEuro(1.0, 1.0, 1.0);
+  if (!mx || !my || mx.r2 < 0.3 || my.r2 < 0.3) {
+    $('calTitle').textContent = 'TRACKING WAS UNSTEADY';
+    $('calMsg').textContent = 'Sit facing the screen in good light, keep your face in view, and try again. Or play now and see how it feels.';
+    $('btnCalRetry').hidden = false;
+    $('btnCalSkip').textContent = 'PLAY ANYWAY';
+    $('btnCalSkip').hidden = false;
+    calPlayAnyway = true;
+    return;
+  }
   afterCalibration();
 }
 function skipCalibration() {
   track.cal = null; calLast = 0;
-  track.map = { hU: 0, hD: 0, eU: 0, eD: 0, wH: 0, wE: 0, neutral: track.head };
-  state.bandCount = 2;
+  if (!calPlayAnyway || !track.model) track.model = defaultModel();
+  track.fx = new OneEuro(1.0, 1.0, 1.0); track.fy = new OneEuro(1.0, 1.0, 1.0);
+  $('calDot').hidden = true;
   afterCalibration();
 }
 function afterCalibration() {
+  calPlayAnyway = false;
+  $('btnCalRetry').hidden = true; $('btnCalSkip').hidden = true;
+  $('btnCalSkip').textContent = 'SKIP — USE DEFAULTS';
   $('calTitle').textContent = 'READY';
-  $('calMsg').textContent = state.bandCount === 3
-    ? 'Three bands. Look at a band and hold your focus on it.'
-    : 'Two bands, so each target is bigger. Look at a band and hold your focus on it.';
-  $('calCount').textContent = '';
-  $('calArc').style.strokeDashoffset = '0';
+  $('calMsg').textContent = 'A red crosshair shows where you are looking. Keep it on a saucer until the ring closes.';
+  state.bandCount = 3;
   setTimeout(() => {
     if (resumeAfterCal) {
       resumeAfterCal = false;
-      for (const v of state.invaders) v.band = Math.min(v.band, state.bandCount - 1);
-      state.selectedBand = null; state.heldBand = null; state.bandDwell = 0;
+      state.selectedBand = null; state.heldBand = null; state.bandDwell = 0; state.killGaze = null;
       state.mode = 'play'; showScreen(null); lastT = 0;
-    }
-    else startRun();
-  }, 900);
+    } else startRun();
+  }, 1300);
 }
-let resumeAfterCal = false;
+let resumeAfterCal = false, calPlayAnyway = false;
 
 // ------------------------------------------------------------------ flow
 function pauseGame() {
@@ -1270,6 +1325,7 @@ $('btnEyes').addEventListener('click', () => { unlockAudio(); startEyes(); });
 $('btnPointer').addEventListener('click', () => { unlockAudio(); startPointer(); });
 $('btnSound').addEventListener('click', () => setMuted(!audio.muted));
 $('btnCalSkip').addEventListener('click', skipCalibration);
+$('btnCalRetry').addEventListener('click', beginCalibration);
 $('btnPause').addEventListener('click', pauseGame);
 $('btnResume').addEventListener('click', resumeGame);
 $('btnRecal').addEventListener('click', () => { resumeAfterCal = true; startEyes(); });
@@ -1298,8 +1354,9 @@ if (params.has('autoplay')) {
   state.score = 2525; state.wave = 8; state.best = 0; showOver();
 } else if (params.get('screen') === 'cal') {    // layout check only
   state.mode = 'cal'; showScreen('cal');
-  $('calTitle').textContent = 'LOOK UP'; $('calCount').textContent = '2';
-  $('calMsg').textContent = 'Tip your head and eyes up toward HIGH ORBIT, at the top of the screen, and hold.';
+  $('calTitle').textContent = 'LOOK AT THE DOT';
+  $('calMsg').textContent = '4 of 5. Keep your eyes on it until its ring fills.';
+  $('calDot').hidden = false; $('calDot').style.left = '14%'; $('calDot').style.top = '50%';
   $('calArc').style.strokeDashoffset = '140';
 }
 
@@ -1309,8 +1366,12 @@ window.__qb = {
     mode: state.mode, input: state.input, wave: state.wave, score: state.score, integrity: state.integrity,
     combo: state.combo, bandCount: state.bandCount, selected: state.selectedBand, weather: state.weather && state.weather.condition,
     invaders: state.invaders.map((v) => ({ kind: v.kind, band: v.band, dwell: +v.dwell.toFixed(2), boss: v.bossName, x: Math.round(v.pos.x), y: Math.round(v.pos.y), dying: v.collapsing })),
-    banner: state.banner, aim: track.aim, live: track.live,
+    banner: state.banner, gaze: { x: Math.round(track.gaze.x), y: Math.round(track.gaze.y) }, live: track.live, model: !!track.model,
   }),
   setBand: (b) => { state.keysOverride = true; state.selectedBand = b; },
+  // eye play without a camera: a test puts the gaze where it wants
+  fakeEyes: () => { track.model = defaultModel(); track.live = true; track.lastFace = Infinity; state.input = 'eyes'; startRun(); },
+  gazeAt: (x, y) => { track.live = true; track.gaze.x = x; track.gaze.y = y; },
+  size: () => ({ W, H, u }),
   wave: (n) => { state.invaders = []; state.pending = []; beginWave(n); },
 };
