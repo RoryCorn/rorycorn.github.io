@@ -21,7 +21,7 @@
     if (e.key === "Escape" && nav.classList.contains("is-open")) { setOpen(false); toggle.focus(); }
   });
 
-  // ---- early access form ----
+  // ---- news signup form ----
   // Posts form-encoded (a "simple" request, so no CORS preflight) to Rory's n8n
   // workflow, which validates, de-duplicates and stores the address.
   var form = document.getElementById("notify-form");
@@ -55,10 +55,10 @@
       })
       .then(function (r) {
         if (r.ok && r.data && r.data.status === "already") {
-          say("You're already on the list. One message when it's ready.", "ok");
+          say("You're already on the list.", "ok");
           form.reset();
         } else if (r.ok) {
-          say("You're on the list. One message when the build is ready.", "ok");
+          say("You're on the list. Only Quantum Boss news.", "ok");
           form.reset();
         } else if (r.data && r.data.status === "invalid") {
           say("Check that email address.", "err");
