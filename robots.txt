@@ -5,3 +5,4 @@ Sitemap: https://rorycorn.github.io/sitemap.xml
 Sitemap: https://rorycorn.github.io/quantum-boss/sitemap.xml
 Sitemap: https://rorycorn.github.io/synesthesia/sitemap.xml
 Sitemap: https://rorycorn.github.io/sky-calendar/sitemap.xml
+Sitemap: https://rorycorn.github.io/kilocycle/sitemap.xml

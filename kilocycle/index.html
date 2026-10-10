@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kilocycle Radio — every genre, one frequency</title>
+<meta name="description" content="Kilocycle Radio is Rory Corn's internet radio station: original soul, funk, island and hip-hop, blended like a DJ set, with live shows you can call into from any browser. Listen free, no sign-in.">
+<link rel="canonical" href="https://rorycorn.github.io/kilocycle/">
+<meta name="google-site-verification" content="h-buz-rrgSHcU7IuUSi3iAW33hdJ6DllM8G6c4aYv_k">
+<meta name="theme-color" content="#FBF6EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kilocycle Radio">
+<meta property="og:title" content="Kilocycle Radio — every genre, one frequency">
+<meta property="og:description" content="Original soul, funk, island and hip-hop, blended like a DJ set, with live call-in shows. Listen free in your browser.">
+<meta property="og:url" content="https://rorycorn.github.io/kilocycle/">
+<meta property="og:image" content="https://rorycorn.github.io/kilocycle/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Kilocycle Radio logo: an amber dial lamp with one sound wave across it, and the words Every genre. One frequency.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/bricolage.woff" as="font" type="font/woff" crossorigin>
+<style>
+@font-face { font-family: "Bricolage"; src: url("assets/bricolage.woff") format("woff"); font-weight: 200 800; font-display: swap; }
+:root { --bg: #FBF6EC; --card: #ffffff; --text: #101828; --muted: #5b6475; --line: #e8e0cf; --amber: #F5A524; --amber-ink: #8a5300; --red: #D93D42; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0B1220; --card: #111a2c; --text: #ece7dc; --muted: #97a1b4; --line: #25314b; --amber-ink: #F5A524; --red: #E5484D; color-scheme: dark; } }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h1, h2, h3 { font-family: "Bricolage", system-ui, sans-serif; letter-spacing: -.015em; line-height: 1.15; }
+a { color: var(--amber-ink); }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; flex-wrap: wrap; }
+header.top img { height: 46px; width: auto; display: block; }
+nav.jump { display: flex; gap: 16px; flex-wrap: wrap; font-size: 15px; }
+nav.jump a { color: var(--muted); text-decoration: none; } nav.jump a:hover { color: var(--text); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+.hero { display: grid; gap: 14px; margin: 10px 0 28px; }
+.hero h1 { font-size: clamp(32px, 7vw, 52px); margin: 0; }
+.tagline { font-family: "Bricolage", sans-serif; font-weight: 650; text-transform: uppercase; letter-spacing: .18em; font-size: 13px; color: var(--amber-ink); margin: 0; }
+.lede { font-size: 19px; margin: 0; max-width: 62ch; }
+.now { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: color-mix(in srgb, var(--amber) 10%, transparent); border-radius: 14px; padding: 12px 14px; min-height: 52px; }
+.badge { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--amber-ink); }
+.badge.live { color: #fff; background: var(--red); border-radius: 999px; padding: 2px 10px; }
+.now b { font-size: 17px; } .now span.muted { color: var(--muted); font-size: 15px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 14px 22px; font-weight: 800; font-size: 17px; text-decoration: none; border: 1px solid var(--line); color: var(--text); background: var(--card); }
+.btn.primary { background: var(--amber); border-color: var(--amber); color: #1b1203; }
+.btn:hover { filter: brightness(1.05); }
+.btn svg { width: 20px; height: 20px; }
+section { margin: 34px 0; }
+section h2 { font-size: 26px; margin: 0 0 12px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.tabs button { font: inherit; font-size: 14px; font-weight: 600; border: 1px solid var(--line); background: var(--card); color: inherit; border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--amber); border-color: var(--amber); color: #1b1203; }
+.sched { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.sched li { display: grid; grid-template-columns: 170px 1fr auto; gap: 10px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); align-items: baseline; }
+.sched li.on { border-color: var(--amber); }
+.sched .t { white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 15px; }
+.sched .k { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.sched small { display: block; color: var(--muted); font-size: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid3 .card { padding: 18px; } .grid3 h3 { margin: 0 0 6px; font-size: 18px; } .grid3 p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.muted { color: var(--muted); }
+.small { font-size: 15px; }
+footer.site { border-top: 1px solid var(--line); margin-top: 40px; padding: 26px 0 40px; font-size: 15px; color: var(--muted); }
+footer.site p { margin: 8px 0; }
+.privacy article { margin: 0 0 14px; } .privacy h3 { font-size: 17px; margin: 0 0 4px; } .privacy p { margin: 0; color: var(--muted); font-size: 15.5px; }
+@media (max-width: 720px) { .grid3 { grid-template-columns: 1fr; } .sched li { grid-template-columns: 1fr; gap: 2px; } .sched .k { display: none; } nav.jump { display: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <picture>
+      <source srcset="logo-dark.svg" media="(prefers-color-scheme: dark)">
+      <img src="logo.svg" alt="Kilocycle" width="155" height="46">
+    </picture>
+    <nav class="jump" aria-label="On this page"><a href="#listen">Listen</a><a href="#schedule">Schedule</a><a href="#call">Call in</a><a href="#about">About</a></nav>
+  </header>
+
+  <main>
+    <div class="card hero" id="listen">
+      <p class="tagline">Every genre. One frequency.</p>
+      <h1>Kilocycle Radio</h1>
+      <p class="lede">Original soul, funk, island and hip-hop, blended like a DJ set, around the clock, with live shows you can call into from any browser.</p>
+      <div class="now" id="now" aria-live="polite"><span class="badge" id="nowBadge">On air</span><b id="nowTitle">Kilocycle Radio</b><span class="muted" id="nowMore"></span></div>
+      <div class="actions">
+        <a class="btn primary" id="listenBtn" href="https://159-203-162-41.sslip.io/?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Listen live"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>Listen live</a>
+        <a class="btn" id="callBtn" href="https://159-203-162-41.sslip.io/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">Call the studio</a>
+      </div>
+      <p class="muted small" id="listenNote">Free, no account. It plays in your browser about two seconds behind the studio.</p>
+    </div>
+
+    <section id="schedule" aria-labelledby="h-sched">
+      <h2 id="h-sched">This week on Kilocycle</h2>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Days"></div>
+      <ol class="sched" id="sched"><li><span class="t">Loading…</span><b>The schedule comes straight from the station</b></li></ol>
+      <p class="muted small">Times are Eastern. Between shows, Kilocycle All Genres plays a bit of everything.</p>
+    </section>
+
+    <section id="call" aria-labelledby="h-call">
+      <h2 id="h-call">Call in</h2>
+      <p>During live call-in shows, open <a href="https://159-203-162-41.sslip.io/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">the call page</a> on your phone or computer, give your first name and what you'd like to talk about, and wait for the host to pick up. No phone number and no app: your voice goes straight from your browser to the studio. Use earbuds, and turn the station off on that device so it doesn't echo.</p>
+      <p class="muted small" id="callNote">The weekly call-in show is <b>Weekend Open Line</b>, Saturdays 11 AM to 1 PM Eastern.</p>
+    </section>
+
+    <section id="about" aria-labelledby="h-about">
+      <h2 id="h-about">About the station</h2>
+      <p>Kilocycle Radio is Rory Corn's station, and everything on it, from the music to the studio, was built from scratch. The name comes from early radio, when dials were marked in kilocycles before anyone said kilohertz.</p>
+      <div class="grid3">
+        <div class="card"><h3>Mixed like a DJ</h3><p>Every song is measured for tempo, key and energy. The next song is picked to fit the last one, and the two are blended: a long mix with a bass swap when they match, a smooth crossfade when they don't.</p></div>
+        <div class="card"><h3>Live, almost instantly</h3><p>Hosts broadcast from a phone or a computer, and listeners hear them about two seconds later instead of the usual ten to fifteen.</p></div>
+        <div class="card"><h3>A studio in the browser</h3><p>The host's console has an equalizer, compressor, voice changer, sound pads, phone lines for callers and a profanity delay, all in a web page.</p></div>
+      </div>
+    </section>
+
+    <section class="privacy" id="privacy" aria-labelledby="h-priv">
+      <h2 id="h-priv">Privacy</h2>
+      <article><h3>Visit counts</h3><p>This page counts visits anonymously with Umami: no cookies, nothing that identifies you. It also counts presses of Listen live and Call the studio.</p></article>
+      <article><h3>The station</h3><p>This page shows what's playing and the schedule by asking the station's server, and Listen live and the call page are on the station's own site, which has <a href="https://159-203-162-41.sslip.io/privacy">its own privacy page</a>. There's no account, no sign-in and no advertising.</p></article>
+    </section>
+  </main>
+
+  <footer class="site">
+    <p>Also by Rory Corn: <a href="https://proxipals.onrender.com/" data-umami-event="Outbound link" data-umami-event-url="proxipals.onrender.com">ProxiPals ↗</a>, see who's around you and say hi.</p>
+    <p><a href="https://rorycorn.github.io/" data-umami-event="Outbound link" data-umami-event-url="rorycorn.github.io">More by Rory Corn</a> · <a href="#privacy">Privacy</a> · Logo font: Bricolage Grotesque (<a href="assets/OFL-bricolage-grotesque.txt">SIL Open Font License</a>)</p>
+    <p>© 2026 Rory Corn · Free, no sign-in</p>
+  </footer>
+</div>
+
+<script>
+// Live "now playing" and the weekly schedule, straight from the station (public, read-only info).
+const STATION = 'https://159-203-162-41.sslip.io';
+const $ = (s) => document.querySelector(s);
+async function getJSON(path) { const r = await fetch(STATION + path, { cache: 'no-store' }); if (!r.ok) throw new Error(r.status); return r.json(); }
+
+async function nowPlaying() {
+  try {
+    const n = await getJSON('/api/now');
+    $('#nowBadge').textContent = n.live ? 'Live' : n.kind === 'music' ? 'Now playing' : 'On air';
+    $('#nowBadge').className = 'badge' + (n.live ? ' live' : '');
+    $('#nowTitle').textContent = n.title || n.station || 'Kilocycle Radio';
+    $('#nowMore').textContent = [n.live ? '' : n.artist, n.block].filter(Boolean).join(' · ');
+  } catch { $('#nowMore').textContent = ''; }
+  try {
+    const c = await getJSON('/api/call/status');
+    $('#callBtn').textContent = c.open ? 'Call the studio: lines open now' : 'Call the studio';
+    const DAY = { sat: 'Saturdays', sun: 'Sundays', 'mon-fri': 'weekdays', daily: 'every day' }, t12 = (t) => { const [h, m] = t.split(':').map(Number); return `${((h + 11) % 12) + 1}${m ? ':' + String(m).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
+    if (c.shows?.length) $('#callNote').textContent = 'Call-in shows: ' + c.shows.map((b) => `${b.name}, ${[].concat(b.days).map((d) => DAY[d] || d).join(', ')} ${t12(b.start)} to ${t12(b.end)} Eastern`).join('; ') + '.';
+  } catch {}
+}
+
+async function schedule() {
+  let s; try { s = await getJSON('/api/schedule'); } catch { $('#sched').innerHTML = '<li><span class="t">—</span><b>The schedule is on the station’s page</b></li>'; return; }
+  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'], NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: s.timezone, weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+  const today = days.indexOf(parts.find((p) => p.type === 'weekday').value.toLowerCase().slice(0, 3));
+  const mins = +parts.find((p) => p.type === 'hour').value * 60 + +parts.find((p) => p.type === 'minute').value;
+  const on = (b, di) => (b.days || []).some((d) => {
+    d = String(d).toLowerCase();
+    if (['daily', 'all', 'everyday'].includes(d)) return true;
+    if (d === 'weekdays') return di > 0 && di < 6; if (d === 'weekends') return di === 0 || di === 6;
+    const m = d.match(/^(\w{3})-(\w{3})$/);
+    if (m) { let i = days.indexOf(m[1]); const j = days.indexOf(m[2]); for (;;) { if (i === di) return true; if (i === j) return false; i = (i + 1) % 7; } }
+    return d === days[di];
+  });
+  const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  const fallback = s.blocks.find((b) => b.default) || { name: 'Music', type: 'music' };
+  const named = s.blocks.filter((b) => !b.default && b.start && b.end);
+  const lineup = (di) => {
+    const prev = (di + 6) % 7, segs = []; let cursor = 0;
+    for (const b of named) if (on(b, prev) && toMin(b.end) < toMin(b.start) && toMin(b.end) > 0) { segs.push({ from: 0, to: toMin(b.end), name: b.name, type: b.type, end: b.end }); cursor = toMin(b.end); }
+    for (const b of named.filter((x) => on(x, di)).sort((a, c) => toMin(a.start) - toMin(c.start))) {
+      const st = toMin(b.start), en = toMin(b.end) <= st ? 1440 : toMin(b.end);
+      if (st > cursor) segs.push({ from: cursor, to: st, name: fallback.name, type: fallback.type });
+      segs.push({ from: Math.max(st, cursor), to: en, name: b.name, type: b.type, end: b.end }); cursor = en;
+    }
+    if (cursor < 1440) segs.push({ from: cursor, to: 1440, name: fallback.name, type: fallback.type });
+    return segs;
+  };
+  const groups = [];
+  for (const di of [1, 2, 3, 4, 5, 6, 0]) { const l = lineup(di), sig = JSON.stringify(l), g = groups.at(-1); if (g && g.sig === sig) g.days.push(di); else groups.push({ sig, days: [di], segs: l }); }
+  const label = (g) => (g.days.length === 1 ? NAMES[g.days[0]] : `${NAMES[g.days[0]]}–${NAMES[g.days.at(-1)]}`);
+  const clock = (m) => new Date(2000, 0, 1, Math.floor(m / 60) % 24, m % 60).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  function show(g) {
+    for (const b of $('#tabs').children) b.setAttribute('aria-selected', String(b.dataset.i === String(groups.indexOf(g))));
+    const ol = $('#sched'); ol.textContent = '';
+    for (const seg of g.segs) {
+      const li = document.createElement('li'); if (g.days.includes(today) && mins >= seg.from && mins < seg.to) li.className = 'on';
+      li.innerHTML = '<span class="t"></span><b></b><span class="k"></span>';
+      li.querySelector('.t').textContent = `${clock(seg.from)}–${seg.end ? clock(toMin(seg.end)) : clock(seg.to)}`;
+      li.querySelector('b').textContent = seg.name;
+      li.querySelector('.k').textContent = seg.type === 'live' ? 'Live' : seg.type === 'show' ? 'Show' : 'Music';
+      ol.append(li);
+    }
+  }
+  $('#tabs').textContent = '';
+  groups.forEach((g, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.i = i; b.textContent = label(g) + (g.days.includes(today) ? ' (today)' : ''); b.addEventListener('click', () => show(g)); $('#tabs').append(b); });
+  show(groups.find((g) => g.days.includes(today)) || groups[0]);
+}
+
+nowPlaying(); schedule();
+setInterval(nowPlaying, 20000);
+</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="0a9cea78-7df1-4cb5-a090-2f1a9c9b572d" data-domains="rorycorn.github.io"></script>
+</body>
+</html>
