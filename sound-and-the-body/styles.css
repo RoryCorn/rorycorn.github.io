@@ -1,0 +1,130 @@
+/* Sound & the Body — landing page.
+   Palette is lifted from the atlas itself so the site and the app feel like
+   one thing rather than a brochure bolted onto a product. */
+:root{
+  --bg:#0b0e1a; --bg2:#121734; --panel:#141a33; --panel2:#1b2244;
+  --ink:#eaf0ff; --muted:#93a0c8; --line:rgba(255,255,255,.09);
+  --accent:#7c5cff; --accent2:#28d3c7;
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(130% 70% at 50% -10%, rgba(124,92,255,.20), transparent 62%),
+    radial-gradient(90% 55% at 50% 108%, rgba(40,211,199,.12), transparent 60%),
+    var(--bg);
+  min-height:100vh;
+}
+a{color:var(--accent2)}
+img{max-width:100%}
+
+/* ---- top bar ---- */
+.bar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 20px;max-width:1040px;margin:0 auto;
+}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:700}
+.brand__mark{width:30px;height:30px;display:block;flex:0 0 30px}
+.brand__mark svg{width:100%;height:100%;display:block}
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-block;padding:13px 22px;border-radius:12px;text-decoration:none;
+  font-weight:700;border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.04);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+.btn--sm{padding:9px 15px;font-size:.88rem}
+.btn--lg{padding:16px 30px;font-size:1.04rem}
+.btn--primary{
+  background:linear-gradient(135deg,var(--accent),#6a4df0);border-color:transparent;color:#fff;
+  box-shadow:0 10px 30px rgba(124,92,255,.32);
+}
+.btn--primary:hover{box-shadow:0 14px 38px rgba(124,92,255,.42)}
+
+/* ---- layout ---- */
+main{max-width:1040px;margin:0 auto;padding:0 20px 20px}
+.sec{padding:58px 0;border-top:1px solid var(--line)}
+.sec h2{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.22;letter-spacing:-.02em;margin-bottom:14px}
+.sec p{color:#cdd6f0;max-width:62ch}
+.sec p + p{margin-top:12px}
+.sec--quiet p{color:var(--muted)}
+
+/* ---- hero ---- */
+.hero{padding:44px 0 56px}
+.kicker{
+  display:inline-block;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent2);border:1px solid rgba(40,211,199,.35);border-radius:999px;padding:5px 12px;margin-bottom:18px;
+}
+.hero h1{
+  font-size:clamp(2rem,5.6vw,3.3rem);line-height:1.08;letter-spacing:-.03em;
+  max-width:19ch;margin-bottom:18px;
+}
+.lede{font-size:clamp(1rem,2.1vw,1.16rem);color:#cdd6f0;max-width:58ch}
+.lede--tight{margin-top:12px}
+.cta{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.cta__note{font-size:.88rem;color:var(--muted)}
+
+/* ---- split section with the sample panel ---- */
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:start}
+@media (max-width:820px){ .split{grid-template-columns:1fr;gap:26px} }
+.ticks{list-style:none;display:grid;gap:12px;margin:16px 0 0}
+.ticks li{position:relative;padding-left:22px;color:#cdd6f0;max-width:58ch}
+.ticks li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.aside{margin-top:14px;font-size:.92rem;color:var(--muted)}
+
+.panelcard{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+.panelcard__hz{font-size:3.1rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,var(--accent2),#7aa2ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.panelcard__hz span{font-size:1.05rem;margin-left:6px;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.pill{display:inline-block;margin:6px 0 12px;padding:5px 11px;border-radius:999px;
+  background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.4);font-size:.8rem;font-weight:600}
+.panelcard__role{font-size:.93rem;color:#cdd6f0}
+.panelcard__srch{margin-top:16px;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.panelcard__src{margin:7px 0 0;padding-left:18px;display:grid;gap:5px}
+.panelcard__src li{font-size:.8rem;color:var(--accent2);line-height:1.4}
+
+/* ---- the nine maps ---- */
+.maps{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+@media (max-width:760px){ .maps{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:460px){ .maps{grid-template-columns:1fr} }
+.maps li{
+  background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;padding:15px;
+  display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:2px 11px;align-items:center;
+}
+.maps span{grid-row:1/3;font-size:1.5rem}
+.maps b{font-size:.98rem}
+.maps i{font-style:normal;font-size:.8rem;color:var(--muted);line-height:1.35}
+
+.warn{margin-top:14px;font-size:.9rem;color:#f0c27a}
+
+/* ---- pricing ---- */
+.price__grid{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;margin:22px 0 26px}
+@media (max-width:700px){ .price__grid{grid-template-columns:1fr} }
+.price__card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.price__card h3{font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.price__card p{font-size:.95rem}
+.price__card--main{border-color:rgba(124,92,255,.45);background:
+  linear-gradient(180deg,rgba(124,92,255,.12),rgba(124,92,255,.03))}
+.price__amt{font-size:2.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px!important}
+.price__fine{margin-top:12px!important;font-size:.85rem;color:var(--muted)}
+
+.disclaim p{color:var(--muted);font-size:.94rem}
+.final{text-align:center;padding:66px 0}
+.final h2{margin-bottom:22px}
+
+/* ---- footer ---- */
+.foot{
+  max-width:1040px;margin:0 auto;padding:26px 20px 46px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.87rem;display:grid;gap:7px;
+}
+.foot a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.foot a:hover{color:var(--ink)}

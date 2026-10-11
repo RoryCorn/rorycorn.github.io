@@ -1,0 +1,400 @@
+:root{
+  --bg:#0b0e1a;
+  --bg2:#121734;
+  --panel:#141a33;
+  --panel2:#1b2244;
+  --ink:#eaf0ff;
+  --muted:#93a0c8;
+  --line:rgba(255,255,255,.09);
+  --accent:#7c5cff;
+  --accent2:#28d3c7;
+  --glow:0 0 0 3px rgba(124,92,255,.25);
+  --radius:16px;
+  --sci:#28d3c7;
+  --trad:#c98bff;
+  font-synthesis:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 80% -10%, rgba(124,92,255,.18), transparent 60%),
+    radial-gradient(900px 600px at 0% 110%, rgba(40,211,199,.14), transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  /* native-app feel: no accidental text selection / tap-highlight / bounce */
+  -webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+  overscroll-behavior-y:none;
+}
+/* keep the descriptive/explanatory text selectable */
+.pc-section p,#pcRole,.disclaimer span,.waves-intro,.freq-note,.play-mode-note{-webkit-user-select:text;user-select:text}
+.app{
+  max-width:1280px;margin:0 auto;
+  padding:calc(22px + env(safe-area-inset-top)) calc(22px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(22px + env(safe-area-inset-left));
+  min-height:100%;display:flex;flex-direction:column;gap:16px
+}
+/* phones: tighten spacing, size tap targets */
+@media(max-width:640px){
+  .app{padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
+  h1{font-size:1.2rem}
+  .tab{padding:10px 13px;font-size:.86rem}
+  .chip{font-size:.78rem}
+}
+
+/* ---------- header ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{width:46px;height:46px;background:linear-gradient(150deg,var(--panel2),#0e1330);border:1px solid var(--line);border-radius:13px;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.brand-mark svg{width:30px;height:30px}
+h1{font-size:1.45rem;margin:0;letter-spacing:.2px}
+.subtitle{margin:2px 0 0;color:var(--muted);font-size:.86rem}
+
+.view-switch{display:flex;flex-wrap:wrap;gap:6px;background:var(--panel);border:1px solid var(--line);padding:5px;border-radius:14px}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font-size:.9rem;font-weight:600;padding:9px 15px;border-radius:10px;cursor:pointer;transition:.18s}
+.tab:hover{color:var(--ink)}
+.tab.active{background:linear-gradient(150deg,var(--accent),#5b45d6);color:#fff;box-shadow:0 6px 18px rgba(124,92,255,.35)}
+
+/* ---------- modebar ---------- */
+.modebar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.mode-toggle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mode-label{color:var(--muted);font-size:.82rem;font-weight:600}
+.chip{appearance:none;border:1px solid var(--line);background:#0e1430;color:var(--muted);padding:8px 13px;border-radius:999px;font-size:.82rem;cursor:pointer;transition:.18s;font-weight:600}
+.chip em{font-style:normal;opacity:.7;font-weight:500}
+.chip:hover{color:var(--ink);border-color:rgba(255,255,255,.25)}
+.chip.active[data-mode="science"]{background:rgba(40,211,199,.14);border-color:var(--sci);color:#bff6f0}
+.chip.active[data-mode="traditional"]{background:rgba(201,139,255,.14);border-color:var(--trad);color:#ecd8ff}
+.ghost{appearance:none;background:transparent;border:1px solid var(--line);color:var(--muted);padding:8px 13px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.82rem}
+.ghost:hover{color:var(--ink);border-color:rgba(255,255,255,.3)}
+.modebar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.trial-pill{appearance:none;cursor:pointer;font-weight:700;font-size:.76rem;padding:7px 12px;border-radius:999px;
+  background:rgba(40,211,199,.12);border:1px solid var(--sci);color:#bff6f0;transition:.15s}
+.trial-pill:hover{filter:brightness(1.1)}
+.trial-pill.ending{background:rgba(245,166,35,.14);border-color:#f5a623;color:#ffd79a}
+.trial-pill.unlocked{background:rgba(124,92,255,.14);border-color:var(--accent);color:#e3dcff;cursor:default}
+
+/* ---------- audio hint toast (shown on first play) ---------- */
+.audio-toast{
+  position:fixed;left:50%;transform:translateX(-50%) translateY(0);
+  bottom:calc(18px + env(safe-area-inset-bottom));z-index:90;
+  display:flex;align-items:center;gap:10px;max-width:min(92vw,440px);
+  padding:11px 12px 11px 15px;border-radius:14px;
+  background:linear-gradient(150deg,#1b2350,#141a38);border:1px solid rgba(124,92,255,.4);
+  box-shadow:0 14px 40px rgba(0,0,0,.55);color:#eaf0ff;font-size:.85rem;font-weight:600;
+  animation:toastIn .3s cubic-bezier(.2,.8,.2,1);
+}
+.audio-toast[hidden]{display:none}
+.audio-toast.leaving{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(16px)}}
+.at-ico{font-size:1.05rem;flex:none}
+.at-text{line-height:1.35}
+.at-close{flex:none;width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:#0e1430;color:var(--muted);cursor:pointer;font-size:.75rem;line-height:1}
+.at-close:hover{color:var(--ink)}
+
+/* ---------- update-available banner (top) ---------- */
+.update-banner{
+  position:fixed;left:50%;transform:translateX(-50%);
+  top:calc(12px + env(safe-area-inset-top));z-index:95;
+  display:flex;align-items:center;gap:10px;width:min(94vw,460px);
+  padding:10px 10px 10px 15px;border-radius:14px;
+  background:linear-gradient(150deg,#1b2350,#141a38);border:1px solid rgba(124,92,255,.45);
+  box-shadow:0 14px 40px rgba(0,0,0,.55);color:#eaf0ff;font-size:.85rem;font-weight:600;
+  animation:ubIn .3s cubic-bezier(.2,.8,.2,1);
+}
+.update-banner[hidden]{display:none}
+.update-banner.leaving{animation:ubOut .25s ease forwards}
+@keyframes ubIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes ubOut{to{opacity:0;transform:translateX(-50%) translateY(-16px)}}
+.ub-ico{font-size:1.05rem;flex:none}
+.ub-text{line-height:1.35;flex:1}
+.ub-btn{flex:none;appearance:none;border:0;cursor:pointer;background:linear-gradient(150deg,var(--accent),#5b45d6);color:#fff;font-weight:700;font-size:.82rem;padding:8px 14px;border-radius:10px;box-shadow:0 6px 16px rgba(124,92,255,.35)}
+.ub-btn:hover{filter:brightness(1.08)}
+.ub-close{flex:none;width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:#0e1430;color:var(--muted);cursor:pointer;font-size:.75rem;line-height:1}
+.ub-close:hover{color:var(--ink)}
+
+/* ---------- overlays (disclaimer gate + about) ---------- */
+.overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;
+  padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  background:rgba(6,9,20,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fade .2s ease}
+.overlay[hidden]{display:none}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{position:relative;width:100%;max-width:460px;max-height:100%;overflow:auto;background:linear-gradient(165deg,#161c38,#0d1329);
+  border:1px solid var(--line);border-radius:22px;padding:26px 24px;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:rise .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-icon{width:56px;height:56px;margin:0 auto 6px;background:linear-gradient(150deg,var(--panel2),#0e1330);border:1px solid var(--line);border-radius:16px;display:grid;place-items:center}
+.sheet-icon svg{width:36px;height:36px}
+.sheet h2{text-align:center;margin:6px 0 2px;font-size:1.4rem}
+.sheet .lead{text-align:center;color:#d7def5;font-size:.92rem;line-height:1.5;margin:6px 0 16px}
+.sheet .muted-line{text-align:center;color:var(--muted);font-size:.82rem;margin:0 0 14px}
+.gate-points{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:11px}
+.gate-points li{display:flex;gap:11px;font-size:.86rem;line-height:1.45;color:#cdd6f2}
+.gate-points li span{flex:none;font-size:1rem}
+.primary-btn{width:100%;appearance:none;border:0;cursor:pointer;background:linear-gradient(150deg,var(--accent),#5b45d6);color:#fff;font-weight:700;font-size:.95rem;padding:14px;border-radius:13px;box-shadow:0 8px 22px rgba(124,92,255,.32);transition:.15s}
+.primary-btn:hover{filter:brightness(1.08)}
+.text-btn{display:block;width:100%;margin-top:10px;background:transparent;border:0;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;padding:6px}
+.text-btn:hover{color:var(--ink)}
+.sheet-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#0e1430;color:var(--muted);cursor:pointer;font-size:.9rem;line-height:1}
+.sheet-close:hover{color:var(--ink);border-color:rgba(255,255,255,.3)}
+.about-scroll{text-align:left;margin:8px 0 18px}
+.about-scroll h4{margin:16px 0 5px;font-size:.9rem;color:var(--accent2)}
+.about-scroll h4:first-child{margin-top:4px}
+.about-scroll p{margin:0 0 8px;font-size:.85rem;line-height:1.55;color:#cdd6f2}
+
+/* ---------- stage ---------- */
+.stage{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;flex:1;min-height:0}
+@media(max-width:900px){.stage{grid-template-columns:1fr}}
+
+.canvas-wrap{position:relative;background:
+    radial-gradient(600px 400px at 50% 30%, rgba(124,92,255,.10), transparent 70%),
+    linear-gradient(160deg,var(--panel),#0d1228);
+  border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;min-height:460px}
+.canvas-inner{flex:1;display:grid;place-items:center}
+.canvas-inner svg{width:100%;height:100%;max-height:560px;overflow:visible}
+.hint{text-align:center;color:var(--muted);font-size:.8rem;margin:6px 0 0}
+
+/* region markers */
+.node{cursor:pointer}
+.node .halo{fill:var(--accent);opacity:.14;transition:.2s}
+.node .dot{fill:#fff;stroke:var(--accent);stroke-width:1.1;transition:.2s;filter:drop-shadow(0 0 1.5px rgba(124,92,255,.9))}
+.node .ping{fill:none;stroke:var(--accent);stroke-width:.7;opacity:.45;transform-origin:center;transform-box:fill-box}
+.node:hover .halo{opacity:.32}
+.node:hover .dot{stroke:var(--accent2);r:2.4px}
+.node.active .halo{opacity:.5;fill:var(--accent2)}
+.node.active .dot{stroke:var(--accent2);fill:var(--accent2)}
+.node .lbl{fill:#ffffff;font-size:3.4px;font-weight:700;paint-order:stroke;stroke:#0b0e1a;stroke-width:1.5px;stroke-linejoin:round;opacity:0;transition:.15s}
+.node:hover .lbl,.node.active .lbl,.node:focus .lbl{opacity:1}
+.body-svg .lbl,.brain-svg .lbl{pointer-events:none}
+@keyframes ping{0%{transform:scale(1);opacity:.6}70%{transform:scale(2.4);opacity:0}100%{opacity:0}}
+.node .ping{animation:ping 2.6s ease-out infinite}
+
+.anat{fill:rgba(255,255,255,.03);stroke:rgba(255,255,255,.22);stroke-width:.5}
+.anat-soft{fill:rgba(124,92,255,.06);stroke:rgba(124,92,255,.35);stroke-width:.5}
+
+/* ---- detailed brain ---- */
+.skull{fill:none;stroke:rgba(255,255,255,.14);stroke-width:.6;stroke-dasharray:2 2}
+.cortex{fill:url(#cortexFill);stroke:rgba(205,185,255,.85);stroke-width:.7}
+.gyri path{fill:none;stroke:rgba(195,175,255,.7);stroke-width:.55;stroke-linecap:round}
+.cc{fill:rgba(124,92,255,.35);stroke:rgba(205,185,255,.75);stroke-width:.45}
+.deep{fill:rgba(40,211,199,.35);stroke:rgba(120,240,230,.85);stroke-width:.45}
+.ventricle{fill:rgba(255,255,255,.10);stroke:rgba(210,225,255,.55);stroke-width:.35}
+.cerebellum{fill:url(#cbFill);stroke:rgba(215,170,255,.85);stroke-width:.6}
+.folia path{fill:none;stroke:rgba(225,190,255,.75);stroke-width:.4}
+.stem{fill:rgba(124,92,255,.28);stroke:rgba(205,185,255,.75);stroke-width:.5}
+.pons{fill:rgba(150,120,230,.4);stroke:rgba(205,185,255,.7);stroke-width:.35}
+.stem-line{stroke:rgba(205,185,255,.6);stroke-width:.35;stroke-linecap:round}
+.hypo{fill:rgba(40,211,199,.3);stroke:rgba(120,240,230,.7);stroke-width:.35}
+.pituitary{fill:rgba(255,180,120,.4);stroke:rgba(255,200,150,.8);stroke-width:.3}
+.sulcus{stroke:rgba(180,160,245,.5);stroke-width:.4;stroke-linecap:round}
+
+/* ---- detailed body ---- */
+.body-skin{fill:rgba(96,116,196,.12);stroke:rgba(190,205,255,.65);stroke-width:.6}
+.spine{fill:none;stroke:rgba(235,240,255,.35);stroke-width:.7}
+.vertebrae path{fill:none;stroke:rgba(235,240,255,.30);stroke-width:.5;stroke-linecap:round}
+.diaphragm{stroke:rgba(255,255,255,.35);stroke-width:.5;stroke-dasharray:1.5 1.5}
+.organ{stroke-width:.5}
+.organ-brain{fill:rgba(201,139,255,.45);stroke:rgba(220,175,255,.95)}
+.organ-resp{fill:rgba(120,200,255,.30);stroke:rgba(150,215,255,.8)}
+.organ-thyroid{fill:rgba(255,180,120,.40);stroke:rgba(255,200,150,.9)}
+.organ-lung{fill:rgba(120,200,255,.26);stroke:rgba(150,215,255,.85)}
+.organ-heart{fill:rgba(255,92,138,.55);stroke:rgba(255,140,175,.95)}
+.organ-liver{fill:rgba(205,120,95,.5);stroke:rgba(230,150,120,.9)}
+.organ-stomach{fill:rgba(245,166,35,.38);stroke:rgba(255,190,90,.9)}
+.organ-gut{fill:rgba(245,180,120,.30);stroke:rgba(250,200,150,.85)}
+.organ-kidney{fill:rgba(160,90,120,.45);stroke:rgba(210,140,170,.85)}
+.organ-bladder{fill:rgba(245,220,120,.32);stroke:rgba(250,230,150,.85)}
+.organ-pancreas{fill:rgba(230,200,110,.30);stroke:rgba(240,215,140,.8)}
+.organ-spleen{fill:rgba(150,80,110,.42);stroke:rgba(200,130,160,.8)}
+
+/* ---- nerves view ---- */
+.nerve-cord{fill:none;stroke:rgba(245,230,150,.7);stroke-width:1.1;stroke-linecap:round}
+.nerve-symp{fill:none;stroke:rgba(200,210,240,.4);stroke-width:.5}
+.nerve-rungs path{fill:none;stroke:rgba(200,210,240,.35);stroke-width:.4;stroke-linecap:round}
+.nerve-vagus{fill:none;stroke:rgba(40,211,199,.85);stroke-width:.9;stroke-linecap:round;filter:drop-shadow(0 0 1px rgba(40,211,199,.6))}
+.nerve-branch path{fill:none;stroke:rgba(40,211,199,.6);stroke-width:.5;stroke-linecap:round}
+.nerve-thin{fill:none;stroke:rgba(245,230,150,.5);stroke-width:.55;stroke-linecap:round}
+.ribs path{fill:none;stroke:rgba(230,235,255,.28);stroke-width:.4;stroke-linecap:round}
+.organ-pelvis{stroke:rgba(235,235,255,.7);stroke-width:.6}
+.muscle{stroke:rgba(255,130,150,.55);stroke-width:.5}
+.muscle-belly{fill:rgba(255,120,140,.26);stroke:rgba(255,150,170,.8);stroke-width:.5}
+.bones path{fill:none;stroke:rgba(240,240,255,.5);stroke-width:.6;stroke-linecap:round}
+
+/* ---- cell view ---- */
+.membrane{fill:url(#cytoFill);stroke:rgba(120,200,255,.75);stroke-width:.8}
+.er{stroke:rgba(150,200,255,.5);stroke-width:.5;stroke-linecap:round}
+.nuc-env{fill:url(#nucFill);stroke:rgba(205,170,255,.85);stroke-width:.7}
+.nucleolus{fill:rgba(255,140,175,.5);stroke:rgba(255,175,200,.85);stroke-width:.4}
+.dna path{stroke:rgba(40,211,199,.9);stroke-width:.85;stroke-linecap:round}
+.dna .rungs line{stroke:rgba(205,175,255,.7);stroke-width:.5}
+.mito ellipse{fill:rgba(245,166,35,.28);stroke:rgba(255,195,95,.85);stroke-width:.5}
+.mito .crista{stroke:rgba(255,195,95,.7);stroke-width:.4;stroke-linecap:round}
+.ribos circle{fill:rgba(205,175,255,.6)}
+
+/* ---- atom view ---- */
+.orbit ellipse{fill:none;stroke:rgba(124,92,255,.45);stroke-width:.5}
+.shell-ring{fill:none;stroke:rgba(40,211,199,.35);stroke-width:.5;stroke-dasharray:2 2}
+.nuc-glow{fill:url(#nucGlow);opacity:.28}
+.proton{fill:rgba(255,92,138,.8);stroke:rgba(255,150,180,.95);stroke-width:.3}
+.neutron{fill:rgba(165,175,205,.62);stroke:rgba(205,215,240,.85);stroke-width:.3}
+.electrons circle{fill:rgba(120,205,255,.95);stroke:#e6f4ff;stroke-width:.35;filter:drop-shadow(0 0 1.4px rgba(120,205,255,.9))}
+
+/* ---------- panel ---------- */
+.panel{background:linear-gradient(160deg,var(--panel),#0d1228);border:1px solid var(--line);border-radius:var(--radius);padding:20px;overflow:auto}
+.panel-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;color:var(--muted)}
+/* the display:flex above defeats the [hidden] attribute; restore it so the
+   "Select a region" placeholder actually disappears once a region is chosen */
+.panel-empty[hidden]{display:none}
+.panel-empty h3{color:var(--ink);margin:4px 0 0}
+.panel-empty p{max-width:34ch;font-size:.88rem;line-height:1.5}
+.pulse-ring{width:60px;height:60px;border-radius:50%;border:2px solid var(--accent);position:relative}
+.pulse-ring::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--accent2);animation:ping 2.2s ease-out infinite}
+
+.pc-head{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+.pc-badge{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accent2);background:rgba(40,211,199,.12);padding:4px 9px;border-radius:999px}
+.pc-head h2{margin:9px 0 2px;font-size:1.3rem}
+.pc-sub{margin:0;color:var(--muted);font-size:.85rem}
+
+.freq-card{background:#0d1330;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.freq-big{display:flex;align-items:baseline;gap:6px}
+.freq-num{font-size:2.6rem;font-weight:800;background:linear-gradient(120deg,var(--accent2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.freq-unit{color:var(--muted);font-weight:700}
+.freq-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+.freq-tag{font-size:.76rem;font-weight:700;color:#dfe6ff;background:rgba(124,92,255,.16);border:1px solid rgba(124,92,255,.3);padding:3px 9px;border-radius:999px}
+.freq-note{font-size:.78rem;color:var(--muted)}
+.play-btn{width:100%;appearance:none;border:0;cursor:pointer;background:linear-gradient(150deg,var(--accent),#5b45d6);color:#fff;font-weight:700;font-size:.95rem;padding:12px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:9px;transition:.18s;box-shadow:0 8px 22px rgba(124,92,255,.3)}
+.play-btn:hover{filter:brightness(1.08)}
+.play-btn.playing{background:linear-gradient(150deg,#ff5c8a,#c93a63)}
+.play-ico{font-size:.9rem}
+.play-mode-note{margin:10px 0 0;font-size:.76rem;line-height:1.45;color:var(--muted)}
+.wave-viz{margin:12px 0 6px;background:#080c1e;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.wave-viz canvas{display:block;width:100%;height:60px}
+.vol-row{display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--muted)}
+.vol-row input{flex:1;accent-color:var(--accent)}
+
+.pc-section{margin-bottom:14px}
+.pc-section h4{margin:0 0 5px;font-size:.74rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.pc-section p{margin:0;font-size:.9rem;line-height:1.55;color:#d7def5}
+.alt-freqs{display:flex;flex-wrap:wrap;gap:8px}
+.alt-pill{font-size:.8rem;font-weight:600;color:#dfe6ff;background:#101637;border:1px solid var(--line);padding:7px 11px;border-radius:10px;cursor:pointer;transition:.15s;display:flex;gap:7px;align-items:center}
+.alt-pill:hover{border-color:var(--accent);color:#fff}
+.alt-pill .ap-hz{color:var(--accent2);font-weight:800}
+
+/* ---------- brainwaves view ---------- */
+.waves-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.wave-card{background:linear-gradient(160deg,var(--panel),#0d1228);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.wave-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.25)}
+.wave-card h3{margin:0;font-size:1.15rem}
+.wave-card .wc-range{color:var(--muted);font-size:.82rem;font-weight:600;margin:2px 0 10px}
+.wave-card .wc-state{font-size:.82rem;color:#cfd8f4;font-weight:600;margin-bottom:8px}
+.wave-card .wc-role{font-size:.82rem;color:var(--muted);line-height:1.5}
+.wc-line{height:44px;margin:8px 0 12px}
+.wc-play{margin-top:12px;font-size:.78rem;font-weight:700;color:var(--accent2)}
+.wave-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--wc)}
+
+.waves-intro{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:70ch;margin:0 auto 4px}
+
+/* ---------- disclaimer ---------- */
+.disclaimer{background:linear-gradient(150deg,rgba(245,166,35,.10),rgba(245,166,35,.04));border:1px solid rgba(245,166,35,.3);border-radius:14px;padding:14px 16px;font-size:.82rem;line-height:1.55;color:#f4e6cf;display:flex;gap:10px;flex-direction:column}
+.disclaimer strong{color:#ffcf87}
+@media(min-width:720px){.disclaimer{flex-direction:row}.disclaimer strong{white-space:nowrap}}
+
+/* ---------- mobile: keep the Play button near the diagram ----------
+   Placed at end of file so these overrides win over the base .canvas-wrap /
+   .canvas-inner svg / .panel rules by source order. On phones the stage is a
+   single column; without this the boxes stretch to fill the viewport and push
+   the detail panel (and its Play button) ~2 screens below the fold. */
+@media(max-width:900px){
+  .stage{flex:0 0 auto;min-height:0}
+  .canvas-wrap{min-height:300px}
+  .canvas-inner svg{max-height:300px}
+  .panel{overflow:visible}
+}
+
+/* ============================================================
+   INTERACTIVE 3D ATLAS
+   Markers reuse .node/data-id so the existing selection wiring
+   drives them; these rules only add the HTML-marker presentation.
+   ============================================================ */
+.a3d{position:relative;width:100%;height:100%;min-height:460px;max-height:560px;
+  touch-action:none;user-select:none;-webkit-user-select:none}
+.a3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.a3d-overlay{position:absolute;inset:0;pointer-events:none}
+
+.a3d-hint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+  color:var(--muted);font-size:.74rem;letter-spacing:.02em;opacity:.85;
+  pointer-events:none;transition:opacity .4s}
+.a3d-hint.gone{opacity:0}
+
+/* a 3D marker: dot + label chip, positioned each frame.
+   opacity starts at 0 and _placeMarkers sets it inline on the first frame a
+   marker is actually visible. Without that, a marker that is occluded from the
+   opening camera angle (every back-facing muscle) would render at the overlay's
+   top-left corner for one frame and fade out from there. */
+.node3d{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  opacity:0;transition:opacity .18s;will-change:transform}
+.node3d.is-hidden{opacity:0 !important;pointer-events:none}
+/* near the top edge the label drops below the dot so it can't be clipped */
+.node3d.flip{flex-direction:column-reverse}
+
+.node3d .n3-dot{width:14px;height:14px;border-radius:50%;background:#fff;
+  border:2px solid var(--accent);box-sizing:border-box;
+  box-shadow:0 0 10px rgba(124,92,255,.95),0 0 3px rgba(0,0,0,.9);transition:.18s}
+.node3d .n3-lbl{font-size:.62rem;font-weight:700;color:#fff;white-space:nowrap;
+  padding:1px 5px;border-radius:4px;background:rgba(11,14,26,.88);
+  border:1px solid rgba(124,92,255,.35);
+  text-shadow:0 1px 2px rgba(0,0,0,.9);opacity:0;transition:.18s;pointer-events:none}
+
+.node3d:hover .n3-dot,.node3d:focus-visible .n3-dot{transform:scale(1.25)}
+/* Labels appear only on the selected dot (.active), so the body stays readable.
+   Hover deliberately moves the dot but does NOT reveal the label; :focus-visible
+   still does, so keyboard users can tell what they are on. */
+.node3d:focus-visible .n3-lbl{opacity:1}
+.node3d.active .n3-dot{background:#39ff88;border-color:#eafff2;transform:scale(1.4);
+  box-shadow:0 0 6px #39ff88,0 0 16px rgba(57,255,136,.95),
+             0 0 30px rgba(57,255,136,.55)}
+.node3d.active .n3-lbl{opacity:1;background:rgba(11,14,26,.94);
+  border-color:rgba(57,255,136,.55);color:#eafff2}
+
+@media(prefers-reduced-motion:no-preference){
+  .node3d.active .n3-dot{animation:n3pulse 2s ease-in-out infinite}
+}
+@keyframes n3pulse{
+  0%,100%{box-shadow:0 0 6px #39ff88,0 0 16px rgba(57,255,136,.95),
+                     0 0 30px rgba(57,255,136,.55)}
+  50%    {box-shadow:0 0 8px #39ff88,0 0 24px rgba(57,255,136,1),
+                     0 0 44px rgba(57,255,136,.75)}
+}
+
+/* view toggle */
+.dim-toggle{display:inline-flex;gap:2px;padding:2px;border:1px solid var(--line);
+  border-radius:999px;background:rgba(255,255,255,.03)}
+.dim-toggle button{border:0;background:transparent;color:var(--muted);
+  font:inherit;font-size:.74rem;font-weight:700;padding:3px 12px;
+  border-radius:999px;cursor:pointer}
+.dim-toggle button.on{background:var(--accent);color:#fff}
+
+@media(max-width:900px){
+  .a3d{min-height:300px;max-height:300px}
+}
+
+/* ---- Sources / citations (Guideline 1.4.1) ---- */
+.src-lead{margin:0 0 8px!important;font-size:.86rem;line-height:1.5;color:#d7def5}
+.src-list{margin:0;padding:0 0 0 1.05em;display:grid;gap:7px;-webkit-user-select:text;user-select:text}
+.src-list li{font-size:.82rem;line-height:1.45;color:var(--muted)}
+.src-list a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px;word-break:break-word}
+.src-list a:hover{color:var(--ink)}
+.src-all{margin-top:10px;font-size:.78rem;padding:7px 11px}
+
+/* ---- Web unlock code entry ---- */
+.code-row{display:grid;gap:8px;margin:12px 0 4px;text-align:left}
+.code-label{font-size:.78rem;color:var(--muted)}
+.code-input{
+  width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(0,0,0,.25);color:var(--ink);font-size:1rem;letter-spacing:.06em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase}
+.code-input:focus{outline:none;border-color:var(--accent);box-shadow:var(--glow)}
+.code-input::placeholder{color:#55618a;letter-spacing:.06em}

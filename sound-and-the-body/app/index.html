@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Sound &amp; the Body — Interactive Frequency Atlas</title>
+<link rel="stylesheet" href="styles.css?v=2026-09-20a">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= HEADER ================= -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M4 24c6 0 6-14 12-14s6 28 12 28 6-14 12-14" fill="none" stroke="url(#wave)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="wave" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#28d3c7"/></linearGradient></defs></svg>
+      </div>
+      <div>
+        <h1>Sound &amp; the Body</h1>
+        <p class="subtitle">An interactive frequency atlas of the brain &amp; human anatomy</p>
+      </div>
+    </div>
+
+    <nav class="view-switch" role="tablist" aria-label="Choose a map">
+      <button class="tab active" data-view="brain" role="tab" aria-selected="true">🧠 Brain</button>
+      <button class="tab" data-view="body" role="tab" aria-selected="false">🧍 Body</button>
+      <button class="tab" data-view="organs" role="tab" aria-selected="false">🫀 Organs</button>
+      <button class="tab" data-view="muscles" role="tab" aria-selected="false">💪 Muscles</button>
+      <button class="tab" data-view="nerves" role="tab" aria-selected="false">🧬 Nerves</button>
+      <button class="tab" data-view="cell" role="tab" aria-selected="false">🔬 Cell</button>
+      <button class="tab" data-view="atom" role="tab" aria-selected="false">⚛️ Atom</button>
+      <button class="tab" data-view="harmony" role="tab" aria-selected="false">🔺 Harmony</button>
+      <button class="tab" data-view="waves" role="tab" aria-selected="false">📊 Brainwaves</button>
+    </nav>
+  </header>
+
+  <!-- ================= MODE / LEGEND BAR ================= -->
+  <div class="modebar">
+    <div class="mode-toggle" id="modeToggle">
+      <span class="mode-label">Frequency system:</span>
+      <button class="chip active" data-mode="science">EEG brainwaves &amp; audible tones <em>(measured science)</em></button>
+      <button class="chip" data-mode="traditional">Solfeggio &amp; chakra tones <em>(traditional / unproven)</em></button>
+    </div>
+    <div class="modebar-actions">
+      <button class="trial-pill" id="trialPill" hidden></button>
+      <button class="ghost" id="sourcesBtn" title="Sources &amp; references for every figure shown">📚 Sources</button>
+      <button class="ghost" id="aboutBtn" title="About, disclaimer &amp; privacy">ⓘ About</button>
+      <button class="ghost" id="stopAll" title="Stop any playing tone">◼ Stop sound</button>
+    </div>
+  </div>
+
+  <!-- ================= MAIN ================= -->
+  <main class="stage">
+    <!-- LEFT: diagram -->
+    <section class="canvas-wrap" id="canvasWrap">
+      <div class="canvas-inner" id="canvasInner"><!-- SVG or 3D canvas injected here --></div>
+      <p class="hint" id="hint">Tap or hover a highlighted region to explore it.</p>
+      <div class="dim-toggle" id="dimToggle" role="group" aria-label="View dimension" hidden>
+        <button type="button" data-dim="2d" class="on" aria-pressed="true">2D</button>
+        <button type="button" data-dim="3d" aria-pressed="false">3D</button>
+      </div>
+    </section>
+
+    <!-- RIGHT: detail panel -->
+    <aside class="panel" id="panel" aria-live="polite">
+      <div class="panel-empty" id="panelEmpty">
+        <div class="pulse-ring"></div>
+        <h3>Select a region</h3>
+        <p>Click any glowing point on the diagram to see the anatomy, its associated frequencies, and what they're claimed to influence — then press play to hear the tone.</p>
+      </div>
+
+      <div class="panel-content" id="panelContent" hidden>
+        <div class="pc-head">
+          <span class="pc-badge" id="pcBadge">Region</span>
+          <h2 id="pcTitle">—</h2>
+          <p class="pc-sub" id="pcSub">—</p>
+        </div>
+
+        <div class="freq-card" id="freqCard">
+          <div class="freq-big">
+            <span class="freq-num" id="freqNum">—</span>
+            <span class="freq-unit" id="freqUnit">Hz</span>
+          </div>
+          <div class="freq-meta">
+            <span class="freq-tag" id="freqTag">—</span>
+            <span class="freq-note" id="freqNote"></span>
+          </div>
+          <button class="play-btn" id="playBtn">
+            <span class="play-ico">▶</span><span id="playLabel">Play tone</span>
+          </button>
+          <p class="play-mode-note" id="playModeNote"></p>
+          <div class="wave-viz" id="waveViz"><canvas id="waveCanvas" width="320" height="60"></canvas></div>
+          <label class="vol-row"><span>Volume</span><input type="range" id="vol" min="0" max="100" value="35"></label>
+        </div>
+
+        <div class="pc-section">
+          <h4>What it does</h4>
+          <p id="pcRole">—</p>
+        </div>
+        <div class="pc-section">
+          <h4>Frequency association</h4>
+          <p id="pcEffect">—</p>
+        </div>
+        <div class="pc-section" id="srcSection">
+          <h4>Sources</h4>
+          <p class="src-lead" id="pcSrcLead"></p>
+          <ul class="src-list" id="pcSources"></ul>
+          <button class="ghost src-all" id="srcMoreBtn">View all sources &amp; references</button>
+        </div>
+        <div class="pc-section" id="altSection">
+          <h4>Other associated frequencies</h4>
+          <div class="alt-freqs" id="altFreqs"></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ================= DISCLAIMER ================= -->
+  <footer class="disclaimer">
+    <strong>Read this first.</strong>
+    <span><b>EEG brainwave bands</b> (delta–gamma), <b>NMR/MRI resonances</b>, molecular <b>terahertz vibrations</b> and the <b>cesium atomic clock</b> shown here are real, measured physical frequencies — but most of them (MHz to THz) are far above hearing, so the app plays a clearly-labelled <b>symbolic audible stand-in</b>. Claims that playing a tone "heals" or "activates" an organ, cell, or particle — including <b>Solfeggio frequencies</b>, the "528 Hz DNA repair" tone, and <b>chakra tuning</b> — are <b>traditional or speculative beliefs, not established science.</b> This atlas is an educational and creative tool, not medical advice.</span>
+  </footer>
+
+</div>
+
+<!-- ================= AUDIO HINT (first play) ================= -->
+<div class="audio-toast" id="audioToast" hidden role="status">
+  <span class="at-ico" aria-hidden="true">🎧</span>
+  <span class="at-text">Headphones recommended — start at a low volume.</span>
+  <button class="at-close" id="audioToastClose" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ================= UPDATE AVAILABLE BANNER ================= -->
+<div class="update-banner" id="updateBanner" hidden role="status">
+  <span class="ub-ico" aria-hidden="true">✨</span>
+  <span class="ub-text">A new version of Sound &amp; the Body is available.</span>
+  <button class="ub-btn" id="updateBtn">Update</button>
+  <button class="ub-close" id="updateClose" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ================= PAYWALL / UNLOCK ================= -->
+<div class="overlay" id="paywall" hidden>
+  <div class="sheet">
+    <div class="sheet-icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M4 24c6 0 6-14 12-14s6 28 12 28 6-14 12-14" fill="none" stroke="url(#pw)" stroke-width="3.5" stroke-linecap="round"/><defs><linearGradient id="pw" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#28d3c7"/></linearGradient></defs></svg>
+    </div>
+    <h2 id="pwTitle">Unlock the full atlas</h2>
+    <p class="lead" id="pwLead">Your free trial has ended. Unlock every map and tone — a one-time purchase, no subscription.</p>
+    <ul class="gate-points">
+      <li><span>🧠</span> All nine maps — brain, body, organs, muscles, nerves, cells, atoms, harmony, brainwaves.</li>
+      <li><span>🔊</span> The full live tone engine and oscilloscope.</li>
+      <li><span>♾️</span> Yours forever — one payment, never a subscription.</li>
+      <li><span>🔒</span> Still no ads, no tracking, no account — the atlas works offline.</li>
+    </ul>
+    <button class="primary-btn" id="pwBuy"><span id="pwBuyLabel">Unlock — $1.99</span></button>
+    <button class="text-btn" id="pwRestore">I already have an unlock code</button>
+    <div class="code-row" id="pwCodeRow" hidden>
+      <label class="code-label" for="pwCode">Paste the code from your email</label>
+      <input class="code-input" id="pwCode" type="text" inputmode="text" autocomplete="one-time-code"
+             spellcheck="false" placeholder="SATB-XXXX-XXXX-XXXX" aria-label="Unlock code">
+      <button class="primary-btn" id="pwCodeGo">Unlock</button>
+    </div>
+    <p class="play-mode-note" id="pwNote" style="text-align:center"></p>
+  </div>
+</div>
+
+<!-- ================= FIRST-LAUNCH DISCLAIMER GATE ================= -->
+<div class="overlay" id="gate" hidden>
+  <div class="sheet">
+    <div class="sheet-icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M4 24c6 0 6-14 12-14s6 28 12 28 6-14 12-14" fill="none" stroke="url(#gw)" stroke-width="3.5" stroke-linecap="round"/><defs><linearGradient id="gw" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#28d3c7"/></linearGradient></defs></svg>
+    </div>
+    <h2>Welcome</h2>
+    <p class="lead"><b>Sound &amp; the Body</b> is an educational and creative frequency atlas. Please read before you begin:</p>
+    <ul class="gate-points">
+      <li><span>✅</span> Real, measured frequencies (EEG brainwaves, MRI/NMR, atomic clocks) are clearly labelled as <b>science</b>.</li>
+      <li><span>⚠️</span> "Healing" tones — Solfeggio, chakra tuning, the "528 Hz DNA repair" tone — are <b>traditional beliefs, not proven medicine</b>.</li>
+      <li><span>🩺</span> This app does <b>not</b> diagnose, treat, or cure anything, and is <b>not medical advice</b>.</li>
+      <li><span>🎧</span> Some tones can be loud — start at a low volume, especially with headphones.</li>
+      <li><span>🔒</span> No ads, no tracking, no sign-in. The atlas works offline — only purchases use the network.</li>
+    </ul>
+    <button class="primary-btn" id="gateAccept">I understand — continue</button>
+    <button class="text-btn" id="gatePrivacy">Read the full privacy &amp; disclaimer</button>
+  </div>
+</div>
+
+<!-- ================= ABOUT / PRIVACY MODAL ================= -->
+<div class="overlay" id="about" hidden>
+  <div class="sheet">
+    <button class="sheet-close" id="aboutClose" aria-label="Close">✕</button>
+    <div class="sheet-icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M4 24c6 0 6-14 12-14s6 28 12 28 6-14 12-14" fill="none" stroke="url(#aw)" stroke-width="3.5" stroke-linecap="round"/><defs><linearGradient id="aw" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#28d3c7"/></linearGradient></defs></svg>
+    </div>
+    <h2>Sound &amp; the Body</h2>
+    <p class="muted-line">Interactive Frequency Atlas · version 1.7</p>
+    <div class="about-scroll">
+      <h4>⚕️ Medical &amp; scientific disclaimer</h4>
+      <p>This app is for <b>education, curiosity and creative exploration only</b>. It is <b>not</b> a medical device and does <b>not</b> diagnose, treat, cure, or prevent any condition. Nothing here is medical, psychological, or health advice. Always consult a qualified professional for health concerns. Do not use this app in place of medical care, and do not use sound to treat any condition.</p>
+      <p>The app separates two very different things: <b>measured physical frequencies</b> (EEG brainwave bands, NMR/MRI resonances, molecular terahertz vibrations, the cesium atomic clock) are real science; <b>"healing" frequency claims</b> (Solfeggio, chakra tuning, Rife frequencies, "528 Hz DNA repair") are traditional or speculative beliefs that are <b>not supported by scientific evidence</b>. Frequencies far above hearing are played as clearly-labelled symbolic audible stand-ins.</p>
+
+      <h4>🔒 Privacy</h4>
+      <p>This app is built to respect your privacy completely:</p>
+      <p>• <b>No accounts or sign-in.</b><br>
+         • <b>No analytics, ads, trackers, or cookies.</b><br>
+         • <b>The atlas works offline.</b> Every diagram, 3D model and tone is generated on your device. Nothing about what you look at or listen to is recorded or sent anywhere.<br>
+         • <b>Saved on your device only:</b> that you accepted this notice, when your trial began, and your settings.</p>
+      <h4>The one exception: purchases</h4>
+      <p>Unlocking the app is a purchase, and purchases cannot happen offline. When the app starts, and when you buy or restore, it contacts <b>Apple</b> and <b>RevenueCat</b>, the service that verifies the purchase. They receive an anonymous purchase identifier and receipt details from Apple — not your name, and nothing about your use of the atlas.</p>
+      <p>That is the only network connection the app makes. We have no server of our own, and we never see your data.</p>
+
+      <h4>🎧 Audio safety</h4>
+      <p>Tones and pulses are generated live. Loud or sustained sound can be uncomfortable or harmful to hearing — begin at a low volume, take breaks, and be cautious with headphones. If you have a seizure disorder, note that rhythmic pulsing light or sound can be a trigger; stop if you feel unwell.</p>
+
+      <h4>ℹ️ About</h4>
+      <p>A hand-built atlas mapping frequencies across nine maps — brain, body, organs, muscles, nerves, cells, atoms, harmony and brainwaves. Sounds are synthesized live with the Web Audio API, on your device.</p>
+    </div>
+    <button class="primary-btn" id="aboutOk">Close</button>
+  </div>
+</div>
+<div class="overlay" id="unlocked" hidden>
+  <div class="sheet">
+    <div class="sheet-icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M4 24c6 0 6-14 12-14s6 28 12 28 6-14 12-14" fill="none" stroke="url(#uw)" stroke-width="3.5" stroke-linecap="round"/><defs><linearGradient id="uw" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#28d3c7"/></linearGradient></defs></svg>
+    </div>
+    <h2>Thank you — the atlas is unlocked</h2>
+    <p class="lead">Every map and every tone, on this device, permanently.</p>
+    <div class="code-row">
+      <label class="code-label">Your unlock code</label>
+      <div class="code-input" id="unlockedCode" style="user-select:all;-webkit-user-select:all"></div>
+    </div>
+    <p class="play-mode-note" id="unlockedNote" style="text-align:center"></p>
+    <button class="primary-btn" id="unlockedOk">Start exploring</button>
+  </div>
+</div>
+
+<div class="overlay" id="sources" hidden>
+  <div class="sheet">
+    <button class="sheet-close" id="sourcesClose" aria-label="Close">✕</button>
+    <h2>Sources &amp; references</h2>
+    <p class="muted-line">Where every measured figure in this atlas comes from</p>
+    <div class="about-scroll">
+      <h4>How to read this atlas</h4>
+      <p>The app shows two kinds of number and never mixes them. <b>Measured figures</b> — EEG brainwave bands, NMR/MRI resonances, the caesium atomic clock — come from the published sources listed below. <b>Traditional figures</b> — Solfeggio, chakra pitches, the "528 Hz DNA repair" tone — have no scientific source, and the app says so wherever it shows them.</p>
+      <p>Frequencies above hearing (MHz to THz) cannot be played. Where you see one, the app plays a clearly-labelled <b>symbolic audible stand-in</b>, which is a representation and not a measurement.</p>
+
+      <h4>Measured figures — cited sources</h4>
+      <ul class="src-list" id="allSources"></ul>
+
+      <h4>Traditional figures — no source to cite</h4>
+      <p id="allSourcesTradition"></p>
+
+      <h4>Not medical advice</h4>
+      <p>These references are provided so you can check the physical figures for yourself. They are <b>not</b> treatment guidance. This app does not diagnose, treat, cure or prevent any condition. Consult a qualified professional for any health concern.</p>
+    </div>
+    <button class="primary-btn" id="sourcesOk">Close</button>
+  </div>
+</div>
+
+<!-- Cache busting. Bump ASSET_V and the ?v= strings together on every deploy:
+     without them a returning browser can serve a stale styles.css / data.js /
+     models/anchors.json and silently render the previous version of the atlas. -->
+<script>window.ASSET_V="2026-09-29a";</script>
+<script src="store-config.js?v=2026-09-20a"></script>
+<script src="store-web-config.js?v=2026-10-11a"></script>
+<script src="store-web.js?v=2026-10-11a"></script>
+<script src="data.js?v=2026-09-20a"></script>
+<script src="atlas3d.js?v=2026-09-20a"></script>
+<script src="app.js?v=2026-09-20a"></script>
+</body>
+</html>
