@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kilocycle Radio — every genre, one frequency</title>
-<meta name="description" content="Kilocycle Radio is Rory Corn's internet radio station: original soul, funk, island and hip-hop, blended like a DJ set, with live shows you can call into from any browser. Listen free, no sign-in.">
+<meta name="description" content="Kilocycle Radio is Rory Corn's internet radio station: original soul, funk, island and hip-hop, blended like a DJ set, around the clock, with live shows and call-ins coming soon. Listen free, no sign-in.">
 <link rel="canonical" href="https://rorycorn.github.io/kilocycle/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","url":"https://rorycorn.github.io/kilocycle/","name":"Kilocycle Radio — every genre, one frequency","description":"Rory Corn's internet radio station: original soul, funk, island and hip-hop, blended like a DJ set, around the clock.","author":{"@type":"Person","name":"Rory Corn","url":"https://rorycorn.github.io/"},"about":{"@type":"RadioStation","@id":"https://kilocycleradio.com/#station","name":"Kilocycle Radio","url":"https://kilocycleradio.com/","slogan":"Every genre. One frequency.","founder":{"@type":"Person","name":"Rory Corn"}}}</script>
 <meta name="google-site-verification" content="h-buz-rrgSHcU7IuUSi3iAW33hdJ6DllM8G6c4aYv_k">
 <meta name="theme-color" content="#FBF6EC" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kilocycle Radio">
 <meta property="og:title" content="Kilocycle Radio — every genre, one frequency">
-<meta property="og:description" content="Original soul, funk, island and hip-hop, blended like a DJ set, with live call-in shows. Listen free in your browser.">
+<meta property="og:description" content="Original soul, funk, island and hip-hop, blended like a DJ set, around the clock. Listen free in your browser. Call-ins coming soon.">
 <meta property="og:url" content="https://rorycorn.github.io/kilocycle/">
 <meta property="og:image" content="https://rorycorn.github.io/kilocycle/og.png">
 <meta property="og:image:width" content="1200">
@@ -85,11 +86,11 @@ footer.site p { margin: 8px 0; }
     <div class="card hero" id="listen">
       <p class="tagline">Every genre. One frequency.</p>
       <h1>Kilocycle Radio</h1>
-      <p class="lede">Original soul, funk, island and hip-hop, blended like a DJ set, around the clock, with live shows you can call into from any browser.</p>
+      <p class="lede">Original soul, funk, island and hip-hop, blended like a DJ set, around the clock. Call-ins are coming soon.</p>
       <div class="now" id="now" aria-live="polite"><span class="badge" id="nowBadge">On air</span><b id="nowTitle">Kilocycle Radio</b><span class="muted" id="nowMore"></span></div>
       <div class="actions">
         <a class="btn primary" id="listenBtn" href="https://kilocycleradio.com/?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Listen live"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>Listen live</a>
-        <a class="btn" id="callBtn" href="https://kilocycleradio.com/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">Call the studio</a>
+        <a class="btn" id="callBtn" href="https://kilocycleradio.com/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">Call-ins coming soon</a>
       </div>
       <p class="muted small" id="listenNote">Free, no account. It plays in your browser about two seconds behind the studio.</p>
     </div>
@@ -103,7 +104,7 @@ footer.site p { margin: 8px 0; }
 
     <section id="call" aria-labelledby="h-call">
       <h2 id="h-call">Call in</h2>
-      <p>During live call-in shows, open <a href="https://kilocycleradio.com/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">the call page</a> on your phone or computer, give your first name and what you'd like to talk about, and wait for the host to pick up. No phone number and no app: your voice goes straight from your browser to the studio. Use earbuds, and turn the station off on that device so it doesn't echo.</p>
+      <p><b id="callState">Call-ins are coming soon.</b> <span id="callHow">Here's how they'll work:</span> during live call-in shows, open <a href="https://kilocycleradio.com/call?utm_source=rorycorn.github.io&amp;utm_medium=kilocycle_page" data-umami-event="Call the studio">the call page</a> on your phone or computer, give your first name and what you'd like to talk about, and wait for the host to pick up. No phone number and no app: your voice goes straight from your browser to the studio. Use earbuds, and turn the station off on that device so it doesn't echo.</p>
       <p class="muted small" id="callNote">The weekly call-in show is <b>Weekend Open Line</b>, Saturdays 11 AM to 1 PM Eastern.</p>
     </section>
 
@@ -147,6 +148,9 @@ async function nowPlaying() {
   } catch { $('#nowMore').textContent = ''; }
   try {
     const c = await getJSON('/api/call/status');
+    // the station can pause call-ins (calls.enabled: false in its station.yaml); then everything here says "coming soon"
+    if (c.paused) { $('#callBtn').textContent = 'Call-ins coming soon'; $('#callState').textContent = 'Call-ins are coming soon.'; $('#callNote').textContent = ''; return; }
+    $('#callState').textContent = ''; $('#callHow').textContent = '';
     $('#callBtn').textContent = c.open ? 'Call the studio: lines open now' : 'Call the studio';
     const DAY = { sat: 'Saturdays', sun: 'Sundays', 'mon-fri': 'weekdays', daily: 'every day' }, t12 = (t) => { const [h, m] = t.split(':').map(Number); return `${((h + 11) % 12) + 1}${m ? ':' + String(m).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
     if (c.shows?.length) $('#callNote').textContent = 'Call-in shows: ' + c.shows.map((b) => `${b.name}, ${[].concat(b.days).map((d) => DAY[d] || d).join(', ')} ${t12(b.start)} to ${t12(b.end)} Eastern`).join('; ') + '.';
