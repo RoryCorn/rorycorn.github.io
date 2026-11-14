@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>13-Month Sky Calendar — a year set by the real sky</title>
-<meta name="description" content="A free calendar of 13 months of 28 days. Each year starts on the March equinox, and each month is named for a constellation the Sun really passes through, Ophiuchus included. With a birth chart and the Moon’s phase for every day. By Rory Corn.">
+<meta name="description" content="A calendar of 13 months of 28 days. Each year starts on the March equinox, and each month is named for a constellation the Sun really passes through, Ophiuchus included. With a birth chart and the Moon’s phase for every day. By Rory Corn.">
 <link rel="canonical" href="https://rorycorn.github.io/sky-calendar/">
 <meta name="google-site-verification" content="h-buz-rrgSHcU7IuUSi3iAW33hdJ6DllM8G6c4aYv_k">
+<script src="assets/gate.js?v=ef528debd6"></script>
 <meta name="theme-color" content="#ECEFF3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1020" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="13-Month Sky Calendar">
 <meta property="og:title" content="13-Month Sky Calendar — a year set by the real sky">
-<meta property="og:description" content="Thirteen months of 28 days, named for the constellations the Sun really crosses. Free in your browser, with a birth chart, Moon phases and more.">
+<meta property="og:description" content="Thirteen months of 28 days, named for the constellations the Sun really crosses. Free with a Proxi-Pals account, with a birth chart, Moon phases and more. Today’s date is open to everyone.">
 <meta property="og:url" content="https://rorycorn.github.io/sky-calendar/">
 <meta property="og:image" content="https://rorycorn.github.io/sky-calendar/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -23,7 +24,9 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=13c1cf8d81">
 <link rel="preload" href="assets/fonts/im-fell-english-normal-400-latin.woff2?v=248300df16" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/libre-franklin-normal-400-600-latin.woff2?v=d21d154559" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts.css?v=494d4f47d3">
+<link rel="preload" href="assets/fonts/noto-sans-symbols-normal-400-subset.woff2?v=383aaf05c1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/noto-sans-symbols-2-normal-400-subset.woff2?v=847d28d941" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css?v=9a9d6284dc">
 <style>
 /* Layout: an almanac page. Today's date and the year wheel up top, then the 13 month plates two to a row, then the method notes. */
 :root{
@@ -35,7 +38,7 @@
   --f-display:"IM Fell English","Iowan Old Style",Georgia,serif;
   --f-body:"Libre Franklin",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --f-glyph:"Noto Sans Symbols","Noto Sans Symbols 2","Apple Symbols","Segoe UI Symbol",sans-serif;
+  --f-glyph:"Noto Sans Symbols","Noto Sans Symbols 2","Apple Symbols","Segoe UI Symbol","STIX Two Math",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -604,35 +607,60 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
 }
 
 </style>
-<link rel="stylesheet" href="assets/site.css?v=414f87251f">
+<link rel="stylesheet" href="assets/site.css?v=64c7247662">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "13-Month Sky Calendar",
- "url": "https://rorycorn.github.io/sky-calendar/",
- "description": "A free calendar of 13 months of 28 days. Each year starts on the March equinox, and each month is named for a constellation the Sun really passes through, Ophiuchus included. With a birth chart and the Moon’s phase for every day. By Rory Corn.",
- "applicationCategory": "ReferenceApplication",
- "operatingSystem": "Any (runs in a web browser)",
- "isAccessibleForFree": true,
- "offers": {
-  "@type": "Offer",
-  "price": "0",
-  "priceCurrency": "USD"
- },
- "image": "https://rorycorn.github.io/sky-calendar/og.jpg",
- "author": {
-  "@type": "Person",
-  "name": "Rory Corn",
-  "url": "https://rorycorn.github.io/"
- }
+ "@graph": [
+  {
+   "@type": "WebApplication",
+   "@id": "https://rorycorn.github.io/sky-calendar/#app",
+   "name": "13-Month Sky Calendar",
+   "url": "https://rorycorn.github.io/sky-calendar/",
+   "description": "A calendar of 13 months of 28 days. Each year starts on the March equinox, and each month is named for a constellation the Sun really passes through, Ophiuchus included. With a birth chart and the Moon’s phase for every day. By Rory Corn.",
+   "applicationCategory": "ReferenceApplication",
+   "operatingSystem": "Any (runs in a web browser)",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "image": "https://rorycorn.github.io/sky-calendar/og.jpg",
+   "author": {
+    "@type": "Person",
+    "name": "Rory Corn",
+    "url": "https://rorycorn.github.io/"
+   }
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://rorycorn.github.io/sky-calendar/#page",
+   "url": "https://rorycorn.github.io/sky-calendar/",
+   "name": "13-Month Sky Calendar — a year set by the real sky",
+   "mainEntity": {
+    "@id": "https://rorycorn.github.io/sky-calendar/#app"
+   },
+   "isAccessibleForFree": false,
+   "hasPart": {
+    "@type": "WebPageElement",
+    "isAccessibleForFree": false,
+    "cssSelector": ".needs-account"
+   }
+  }
+ ]
 }
 </script>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="30632184-ff07-480d-a8ac-6f3c9c7b73c2" data-domains="rorycorn.github.io"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="30632184-ff07-480d-a8ac-6f3c9c7b73c2" data-domains="rorycorn.github.io" data-exclude-hash="true"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
+    <div class="skycal-bar" hidden>
+      <p class="skycal-bar-open"><span>Signed in with <span class="sj-nw">Proxi-Pals</span></span><span aria-hidden="true">·</span><a data-skycal="open" href="https://proxipals.onrender.com/">Open <span class="sj-nw">Proxi-Pals</span></a><span aria-hidden="true">·</span><button type="button" data-skycal="signout">Sign out of the calendar</button></p>
+      <p class="skycal-bar-checking" role="status">Opening the calendar with <span class="sj-nw">Proxi-Pals</span>…</p>
+      <p class="skycal-bar-gated"><span>Free with a <span class="sj-nw">Proxi-Pals</span> account</span><span aria-hidden="true">·</span><a data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join free</a><span aria-hidden="true">·</span><a data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></p>
+      <p class="skycal-bar-msg" role="status" tabindex="-1" hidden></p>
+    </div>
     <div class="eyebrow">A calendar set by the Sun</div>
     <h1>13-Month Sky Calendar</h1>
     <p class="lede">Thirteen months of exactly 28 days. Each year begins on the spring equinox, and each month carries the name of a constellation the Sun really passes through, Ophiuchus included.</p>
@@ -662,7 +690,18 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
     </figure>
   </section>
 
-  <section id="calendar" style="scroll-margin-top:16px">
+  <div class="skycal-join sj-main" data-where="calendar" role="region" aria-labelledby="sjTitle-calendar" hidden>
+    <div class="eyebrow">The 13 months</div>
+    <h2 id="sjTitle-calendar" tabindex="-1">Your 13 months are one step away</h2>
+    <p class="skycal-msg" role="status" hidden></p>
+    <p>The full calendar is free with a <span class="sj-nw">Proxi-Pals</span> account. Join <span class="sj-nw">Proxi-Pals</span>, then sign in with your email and password.</p>
+    <p class="sj-small">You need an email address you can check, and you must be 18 or older.</p>
+    <div class="sj-actions"><a class="sj-btn sj-primary" data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join Proxi-Pals, free</a><a class="sj-btn" data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></div>
+    <p class="sj-small skycal-ios" hidden>Or <a data-skycal="app" href="https://apps.apple.com/us/app/proxi-pals/id6788054124">get <span class="sj-nw">Proxi-Pals</span> free on the App Store</a>, then come back and tap Sign in.</p>
+    <p class="sj-fine">You sign in on <span class="sj-nw">Proxi-Pals</span>’ own page. This calendar never sees your email or password, and your birth details stay on this device.</p>
+  </div>
+
+  <section id="calendar" class="needs-account" style="scroll-margin-top:16px">
     <div class="months-head">
       <h2 id="mTitle"></h2>
       <p id="mSub"></p>
@@ -670,7 +709,15 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
     <div class="months" id="months"></div>
   </section>
 
-  <section class="natal" id="chart">
+  <div class="skycal-join sj-chart" data-where="chart" role="region" aria-labelledby="sjTitle-chart" hidden>
+    <div class="eyebrow">Birth chart</div>
+    <h2 id="sjTitle-chart" tabindex="-1">Your birth chart is one step away</h2>
+    <p class="skycal-msg" role="status" hidden></p>
+    <p>It’s free with a <span class="sj-nw">Proxi-Pals</span> account. Join <span class="sj-nw">Proxi-Pals</span>, then sign in with your email and password.</p>
+    <div class="sj-actions"><a class="sj-btn sj-primary" data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join Proxi-Pals, free</a><a class="sj-btn" data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></div>
+  </div>
+
+  <section class="natal needs-account" id="chart">
     <div class="natal-head">
       <div>
         <div class="eyebrow" id="nbBadge">Example chart</div>
@@ -770,11 +817,29 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
     </details>
   </section>
 
-  <section id="retro"></section>
+  <div class="skycal-join sj-compact" data-where="retro" role="region" aria-labelledby="sjTitle-retro" hidden>
+    <div><div class="eyebrow">Why planets back up</div><h2 id="sjTitle-retro" tabindex="-1">Retrograde motion</h2><p>Why a planet seems to stop, drift back west for weeks or months, then carry on, drawn from real computed positions.</p><p class="sj-small">Free with a <span class="sj-nw">Proxi-Pals</span> account.</p></div>
+    <div class="sj-actions"><a class="sj-btn sj-primary" data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join Proxi-Pals, free</a><a class="sj-btn" data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></div>
+    <p class="skycal-msg" role="status" hidden></p>
+  </div>
 
-  <section class="pz-section" id="precession" aria-labelledby="pz-title" style="scroll-margin-top:16px"></section>
+  <section id="retro" class="needs-account"></section>
 
-  <section class="cc" id="compare" style="scroll-margin-top:16px"></section>
+  <div class="skycal-join sj-compact" data-where="precession" role="region" aria-labelledby="sjTitle-precession" hidden>
+    <div><div class="eyebrow">Precession time machine</div><h2 id="sjTitle-precession" tabindex="-1">The drifting equinox</h2><p>Move through 28,000 years and watch the spring equinox cross the real constellations.</p><p class="sj-small">Free with a <span class="sj-nw">Proxi-Pals</span> account.</p></div>
+    <div class="sj-actions"><a class="sj-btn sj-primary" data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join Proxi-Pals, free</a><a class="sj-btn" data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></div>
+    <p class="skycal-msg" role="status" hidden></p>
+  </div>
+
+  <section class="pz-section needs-account" id="precession" aria-labelledby="pz-title" style="scroll-margin-top:16px"></section>
+
+  <div class="skycal-join sj-compact" data-where="compare" role="region" aria-labelledby="sjTitle-compare" hidden>
+    <div><div class="eyebrow">Other calendars</div><h2 id="sjTitle-compare" tabindex="-1">Calendars that really have 13 months</h2><p>Pick a date and see it in the Ethiopian, Coptic, Hebrew and Chinese calendars, which have 13 months every year or in some years.</p><p class="sj-small">Free with a <span class="sj-nw">Proxi-Pals</span> account.</p></div>
+    <div class="sj-actions"><a class="sj-btn sj-primary" data-skycal="join" href="https://proxipals.onrender.com/?then=sky-calendar&amp;tab=join">Join Proxi-Pals, free</a><a class="sj-btn" data-skycal="signin" href="https://proxipals.onrender.com/?then=sky-calendar">Sign in</a></div>
+    <p class="skycal-msg" role="status" hidden></p>
+  </div>
+
+  <section class="cc needs-account" id="compare" style="scroll-margin-top:16px"></section>
 
   <section class="how" id="how" style="scroll-margin-top:16px">
     <h2>How it works</h2>
@@ -825,11 +890,15 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
     </article>
     <article>
       <h3>Visit counts</h3>
-      <p>This website counts visits anonymously with Umami: no cookies, nothing that identifies you, and never your birth details. It also counts a few button presses, such as Draw chart, saving a chart image and See why, without anything you entered.</p>
+      <p>This website counts visits anonymously with Umami: no cookies, nothing that identifies you, and never your birth details. It also counts a few button presses, such as Draw chart, saving a chart image, See why, Join and Sign in, without anything you entered.</p>
+    </article>
+    <article>
+      <h3>Signing in</h3>
+      <p>Today’s date, the birthday question and the year wheel are open to everyone; the rest of the calendar is free with a <span class="sj-nw">Proxi-Pals</span> account. You join and sign in on <span class="sj-nw">Proxi-Pals</span>’ own site (proxipals.onrender.com) or in the <span class="sj-nw">Proxi-Pals</span> app, so your email and password are never typed into this page. When <span class="sj-nw">Proxi-Pals</span> sends you back, this page checks a one-time code with <span class="sj-nw">Proxi-Pals</span> once, then remembers in this browser for 30 days that you’re signed in; “Sign out of the calendar” forgets it at once. While you go to sign in, this tab remembers which part you wanted and any date you typed in the birthday box, so it can take you back there. The calendar is never told your email, name, date of birth or location, and keeps no list of who opens it. Joining or signing in also keeps that browser signed in to <span class="sj-nw">Proxi-Pals</span> itself, as any sign-in there does; on a shared computer, sign out of <span class="sj-nw">Proxi-Pals</span> when you’re done.</p>
     </article>
     <article>
       <h3>Everything else</h3>
-      <p>The page remembers whether you chose Sky order or Astrology order, in this browser only. Its fonts and astronomy code come from this site, so until you follow a link, the only other address it contacts is Umami’s counter. There is no account, no sign-in and no advertising.</p>
+      <p>The page remembers whether you chose Sky order or Astrology order, in this browser only. Its fonts and astronomy code come from this site, so until you follow a link, the only other addresses it contacts are Umami’s counter and, once right after you sign in, <span class="sj-nw">Proxi-Pals</span>. There is no advertising.</p>
     </article>
   </section>
 
@@ -850,10 +919,10 @@ input[type=date]{font:400 .9rem var(--f-data);padding:7px 10px;border:1px solid 
         </ul>
       </div>
     </div>
-    <p class="sf-also">Also by Rory Corn: <a href="https://proxipals.onrender.com/" data-umami-event="Outbound link" data-umami-event-url="proxipals.onrender.com">ProxiPals<span aria-hidden="true"> ↗</span></a>, see who’s around you and say hi.</p>
+    <p class="sf-also">Also by Rory Corn: <a href="https://proxipals.onrender.com/" data-umami-event="Outbound link" data-umami-event-url="proxipals.onrender.com"><span class="sj-nw">Proxi-Pals</span><span aria-hidden="true"> ↗</span></a>, see who’s around you and say hi.</p>
     <div class="sf-base">
       <p class="sf-legal"><a href="https://rorycorn.github.io/" data-umami-event="Outbound link" data-umami-event-url="rorycorn.github.io">More by Rory Corn</a><span aria-hidden="true">·</span><a href="#privacy">Privacy</a></p>
-      <p class="sf-legal">© 2026 Rory Corn<span aria-hidden="true">·</span>Free, no sign-in</p>
+      <p class="sf-legal">© 2026 Rory Corn<span aria-hidden="true">·</span>Free with a <span class="sj-nw">Proxi-Pals</span> account</p>
     </div>
   </footer>
 </div>
@@ -1170,7 +1239,7 @@ const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone || 'your local t
 let order = 'sky';
 try { if (localStorage.getItem('skycal-order') === 'astro') order = 'astro'; } catch (e) {}
 
-const g = a => `<span class="glyph">${C[a][1]}︎</span>`;
+const g = a => `<span class="glyph">${C[a][1]}</span>`;
 const code = m => ORDER[order][m];
 const mName = m => { const a = code(m); return order === 'astro' ? (ASTRO_NAME[a] || C[a][0]) : C[a][0]; };
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
@@ -1214,7 +1283,7 @@ function renderToday() {
     <p class="sunline">Next New Year: ${fWMDY.format(localDate(y.next))}, the spring equinox, ${plural(toNY, 'day')} away.</p>
     <div class="rule"></div>
     <form class="lookup" id="lookupForm">
-      <label for="lookup">Convert a date</label>
+      <label for="lookup">What’s your birthday in the 13-month calendar?</label>
       <div class="row">
         <input type="date" id="lookup" value="2027-01-01" min="${isoOf(buildYear(YEARS[0]).ny)}" max="${isoOf(buildYear(YEARS[YEARS.length - 1]).next - 1)}">
         <button class="btn" type="submit" id="lookupGo">Show in calendar</button>
@@ -1238,7 +1307,9 @@ function renderLookup() {
   if (!D) { out.textContent = n === null ? '' : 'That date is outside the years this calendar covers.'; return; }
   const name = D.m === null ? `Year Day${D.y.len - 364 > 1 ? ' ' + D.day : ''}` : `${g(code(D.m))} ${mName(D.m)} ${D.day}`;
   const where = D.m === null ? `end of Year ${D.y.Y}` : `month ${D.m + 1}, Year ${D.y.Y}`;
-  out.innerHTML = `${fWMDY.format(localDate(n))} is <b>${name}</b> (${where}). The Sun is in ${C[D.d.c][0]}.`;
+  const ex = $('#lookup').value === $('#lookup').defaultValue;   // still the example date the box opens with
+  out.innerHTML = (ex ? 'Example: ' : '') + `${fWMDY.format(localDate(n))} is <b>${name}</b> (${where}). The Sun is in ${C[D.d.c][0]}.`
+    + (ex ? ' Now try your own birthday.' : '');
 }
 function showLookup() {
   const n = lookupN(), D = n === null ? null : describe(n);
@@ -1264,14 +1335,14 @@ function renderWheel(y) {
     const f = localDate(y.ny + m * 28), l = localDate(y.ny + m * 28 + 27);
     s += `<path class="ring-m ${m % 2 ? 'b' : 'a'}${m === nowM ? ' now' : ''}" data-m="${m + 1}" d="${arc(150, 190, a0, a1)}"><title>Month ${m + 1} · ${mName(m)} · ${fMD.format(f)} – ${fMD.format(l)}</title></path>`;
     const [gx, gy] = P(176, mid), [nx, ny] = P(159, mid);
-    s += `<text class="w-g" x="${gx}" y="${gy}">${C[code(m)][1]}︎</text><text class="w-n" x="${nx}" y="${ny}">${m + 1}</text>`;
+    s += `<text class="w-g" x="${gx}" y="${gy}">${C[code(m)][1]}</text><text class="w-n" x="${nx}" y="${ny}">${m + 1}</text>`;
   }
   s += `<path class="ring-yd" d="${arc(150, 190, 364 * k, 360)}"><title>Year Day${y.len - 364 > 1 ? 's' : ''}</title></path>`;
   y.runs.forEach((r, i) => {
     const a0 = r.from * k, a1 = (r.from + r.len) * k, [gx, gy] = P(125, (a0 + a1) / 2);
     const f = localDate(y.ny + r.from), l = localDate(y.ny + r.from + r.len - 1);
     s += `<path class="ring-c ${i % 2 ? 'b' : 'a'}" d="${arc(104, 146, a0, a1)}"><title>Sun in ${C[r.a][0]} · ${fMD.format(f)} – ${fMD.format(l)} (${plural(r.len, 'day')} this year)</title></path>`;
-    if (r.len >= 4) s += `<text class="w-gc" x="${gx}" y="${gy}">${C[r.a][1]}︎</text>`;
+    if (r.len >= 4) s += `<text class="w-gc" x="${gx}" y="${gy}">${C[r.a][1]}</text>`;
   });
   s += `<circle class="w-core" cx="${cx}" cy="${cy}" r="98"/>`;
   s += `<text class="w-y" x="${cx}" y="${cy - 4}">Year ${y.Y}</text>`;
@@ -1323,7 +1394,7 @@ function renderMonths(y) {
     }).join('');
     html += `<article class="month" id="m${m + 1}">
       <header class="m-head">
-        <div class="m-glyph">${C[a][1]}︎</div>
+        <div class="m-glyph">${C[a][1]}</div>
         <div class="m-title"><div class="m-num">Month ${m + 1}</div><h3>${mName(m)}</h3></div>
         <div class="m-range">${fMD.format(f)} – ${fMD.format(l)}<br><span>${yr}</span></div>
       </header>
@@ -1764,7 +1835,7 @@ setOrder(order);
   // ---------- widget ----------
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const VS = '︎';   // text presentation for glyphs that also have emoji forms
+  const VS = '';   // text presentation for glyphs that also have emoji forms
   const f1 = x => (Math.round(x * 10) / 10).toFixed(1);
   const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
   const NICE_STEPS = [1, 2, 3, 5, 7, 10, 14, 15, 20, 30, 45, 60];
@@ -3370,7 +3441,7 @@ if (typeof module !== 'undefined') module.exports = NatalPlace;
   const n2 = (v) => String(Math.round(v * 100) / 100);
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   // force text presentation on glyphs that also have emoji forms (gender signs, zodiac, Ophiuchus)
-  const tp = (g) => String(g).replace(/([\u2640\u2642\u2648-\u2653\u26CE])(?!\uFE0E)/g, '$1\uFE0E');
+  const tp = (g) => String(g);   // website: no U+FE0E (build_site.py, glyphs)
 
   // 12°34′ style, rounding minutes without ever printing 60′
   function dm(deg) {
@@ -3711,7 +3782,7 @@ const COPY = {"intro": "A birth chart, also called a natal chart, is a map of th
   const ASPECT_GLYPH = { conjunction: '☌', sextile: '⚹', square: '□', trine: '△', opposition: '☍' };
   const PLACES_URL = 'cities.json?v=2616dab8d5';
 
-  const gl = s => `<span class="glyph">${s}︎</span>`;
+  const gl = s => `<span class="glyph">${s}</span>`;
   const constGlyph = a => (C[a] ? C[a][1] : '');
   const TROP = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
   const TROP_GLYPH = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
@@ -4513,7 +4584,7 @@ const COPY = {"intro": "A birth chart, also called a natal chart, is a map of th
   // ---------- the page section ----------
   const MIN_Y = -13999, MAX_Y = 14000;          // 14,000 BC .. AD 14,000
   const L0 = -30;                                // band starts 30 degrees west of the spring equinox (the sign Pisces)
-  const VS = '︎';                           // text presentation for glyphs with emoji forms
+  const VS = '';                           // text presentation for glyphs with emoji forms
   const g = (ch) => (ch ? `<span class="pz-g">${ch}${VS}</span>` : '');
   const fmtDeg = (d) => (d < 1 ? d.toFixed(2) : d < 10 ? d.toFixed(1) : d.toFixed(0)) + '°';
   // Fixed fill per constellation (alternating in sky order from Pisces, as on the calendar's year wheel),
@@ -5248,7 +5319,7 @@ Precession.render(document.getElementById('precession'), { thisYear: ymd(dnOf(ne
       let main, year = '';
       if (!r.supported || r.outside) main = `<span class="cc-na">${esc(r.text)}</span>`;
       else {
-        const glyph = r.glyph ? `<span class="cc-glyph" aria-hidden="true">${esc(r.glyph)}︎</span>` : '';
+        const glyph = r.glyph ? `<span class="cc-glyph" aria-hidden="true">${esc(r.glyph)}</span>` : '';
         // IM Fell English has no U+02BB (the 'ayn in Rabi\u02bb, Sha\u02bbban); show it as a turned comma it does have
         main = `<span class="cc-date">${glyph}${esc(String(r.text).replace(/\u02bb/g, '\u2018'))}</span>`;
         if (r.yearText) main += `<span class="cc-sub">${esc(r.yearText)}</span>`;
@@ -5331,7 +5402,7 @@ Precession.render(document.getElementById('precession'), { thisYear: ymd(dnOf(ne
 })();
 
 </script>
-<script src="assets/chart-image.js?v=71e930c93a"></script>
+<script src="assets/chart-image.js?v=75f17b2bc1"></script>
 <script>
 // "Save chart as image" (feat/saveimg/chart-image.js): a button under the birth chart wheel.
 // The image is made on this device; each save is counted as "Save chart image" {how: share|download}.

@@ -1,6 +1,8 @@
 /* Fonts for the 13-Month Sky Calendar: IBM Plex Mono, IM Fell English, Libre Franklin, Noto Sans Symbols, Noto Sans Symbols 2.
    Self-hosted copies of the Google Fonts files (fetched 2026-10-03), each under the SIL Open Font License 1.1;
-   the licence texts are in fonts/OFL-*.txt. */
+   the licence texts are in fonts/OFL-*.txt.
+   Noto Sans Symbols and Noto Sans Symbols 2 use font-display: block (they are preloaded and a few kB),
+   so the zodiac and planet signs stay invisible while they load rather than show a fallback. */
 /* cyrillic-ext */
 @font-face {
   font-family: 'IBM Plex Mono';
@@ -249,7 +251,7 @@
   font-family: 'Noto Sans Symbols';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url(fonts/noto-sans-symbols-normal-400-subset.woff2?v=383aaf05c1) format('woff2');
   unicode-range: U+260a, U+260c-260d, U+263d, U+263f-2640, U+2642-2653, U+26b9, U+26ce;
 }
@@ -258,7 +260,7 @@
   font-family: 'Noto Sans Symbols 2';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url(fonts/noto-sans-symbols-2-normal-400-subset.woff2?v=847d28d941) format('woff2');
   unicode-range: U+25a1, U+25b3, U+2609;
 }

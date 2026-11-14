@@ -210,10 +210,13 @@
       clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
       const fonts = await embedFonts(uses, opts);
       // WebKit skips a font for "sign + U+FE0E" when a later font in the list (Apple Symbols) handles that
-      // sequence, so with Noto embedded the selector is dropped; without Noto it stays, to avoid emoji.
-      if (/font-family:"Noto Sans Symbols"/.test(fonts.css)) {
-        const tw = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
-        for (let n = tw.nextNode(); n; n = tw.nextNode()) if (n.nodeValue.includes(VS15)) n.nodeValue = n.nodeValue.split(VS15).join('');
+      // sequence, so with Noto embedded the selector is dropped; without Noto it is added (the website's page
+      // carries none), to avoid emoji.
+      const noto = /font-family:"Noto Sans Symbols"/.test(fonts.css);
+      const tw = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+      for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+        const v = noto ? n.nodeValue.split(VS15).join('') : tp(n.nodeValue);
+        if (v !== n.nodeValue) n.nodeValue = v;
       }
       if (fonts.css) {
         const st = document.createElementNS('http://www.w3.org/2000/svg', 'style');
@@ -271,7 +274,7 @@
     const cards = [...document.querySelectorAll('#nbBig3 .b3')].map(el => {
       const g = el.querySelector('.v .glyph'), n = el.querySelector('.v span:not(.glyph)');
       const txt = s => (s ? s.textContent : '').replace(/\s+/g, ' ').trim();
-      return { k: txt(el.querySelector('.k')), glyph: g ? g.textContent.trim() : '', name: txt(n), s: txt(el.querySelector('.s')), cal: el.classList.contains('cal13') };
+      return { k: txt(el.querySelector('.k')), glyph: g ? tp(g.textContent.trim()) : '', name: txt(n), s: txt(el.querySelector('.s')), cal: el.classList.contains('cal13') };
     });
     if (!cards.length) {   // no cards on the page: Sun, Moon, Rising from the chart itself
       const by = k => chart.bodies.find(b => b.key === k);

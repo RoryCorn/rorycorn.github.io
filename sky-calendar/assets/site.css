@@ -1,4 +1,5 @@
-/* 13-Month Sky Calendar website: the privacy notes and the footer, drawn with the page's own tokens. */
+/* 13-Month Sky Calendar website: the privacy notes and the footer, drawn with the page's own tokens,
+   and (at the end) the text presentation of the zodiac and planet signs. */
 body{margin:0}
 
 /* privacy: laid out like the page's "How it works" notes */
@@ -16,9 +17,29 @@ body{margin:0}
 .sf-cols p{margin:0;max-width:70ch}
 .sf-credits{margin:0;padding:0;list-style:none;display:grid;gap:3px}
 .sf-also{margin:8px 0 0;font-family:var(--f-display);font-size:1.18rem;line-height:1.35;color:var(--ink)}
-.sf-also a{color:var(--accent)}
+/* the Proxi-Pals link: the page's brass, one shade darker in light mode so it reads at 4.9:1 on the page (--accent
+   gave 4.41:1; 4.5:1 is needed); dark mode keeps --accent (9.8:1) */
+:root{--sf-link:#8C5D0E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sf-link:var(--accent)}}
+:root[data-theme="dark"]{--sf-link:var(--accent)}
+.sf-also a{color:var(--sf-link)}
+/* "Proxi-Pals" never breaks at its own hyphen (build_site.py keep_brand_whole wraps it; also without gate.js) */
+.sj-nw{white-space:nowrap}
 .sf-base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;border-top:1px solid var(--line);padding-top:14px}
 .sf-legal{margin:0;font-family:var(--f-data);font-size:.76rem;font-variant-numeric:tabular-nums}
 .sf-legal span[aria-hidden]{margin:0 .45em}
 
 @media (max-width:780px){.site-privacy,.sf-cols{grid-template-columns:minmax(0,1fr)}}
+
+/* "‹ About": back to the landing page (only when the site has one), set apart from the jump links after it */
+.jump .jump-home{color:var(--accent);text-decoration:none;padding-right:18px;border-right:1px solid var(--line)}
+.jump .jump-home:hover{text-decoration:underline}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* zodiac and planet signs: always text, never colour emoji. The website's pages carry no U+FE0E after the signs
+   (build_site.py, "glyphs"), so text presentation is asked for here (Chrome 131+, Firefox 141+). On every element
+   and !important: each `font:` shorthand in the page (body, labels) resets font-variant-emoji to normal. */
+*{font-variant-emoji:text!important}
+/* the sign-only constellation labels in the precession band: the page's .pz-con-t font shorthand overrides
+   .pz-gonly, which left those signs in the body font and so in a system fallback font */
+.pz-con-t.pz-gonly{font-family:var(--f-glyph);font-weight:400}
