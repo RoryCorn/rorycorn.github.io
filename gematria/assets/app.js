@@ -931,7 +931,10 @@
     return 'Each pair you check is another try. Check ' + nu + ' pairs and about one will look “unusual” or rarer by luck alone (1 in ' + nu + ' is ' + pc(u) +
       '); check ' + nr + ' and about one will look “rare” (1 in ' + nr + ' is ' + pc(r) + ').';
   }
-  function renderConnect() {
+  // now === true (drawUpTo, a jump past this part): the chance check runs to its end before this returns, so the box has
+  // its full size (result, luck workings, tries note, and the recap below it) before the scroll starts; any other call
+  // (the button, idle) keeps the slices and the progress bar. The answer is the same either way (seed 7, same order)
+  function renderConnect(now) {
     var out = $('connOut');
     if (!out) return;
     var an = $('connA').value.trim(), bn = $('connB').value.trim(), ad = $('connAd').value, bd = $('connBd').value;
@@ -966,7 +969,7 @@
       recapConn = { a: an, b: bn, share: r.share };
       renderRecap();
     }
-    setTimeout(slice, 0);
+    if (now === true) { run.step(run.n); slice(); } else setTimeout(slice, 0);
   }
 
   // the section's question, answered by the three checks above (the visitor's own pair never changes the answer)
@@ -1141,9 +1144,10 @@
     library: function () { renderOnThisDay(); renderOtdDay(); renderEvents(); renderStrongest(); renderMade(); renderRecap(); idle(renderConnect); },
     calendars: function () { renderCalendars(); renderCalWord(); }
   };
-  // the same, all at once (for a jump past them: nothing left for later that would grow the page above the target)
+  // the same, all at once (for a jump past them: nothing left for later that would grow the page above the target;
+  // 2026-11-18: that includes Connect's chance check, whose result made the box about 260 px taller mid-scroll)
   var AT_ONCE = {
-    library: function () { renderOnThisDay(); renderOtdDay(); renderEvents(); renderStrongest(); renderMade(); renderRecap(); renderConnect(); }
+    library: function () { renderOnThisDay(); renderOtdDay(); renderEvents(); renderStrongest(); renderMade(); renderRecap(); renderConnect(true); }
   };
   var drawn = {};
   function draw(id, now) {
